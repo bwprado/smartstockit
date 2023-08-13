@@ -27,9 +27,9 @@
 			>
 		</form>
 	</div>
-	<table class="table-auto">
+	<table class="table-auto w-1/2">
 		<thead>
-			<tr>
+			<tr class="text-left">
 				<th>Index</th>
 				<th>Nome</th>
 				<th>Unidade</th>
