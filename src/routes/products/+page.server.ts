@@ -1,18 +1,19 @@
-import { supabase } from "$lib/helpers/supabase"
+import { redirect, type Actions } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types.js';
 
-/** @type {import('./$types').Actions} */
-export const actions = {
-    default: async ({ request }) => {
-        const formData = await request.formData()
-        const productName = formData.get("product")
-        const unit = formData.get("unit")
-        const id = formData.get("id")
+export const load: PageServerLoad = async ({ locals: { getSession } }) => {
+    if (!await getSession()) {
+        throw redirect(303, '/login')
+    }
+};
+
+export const actions: Actions = {
+    default: async ({ request, locals: { supabase } }) => {
+        const formData = Object.fromEntries(await request.formData())
 
         const { data, error } = await supabase
             .from('products')
-            .insert([
-                { name: productName, unit, balance: 0 },
-            ])
+            .insert([formData])
             .select()
 
         console.log(error)
