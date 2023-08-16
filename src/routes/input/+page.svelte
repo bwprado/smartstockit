@@ -1,6 +1,6 @@
 <script>
 	export let data;
-	const { products } = data;
+	const products = data?.products || [];
 	let isFresh = false;
 </script>
 
@@ -10,7 +10,7 @@
 			<label for="product">Produto</label>
 			<select name="product" id="product" class="">
 				{#each products as product}
-					<option value={product.id}>{product.name}</option>
+					<option value={product?.id}>{product?.name}</option>
 				{/each}
 			</select>
 		</div>
