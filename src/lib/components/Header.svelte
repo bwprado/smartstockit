@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	export let session: any;
-	console.log(session);
 </script>
 
 <header class="flex h-10 w-full bg-gray-800 items-center text-gray-200 justify-between p-4">
