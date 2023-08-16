@@ -1,18 +1,18 @@
-import { supabase } from '$lib/helpers/supabase.js';
+import { redirect, type Actions } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types.js';
 
 export interface IProduct { product: string, amount: string, price?: string, fresh?: string, expiration_date?: string }
 
-/** @type {import('./$types').Actions} */
-export const actions = {
-    default: async ({ request }) => {
-        const data = await request.formData()
-        const allData = [...data.entries()]
-        let outputData: IProduct = { product: '', amount: '' }
-        type T = keyof typeof outputData
+export const load: PageServerLoad = async ({ locals: { getSession } }) => {
+    if (!await getSession()) {
+        throw redirect(303, '/login')
+    }
+};
 
-        for (const [key, value] of allData) {
-            outputData[key as T] = value as string
-        }
+export const actions: Actions = {
+    default: async ({ request, locals: { supabase } }) => {
+        const outputData = Object.fromEntries(await request.formData())
+
         const negativeAmount = -Number(outputData.amount)
         const res = await supabase.from('inventory').insert([{ ...outputData, amount: negativeAmount }])
     }
