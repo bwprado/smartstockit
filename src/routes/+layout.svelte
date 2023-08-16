@@ -1,14 +1,15 @@
-<script>
+<script lang="ts">
 	import './styles.css';
 	import { page } from '$app/stores';
 	import Header from '$lib/components/Header.svelte';
+	export let data;
 </script>
 
-<head>
+<svelte:head>
 	<title>Inventory VT {$page.url.pathname}</title>
-</head>
+</svelte:head>
 <div class="grid grid-rows-[max-content,auto,max-content] h-screen">
-	<Header />
+	<Header session={data?.session || false} />
 
 	<main class="flex justify-center w-full">
 		<slot />
