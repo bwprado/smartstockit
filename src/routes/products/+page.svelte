@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let data;
-    const products = data?.products || [];
+	const products = data?.products || [];
 </script>
 
 <section class="flex flex-col gap-y-4 w-full items-center">
@@ -40,8 +40,8 @@
 		<tbody>
 			{#if products?.length > 0}
 				{#each products as product, index}
-                <tr>
-                        <td>{index}</td>
+					<tr>
+						<td>{index}</td>
 						<td>{product?.name}</td>
 						<td>{product?.unit}</td>
 						<td>{product?.balance}</td>
