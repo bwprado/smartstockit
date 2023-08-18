@@ -1,17 +1,20 @@
 import type { LayoutServerLoad } from "./$types"
 
-export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } }) => {
+export const load: LayoutServerLoad = async ({ locals: { supabase, getSession, getUserProfile } }) => {
     const session = await getSession()
-    console.log(session)
+
     const fetchProductsData = async () => {
-        console.log('fetching products')
+        if (!session) return []
+
         const { data, error } = await supabase
             .from('products')
             .select()
-        return error ? [] : data
+
+        return session ? error ? [] : data : []
     }
     const fetchDashboardData = async () => {
-        console.log('fetching summary')
+        if (!session) return []
+
         const { data, error } = await supabase.rpc('get_product_summary')
 
         return error ? [] : data
@@ -19,6 +22,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
     return {
         products: fetchProductsData(),
         dashboard: fetchDashboardData(),
-        session: getSession()
+        session: getSession(),
+        user: getUserProfile()
     }
 }
