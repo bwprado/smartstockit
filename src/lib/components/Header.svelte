@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	export let session: any;
+	export let user: any;
 </script>
 
 <header class="flex h-10 w-full bg-gray-800 items-center text-gray-200 justify-between p-4">
@@ -11,6 +12,11 @@
 			<li aria-current={$page.url.pathname === '/dashboard' ? 'page' : undefined}>
 				<a href="/dashboard">Dashboard</a>
 			</li>
+			{#if session && user?.role === 'admin'}
+				<li aria-current={$page.url.pathname === '/admin' ? 'page' : undefined}>
+					<a href="/admin">Admin</a>
+				</li>
+			{/if}
 			<li aria-current={$page.url.pathname === '/products' ? 'page' : undefined}>
 				<a href="/products">Products</a>
 			</li>
