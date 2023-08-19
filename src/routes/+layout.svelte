@@ -8,7 +8,7 @@
 <svelte:head>
 	<title>Inventory VT {$page.url.pathname}</title>
 </svelte:head>
-<div class="grid grid-rows-[max-content,auto,max-content] h-screen">
+<div class="grid grid-rows-[max-content,auto,max-content] h-screen w-full">
 	<Header session={data?.session || false} user={data?.user} />
 
 	<main class="flex justify-center w-full">
