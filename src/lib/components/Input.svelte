@@ -17,8 +17,8 @@
 		'rounded-md',
 		'border-0',
 		'py-1.5',
-		'pl-7',
-		'pr-20',
+		'px-2',
+        'h-8',
 		'text-gray-900',
 		'ring-1',
 		'ring-inset',
@@ -33,10 +33,10 @@
 	]);
 </script>
 
-<div class={twMerge('w-full flex flex-col py-4', customClasses.wrapper)}>
+<div class={twMerge('w-full flex flex-col gap-y-1', customClasses.wrapper)}>
 	<label
 		for={name}
-		class={twMerge('block text-sm font-medium leading-6 text-gray-900', customClasses.label)}
+		class={twMerge('block text-sm leading-6 text-gray-900 font-bold', customClasses.label)}
 		>{label}</label
 	>
 	<input {type} {name} {id} class={twMerge(inputStyle, customClasses.input)} />
