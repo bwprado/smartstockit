@@ -4,8 +4,8 @@
 	export let user: any;
 </script>
 
-<header class="flex h-max w-full bg-gray-800 items-center text-gray-200 justify-between p-4">
-	<div class="">InventoryVT</div>
+<header class="flex h-max w-full bg-gray-800 items-center text-gray-200 justify-between p-4 lg:px-28">
+	<div class=""><a href="/">InventoryVT</a></div>
 
 	<nav class="align-middle">
 		<ul class="flex gap-x-6">
