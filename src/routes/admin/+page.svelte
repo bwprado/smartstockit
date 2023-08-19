@@ -8,7 +8,6 @@
 
 <svelte:head>
 	<title>Inventory - VT / Admin</title>
-	<link rel="stylesheet" href="https://unpkg.com/mono-icons@1.0.5/iconfont/icons.css" />
 </svelte:head>
 <div class="w-fit flex flex-col gap-y-2 mx-auto p-8">
 	<table class="table-auto">
