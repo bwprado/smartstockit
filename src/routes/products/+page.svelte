@@ -1,58 +1,52 @@
 <script lang="ts">
-	import Modal from '$lib/components/Modal.svelte';
+	import Button from '$lib/components/Button.svelte';
 	import Input from '$lib/components/Input.svelte';
+	import Modal from '$lib/components/Modal.svelte';
 	import Select from '$lib/components/Select.svelte';
-	import { Edit } from 'lucide-svelte';
+	import Table from '$lib/components/Table/Table.svelte';
+	import TableCell from '$lib/components/Table/TableCell.svelte';
+	import TableCellHead from '$lib/components/Table/TableCellHead.svelte';
+	import TableRow from '$lib/components/Table/TableRow.svelte';
 
 	export let data;
 	$: showModal = false;
 	const products = data?.products || [];
 </script>
 
-<section class="flex flex-col gap-y-4 w-full items-center">
-	<form
-		method="POST"
-		class="grid grid-cols-3 gap-x-4 py-4 px-6 items-center justify-center bg-slate-300 w-full text-gary"
-	>
-		<Input label="Nome" name="product_name" type="text" />
-		<Select label="Unidade" name="unit" options={['und', 'kg', 'litro']} id="unit" />
-		<button
-			type="submit"
-			class="px-4 py-2 font-bold bg-blue-600 rounded-lg text-gray-100 hover:opacity-50"
-			>+ Produto</button
+<div class="flex flex-col gap-y-10 w-full">
+	<section>
+		<form
+			method="POST"
+			class="grid grid-cols-3 gap-x-4 py-4 px-6 items-center justify-center bg-slate-300 w-full text-gary"
 		>
-	</form>
-	<table class="table-auto w-1/2">
-		<thead>
-			<tr class="text-left">
-				<th>Index</th>
-				<th>Nome</th>
-				<th>Unidade</th>
-				<th>Saldo</th>
-				<th />
-			</tr>
-		</thead>
-		<tbody>
-			{#if products?.length > 0}
-				{#each products as product, index}
-					<tr>
-						<td>{index}</td>
-						<td>{product?.name}</td>
-						<td>{product?.unit}</td>
-						<td>{product?.balance}</td>
-						<td class="w-max">
-							<button class="flex items-center justify-center" on:click={() => (showModal = true)}
-								><Edit />
-							</button>
-						</td>
-					</tr>
-				{/each}
-			{:else}
-				<tr>Nenhum produto encontrado</tr>
-			{/if}
-		</tbody>
-	</table>
-</section>
+			<Input label="Nome" name="name" type="text" />
+			<Select label="Unidade" name="unit" options={['und', 'kg', 'litro']} id="unit" />
+			<Button type="submit" id="add_product">Adicionar</Button>
+		</form>
+	</section>
+
+	<section>
+		<h1 class="text-2xl font-bold">Lista de Produtos</h1>
+	</section>
+
+	<section class="flex flex-col gap-y-4 w-full items-center">
+		<Table columns={['Nome', 'Unidade', 'Saldo']}>
+			{#each products as product, index}
+				<TableRow>
+					<TableCellHead>
+						{product?.name}
+					</TableCellHead>
+					<TableCell>
+						{product?.unit}
+					</TableCell>
+					<TableCell>
+						{product?.balance}
+					</TableCell>
+				</TableRow>
+			{/each}
+		</Table>
+	</section>
+</div>
 
 <Modal bind:showModal>
 	<div slot="header" class="text-xs text-gray-900 p-2">Editar Produto</div>
