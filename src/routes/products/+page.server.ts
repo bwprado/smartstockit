@@ -1,4 +1,4 @@
-import { redirect, type Actions } from '@sveltejs/kit';
+import { redirect, type Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types.js';
 
 export const load: PageServerLoad = async ({ locals: { getSession } }) => {
@@ -11,11 +11,14 @@ export const actions: Actions = {
     default: async ({ request, locals: { supabase } }) => {
         const formData = Object.fromEntries(await request.formData())
 
-        const { data, error } = await supabase
+        const { data, error: err } = await supabase
             .from('products')
             .insert([formData])
             .select()
 
-        console.log(error)
+        if (err) {
+            console.error(err.message)
+            throw error(+err.code, err.message)
+        }
     }
 };
