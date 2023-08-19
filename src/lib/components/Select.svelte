@@ -18,8 +18,8 @@
 		'rounded-md',
 		'border-0',
 		'py-1.5',
-		'pl-7',
-		'pr-20',
+		'px-2',
+		'h-8',
 		'text-gray-900',
 		'ring-1',
 		'ring-inset',
@@ -37,7 +37,7 @@
 <div class={twMerge('w-full flex flex-col py-4', customClasses.wrapper)}>
 	<label
 		for={name}
-		class={twMerge('block text-sm font-medium leading-6 text-gray-900', customClasses.label)}
+		class={twMerge('block text-sm font-bold leading-6 text-gray-900', customClasses.label)}
 		>{label}</label
 	>
 	<select {type} {name} {id} class={twMerge(selectStyle, customClasses.select)}>
