@@ -1,4 +1,6 @@
 <script>
+	import Input from '$lib/components/Input.svelte'
+
 	export let data;
 	const products = data?.products || [];
 	let isFresh = false;
@@ -14,24 +16,8 @@
 				{/each}
 			</select>
 		</div>
-		<div class="flex flex-col gap-y-1">
-			<label for="amount">Quantidade</label>
-			<input
-				name="amount"
-				id="amount"
-				type="number"
-				class="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-			/>
-		</div>
-		<div class="flex flex-col gap-y-1">
-			<label for="price">Preço</label>
-			<input
-				name="price"
-				id="price"
-				type="number"
-				class="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-			/>
-		</div>
+        <Input name="amount" id="amount" type="number" label="Quantidade" />
+        <Input name="price" id="price" type="number" label="Preço" />
 		<div class="flex flex-col gap-y-1 items-start">
 			<label for="fresh">Produto Fresco</label>
 			<input
