@@ -14,7 +14,7 @@
 	})
 </script>
 
-<nav class="bg-gray-200 h-full w-36 my-auto p-4">
+<nav class="bg-gray-200 dark:bg-gray-800 dark:text-gray-200 h-full w-36 my-auto p-4">
 	<ul class="flex flex-col gap-y-4">
 		{#each navItems as { link, label }}
 			<li class={linkStyle({ active: active === link })}>
