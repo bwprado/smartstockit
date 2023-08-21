@@ -30,9 +30,12 @@
 	</section>
 
 	<section class="flex flex-col gap-y-4 w-full items-center">
-		<Table columns={['Nome', 'Unidade', 'Saldo']}>
+		<Table columns={['Barcode','Nome', 'Unidade', 'Saldo']}>
 			{#each products as product}
 				<TableRow>
+					<TableCellHead>
+						{product?.barcode}
+					</TableCellHead>
 					<TableCellHead>
 						{product?.name}
 					</TableCellHead>
