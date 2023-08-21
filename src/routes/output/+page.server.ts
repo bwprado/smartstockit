@@ -10,7 +10,8 @@ export const load: PageServerLoad = async ({ locals: { getSession } }) => {
 };
 
 export const actions: Actions = {
-    default: async ({ request, locals: { supabase } }) => {
+    default: async ({ request, locals: { supabase, getSession } }) => {
+        const session = await getSession()
         const outputData = Object.fromEntries(await request.formData())
 
         const negativeAmount = -Number(outputData.amount)
