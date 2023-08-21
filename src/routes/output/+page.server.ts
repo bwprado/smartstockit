@@ -14,6 +14,6 @@ export const actions: Actions = {
         const outputData = Object.fromEntries(await request.formData())
 
         const negativeAmount = -Number(outputData.amount)
-        const res = await supabase.from('inventory').insert([{ ...outputData, amount: negativeAmount }])
+        const res = await supabase.from('inventory').insert([{ ...outputData, amount: negativeAmount, user: session?.user?.id, price: 0 }])
     }
 };
