@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Input from '$lib/components/Input.svelte'
 	import type { PageData } from './$types';
 	interface Dashboard {
 		product_id: string;
@@ -19,6 +20,7 @@
 <div class="w-1/2 flex flex-col mx-auto">
 	<form method="post" class="flex flex-col gap-y-4">
 		<div class="flex flex-col gap-y-1">
+			<Input name="amount" id="amount" type="number" label="Código de barras" />
 			<label for="product">Produto</label>
 			<select
 				name="product"
