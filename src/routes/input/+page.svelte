@@ -8,6 +8,7 @@
 
 <div class="w-1/2 flex flex-col mx-auto">
 	<form method="post" class="flex flex-col gap-y-4">
+		<Input name="amount" id="amount" type="number" label="Código de barras" />
 		<div class="flex flex-col gap-y-1">
 			<label for="product">Produto</label>
 			<select name="product" id="product" class="">
