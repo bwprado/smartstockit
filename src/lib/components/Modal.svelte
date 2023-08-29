@@ -1,5 +1,6 @@
 <script lang="ts">
     import Button from "./Button.svelte"
+    import { XCircle } from "lucide-svelte"
 
     export let showModal: boolean
     export let confirmFunction: () => void
@@ -15,20 +16,11 @@
 </script>
 
 <style>
-    dialog {
-        max-width: 32em;
-        border-radius: 0.2em;
-        border: none;
-        border-radius: 6px;
-    }
     dialog::backdrop {
         background: rgba(0, 0, 0, 0.3);
     }
-    dialog > div {
-        padding: 1em;
-    }
     dialog[open] {
-        animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        animation: move 0.5s cubic-bezier(0.34, 1.46, 0.74, 1);
     }
     @keyframes zoom {
         from {
@@ -36,6 +28,15 @@
         }
         to {
             transform: scale(1);
+        }
+    }
+
+    @keyframes move {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
         }
     }
     dialog[open]::backdrop {
@@ -53,11 +54,16 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog
-    class="dark:bg-gray-800 bg-white rounded-md shadow-md px-4"
+    class="dark:bg-gray-800 bg-white rounded-md shadow-md p-6 h-full right-0 mr-4 w-1/3 open:flex open:flex-col"
     bind:this={dialog}
     on:close={() => (showModal = false)}
     on:click|self={() => dialog.close()}
 >
+    <div class="self-end">
+        <Button on:click={() => (showModal = false)} intent="secondary" id={"close-modal"}>
+            <XCircle class="text-primary-50" />
+        </Button>
+    </div>
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div on:click|stopPropagation>
         {#if $$slots.header}
