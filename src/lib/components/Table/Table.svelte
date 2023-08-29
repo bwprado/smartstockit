@@ -5,7 +5,7 @@
     import TableCellHead from "./TableCellHead.svelte"
     import TableRow from "./TableRow.svelte"
 
-    export let columns: { label: string; sort?: string, type: string }[] = []
+    export let columns: { label: string; sort?: string; type: string }[] = []
     export let data: any[] = []
     export let index: number = 0
     let direction: "up" | "down" = "down"
@@ -15,18 +15,19 @@
     const formatCurrency = (value: number) =>
         new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value)
 
-    const checkType = (value: any) => {
-        if (typeof value === "string") {
-            return value
+    const checkType = (value: any, type: string) => {
+        if (type === "string") {
+            return value || "Não informado"
         }
-        if (typeof value === "number") {
+        if (type === "number") {
+            return +value
+        }
+        if (type === "currency") {
             return formatCurrency(value)
         }
-        if (typeof value === "object") {
-            if (typeof value?.getMonth === "function") {
-                return format(parseISO(value), "dd/MM/yy 'às' HH:mm:ss")
-            }
-            return ""
+        if (type === "date") {
+            if (value === null || value === undefined || value === "") return "Não informado"
+            return format(parseISO(value), "dd/MM/yy 'às' HH:mm:ss")
         }
         return "Não informado"
     }
@@ -98,11 +99,11 @@
                     {#each columns as col, i}
                         {#if i === index}
                             <TableCellHead>
-                                {col?.sort ? checkType(input[col.sort]) : ""}
+                                {col?.sort ? checkType(input[col.sort], col.type) : ""}
                             </TableCellHead>
                         {:else}
                             <TableCell>
-                                {col?.sort ? checkType(input[col.sort]) : ""}
+                                {col?.sort ? checkType(input[col.sort], col.type) : ""}
                             </TableCell>
                         {/if}
                     {/each}
