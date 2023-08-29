@@ -1,9 +1,23 @@
 import { redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ locals: { getSession } }) => {
+export const load: PageServerLoad = async ({ locals: { getSession, supabase } }) => {
     if (!await getSession()) {
         throw redirect(303, '/login')
+    }
+
+    const { data: inputs, error: err } = await supabase
+        .from('inventory')
+        .select('*, products(name)')
+        .gt('amount', 0)
+        .order('created_at', { ascending: false })
+
+    if (err) {
+        throw err
+    }
+
+    return {
+        inputs: inputs.map(input => ({ ...input, productName: input.products.name }))
     }
 };
 
