@@ -1,26 +1,25 @@
 <script lang="ts">
-	export let type: import('svelte/elements').HTMLButtonAttributes['type'] = 'button';
-	export let id: string = '';
-	export let onClick: () => void = () => {};
-	export let href: HTMLAnchorElement['href'] = '';
+    export let type: import("svelte/elements").HTMLButtonAttributes["type"] = "button"
+    export let id: string = ""
+    export let href: HTMLAnchorElement["href"] = ""
 </script>
 
 {#if href}
-	<a {href}>
-		<button
-			{type}
-			{id}
-			class="rounded-lg bg-blue-600 text-gray-100 font-bold p-3 flex items-center justify-center"
-			on:click={onClick}
-		>
-			<slot />
-		</button>
-	</a>
+    <a {href}>
+        <button
+            {type}
+            {id}
+            class="rounded-lg bg-primary-500 text-gray-100 font-bold p-3 text-sm flex items-center justify-center hover:bg-primary-700"
+        >
+            <slot />
+        </button>
+    </a>
 {:else}
-	<button
-		type="submit"
-		class="rounded-lg bg-blue-600 text-gray-100 font-bold p-3 flex items-center justify-center"
-	>
-		<slot />
-	</button>
+    <button
+        on:click
+        type="submit"
+        class="rounded-lg bg-primary-500 text-gray-100 font-bold p-3 flex text-sm items-center justify-center hover:bg-primary-700"
+    >
+        <slot />
+    </button>
 {/if}
