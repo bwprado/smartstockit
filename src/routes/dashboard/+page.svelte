@@ -13,7 +13,6 @@
     <div class="table-container">
         <Table
             columns={[
-                { label: "Código", sort: "product_id", type: "string" },
                 { label: "Produto", sort: "product_name", type: "string" },
                 { label: "Quantidade", sort: "total_amount", type: "number" },
                 { label: "Preço Médio", sort: "average_price", type: "currency" },
