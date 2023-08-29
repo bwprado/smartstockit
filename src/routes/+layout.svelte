@@ -1,13 +1,12 @@
 <script lang="ts">
-    import "../app.css"
     import { page } from "$app/stores"
-    import { AppShell, Drawer } from "@skeletonlabs/skeleton"
-    import { initializeStores } from "@skeletonlabs/skeleton"
+    import { AppShell, initializeStores } from "@skeletonlabs/skeleton"
+    import "../app.css"
 
     initializeStores()
 
-    import Header from "$lib/components/Header.svelte"
     import Breadcrumbs from "$lib/components/Breadcrumbs.svelte"
+    import Header from "$lib/components/Header.svelte"
     import Sidebar from "$lib/components/Sidebar.svelte"
 
     export let data
@@ -16,8 +15,6 @@
 <svelte:head>
     <title>Inventory VT {$page.url.pathname}</title>
 </svelte:head>
-
-<Drawer />
 
 <AppShell>
     <svelte:fragment slot="header">
