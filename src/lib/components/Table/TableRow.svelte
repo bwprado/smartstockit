@@ -1,3 +1,3 @@
-<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:opacity-70">
+<tr class="table-row">
 	<slot />
 </tr>
