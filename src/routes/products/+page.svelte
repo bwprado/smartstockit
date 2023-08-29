@@ -29,7 +29,7 @@
                 { label: "Código de Barras", sort: "id", type: "string" },
                 { label: "Nome", sort: "name", type: "string" },
                 { label: "Unidade", sort: "unit", type: "string" },
-                { label: "Saldo", sort: "balance", type: "currency" },
+                { label: "Saldo", sort: "balance", type: "number" },
             ]}
             data={products}
             index={1}
