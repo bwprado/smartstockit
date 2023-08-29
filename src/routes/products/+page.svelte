@@ -9,7 +9,6 @@
     $: showModal = false
     $: showAddModal = false
     const products = data?.products || []
-    console.log(products)
 </script>
 
 <div class="flex flex-col gap-y-10 w-full">
