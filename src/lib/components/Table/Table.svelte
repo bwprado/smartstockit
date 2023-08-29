@@ -67,7 +67,7 @@
 </script>
 
 <div class="overflow-x-auto rounded-md table">
-    <table class="text-left">
+    <table class="w-full text-left">
         <thead class="whitespace-nowrap">
             <tr>
                 {#each columns as column}
