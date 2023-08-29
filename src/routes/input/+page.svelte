@@ -4,17 +4,6 @@
     import Modal from "$lib/components/Modal.svelte"
     import Select from "$lib/components/Select.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-    import type { DrawerSettings } from "@skeletonlabs/skeleton"
-    import { getDrawerStore } from "@skeletonlabs/skeleton"
-
-    const drawer = getDrawerStore()
-
-    const drawerSettings: DrawerSettings = {
-        width: "w-1/2",
-        id: "input",
-        padding: "p-4",
-        position: "right",
-    }
 
     export let data
     $: showModal = false
@@ -31,7 +20,7 @@
 <div class="flex flex-col w-full py-6">
     <section class="flex justify-between">
         <h1 class="text-2xl font-bold">Lista de Entradas</h1>
-        <Button on:click={() => drawer.open(drawerSettings)}>Adicionar Entrada</Button>
+        <Button on:click={() => (showModal = true)}>Adicionar Entrada</Button>
     </section>
 </div>
 
