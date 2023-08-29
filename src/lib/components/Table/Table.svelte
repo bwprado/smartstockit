@@ -5,8 +5,9 @@
     import TableCellHead from "./TableCellHead.svelte"
     import TableRow from "./TableRow.svelte"
 
-    export let columns: { label: string; sort: string }[] = []
+    export let columns: { label: string; sort?: string, type: string }[] = []
     export let data: any[] = []
+    export let index: number = 0
     let direction: "up" | "down" = "down"
     $: direction
     $: sorting = columns[0].sort
@@ -30,7 +31,8 @@
         return "Não informado"
     }
 
-    const handleSort = (sortBy: string, direction: string) => {
+    const handleSort = (sortBy: string = "", direction: string) => {
+        if (!sortBy) return
         data = data.sort((a, b) => {
             if (typeof a[sortBy] === "number") {
                 return direction === "down" ? a[sortBy] - b[sortBy] : b[sortBy] - a[sortBy]
@@ -72,16 +74,20 @@
                         scope="col"
                         class={thStyle({ direction: sorting === column.label ? direction : "no" })}
                     >
-                        <button
-                            class="hover:opacity-90"
-                            on:click={() => {
-                                handleSort(column.sort, direction)
-                                direction = direction === "down" ? "up" : "down"
-                                sorting = column.label
-                            }}
-                        >
+                        {#if column.sort}
+                            <button
+                                class="hover:opacity-90"
+                                on:click={() => {
+                                    handleSort(column.sort, direction)
+                                    direction = direction === "down" ? "up" : "down"
+                                    sorting = column.label
+                                }}
+                            >
+                                {column.label}
+                            </button>
+                        {:else}
                             {column.label}
-                        </button>
+                        {/if}
                     </th>
                 {/each}
             </tr>
@@ -90,13 +96,13 @@
             {#each data as input}
                 <TableRow>
                     {#each columns as col, i}
-                        {#if i === 0}
+                        {#if i === index}
                             <TableCellHead>
-                                {checkType(input[col.sort])}
+                                {col?.sort ? checkType(input[col.sort]) : ""}
                             </TableCellHead>
                         {:else}
                             <TableCell>
-                                {checkType(input[col.sort])}
+                                {col?.sort ? checkType(input[col.sort]) : ""}
                             </TableCell>
                         {/if}
                     {/each}
