@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores"
-    import { AppShell, initializeStores } from "@skeletonlabs/skeleton"
+    import { AppShell, Toast, initializeStores } from "@skeletonlabs/skeleton"
     import "../app.css"
 
     initializeStores()
@@ -11,6 +11,8 @@
 
     export let data
 </script>
+
+<Toast />
 
 <svelte:head>
     <title>Inventory VT {$page.url.pathname}</title>
