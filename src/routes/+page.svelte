@@ -12,10 +12,11 @@
         toastStore.trigger({
             message: "Você precisa estar logado para acessar essa página!",
         })
+    } else {
+        toastStore.trigger({
+            message: "Login efetuado com sucesso!",
+        })
     }
-    toastStore.trigger({
-        message: "Login efetuado com sucesso!",
-    })
 </script>
 
 <svelte:head>
