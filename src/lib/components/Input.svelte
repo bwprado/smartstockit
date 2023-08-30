@@ -41,17 +41,31 @@
     ])
 </script>
 
-<div class={twMerge("w-full flex flex-col gap-y-1", customClasses.wrapper)}>
-    <label
-        for={name}
-        class={twMerge(
-            "block text-sm leading-6 text-gray-900 font-bold dark:text-gray-200",
-            customClasses.label,
-        )}>{label}</label>
-    <input
-        type={type}
-        name={name}
-        id={id}
-        class={twMerge(inputStyle, customClasses.input)}
-        on:input={onInput} />
-</div>
+{#if type === "checkbox"}
+    <div>
+        <label for={name} class="flex items-center gap-x-2">
+            <input {type} {required} {name} {id} class="checkbox" on:change />
+            <p class="font-bold dark:text-gray-200 text-sm leading-6 text-gray-900">{label}</p>
+        </label>
+    </div>
+{:else}
+    <div class={twMerge("w-full flex flex-col gap-y-1", customClasses.wrapper)}>
+        <label
+            for={name}
+            class={twMerge(
+                "block text-sm leading-6 text-gray-900 font-bold dark:text-gray-200",
+                customClasses.label,
+            )}>{label}</label
+        >
+        <input
+            {disabled}
+            {required}
+            {type}
+            {name}
+            {id}
+            {value}
+            class={twMerge(inputStyle, customClasses.input)}
+            on:input={onInput}
+        />
+    </div>
+{/if}
