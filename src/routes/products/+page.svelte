@@ -49,9 +49,9 @@
     <form
         slot="body"
         method="POST"
-        class="grid grid-rows-3 gap-x-4 py-4 items-center justify-center w-full text-gary"
+        class="flex flex-col gap-x-4 py-4 items-center justify-center w-full"
     >
-        <Input label="Nome" name="name" type="text" />
+        <Input label="Nome" name="name" type="text" required />
         <Select
             label="Unidade"
             name="unit"
