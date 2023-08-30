@@ -13,6 +13,7 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
         .order('created_at', { ascending: false })
 
     if (err) {
+        console.error(err)
         throw err
     }
 
@@ -24,8 +25,15 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
 export const actions: Actions = {
     default: async ({ request, locals: { supabase } }) => {
         const inputData = Object.fromEntries(await request.formData())
+        console.log(inputData)
 
         inputData?.fresh && delete inputData.fresh
-        await supabase.from('inventory').insert([inputData])
+        const { data, error: err } = await supabase.from('inventory').insert([inputData])
+
+        if (err) {
+            console.error(err)
+            throw err
+        }
+
     }
-};
+}
