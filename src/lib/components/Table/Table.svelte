@@ -5,12 +5,12 @@
     import TableCellHead from "./TableCellHead.svelte"
     import TableRow from "./TableRow.svelte"
 
-    export let columns: { label: string; sort?: string; type: string }[] = []
+    export let columns: { label: string; key?: string; type: string }[] = []
     export let data: any[] = []
     export let index: number = 0
     let direction: "up" | "down" = "down"
     $: direction
-    $: sorting = columns[0].sort
+    $: sorting = columns[0].key
 
     const formatCurrency = (value: number) =>
         new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value)
@@ -75,11 +75,11 @@
                         scope="col"
                         class={thStyle({ direction: sorting === column.label ? direction : "no" })}
                     >
-                        {#if column.sort}
+                        {#if column.key}
                             <button
                                 class="hover:opacity-90"
                                 on:click={() => {
-                                    handleSort(column.sort, direction)
+                                    handleSort(column.key, direction)
                                     direction = direction === "down" ? "up" : "down"
                                     sorting = column.label
                                 }}
@@ -99,11 +99,11 @@
                     {#each columns as col, i}
                         {#if i === index}
                             <TableCellHead>
-                                {col?.sort ? checkType(input[col.sort], col.type) : ""}
+                                {col?.key ? checkType(input[col.key], col.type) : ""}
                             </TableCellHead>
                         {:else}
                             <TableCell>
-                                {col?.sort ? checkType(input[col.sort], col.type) : ""}
+                                {col?.key ? checkType(input[col.key], col.type) : ""}
                             </TableCell>
                         {/if}
                     {/each}
