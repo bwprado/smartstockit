@@ -54,22 +54,22 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog
-    class="dark:bg-gray-800 bg-white rounded-md shadow-md p-6 h-full right-0 mr-4 w-1/3 open:flex open:flex-col"
+    class="dark:bg-gray-800 bg-white rounded-md shadow-md p-6 h-full right-0 mr-4 w-1/3"
     bind:this={dialog}
     on:close={() => (showModal = false)}
     on:click|self={() => dialog.close()}
 >
-    <div class="self-end">
-        <Button on:click={() => (showModal = false)} intent="secondary" id={"close-modal"}>
-            <XCircle class="text-primary-50" />
-        </Button>
-    </div>
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div on:click|stopPropagation>
+    <div on:click|stopPropagation class="flex flex-col">
+        <div class="self-end">
+            <Button on:click={() => (showModal = false)} intent="secondary" id={"close-modal"}>
+                <XCircle class="text-primary-50" />
+            </Button>
+        </div>
         {#if $$slots.header}
             <slot name="header" />
         {:else}
-            <div class="text-sm dark:text-gray-200 font-bold text-gray-900 p-2">{headerText}</div>
+            <div class="text-md dark:text-gray-200 font-bold text-gray-900 py-4">{headerText}</div>
         {/if}
         <hr />
         <slot name="body" />
