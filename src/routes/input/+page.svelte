@@ -27,11 +27,11 @@
 <section class="table-container">
     <Table
         columns={[
-            { label: "Produto", sort: "productName", type: "string" },
-            { label: "Quantidade", sort: "amount", type: "number" },
-            { label: "Preço", sort: "price", type: "currency" },
-            { label: "Data de Vencimento", sort: "expiration_date", type: "date" },
-            { label: "Produto Fresco", sort: "fresh", type: "string" },
+            { label: "Produto", key: "productName", type: "string" },
+            { label: "Quantidade", key: "amount", type: "number" },
+            { label: "Preço", key: "price", type: "currency" },
+            { label: "Data de Vencimento", key: "expiration_date", type: "date" },
+            { label: "Produto Fresco", key: "fresh", type: "string" },
         ]}
         data={inputs}
     />

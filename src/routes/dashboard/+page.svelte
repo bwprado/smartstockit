@@ -13,10 +13,10 @@
     <div class="table-container">
         <Table
             columns={[
-                { label: "Produto", sort: "product_name", type: "string" },
-                { label: "Quantidade", sort: "total_amount", type: "number" },
-                { label: "Preço Médio", sort: "average_price", type: "currency" },
-                { label: "Última Compra", sort: "last_purchase", type: "date" },
+                { label: "Produto", key: "product_name", type: "string" },
+                { label: "Quantidade", key: "total_amount", type: "number" },
+                { label: "Preço Médio", key: "average_price", type: "currency" },
+                { label: "Última Compra", key: "last_purchase", type: "date" },
             ]}
             data={dashboard}
             index={1}

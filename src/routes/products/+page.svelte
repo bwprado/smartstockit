@@ -25,9 +25,9 @@
     <section class="table-container">
         <Table
             columns={[
-                { label: "Nome", sort: "name", type: "string" },
-                { label: "Unidade", sort: "unit", type: "string" },
-                { label: "Saldo", sort: "balance", type: "number" },
+                { label: "Nome", key: "name", type: "string" },
+                { label: "Unidade", key: "unit", type: "string" },
+                { label: "Saldo", key: "balance", type: "number" },
             ]}
             data={products}
             index={1}
