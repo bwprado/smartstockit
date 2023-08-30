@@ -14,7 +14,13 @@
 
     $: inputs = data?.inputs || []
 
-    let isFresh = false
+    $: isFresh = false
+
+    const handleChange = (event: Event) => {
+        if (event?.target instanceof HTMLInputElement) {
+            isFresh = event?.target?.checked
+        }
+    }
 </script>
 
 <div class="flex flex-col w-full py-6">
@@ -40,21 +46,17 @@
 <Modal bind:showModal headerText="Entrada de Produtos" confirmFunction={() => console.log("Test")}>
     <svelte:fragment slot="body">
         <form method="post" class="flex flex-col gap-y-4">
-            <Input name="amount" id="amount" type="number" label="Código de barras" />
-            <Select options={products} label="Produto" />
+            <Select name="product" id="product" options={products} label="Produto" />
             <Input name="amount" id="amount" type="number" label="Quantidade" />
             <Input name="price" id="price" type="number" label="Preço" />
-            <div class="flex flex-col gap-y-1 items-start">
-                <label for="fresh">Produto Fresco</label>
-                <input
-                    name="fresh"
-                    id="fresh"
-                    type="checkbox"
-                    class=""
-                    on:change={(e) => (isFresh = e.currentTarget.checked)}
-                />
-            </div>
-            <Input type="date" id="expiring_date" label="Data de Vencimento" />
+            <Input
+                type="checkbox"
+                name="fresh"
+                id="fresh"
+                label="Produto Fresco"
+                on:change={handleChange}
+            />
+            <Input type="date" id="expiring_date" label="Data de Vencimento" disabled={isFresh} />
             <Button type="submit">Adicionar Entrada</Button>
         </form>
     </svelte:fragment>
