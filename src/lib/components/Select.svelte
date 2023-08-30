@@ -42,7 +42,7 @@
             customClasses.label,
         )}>{label}</label
     >
-    <select {type} {name} {id} class={twMerge(selectStyle, customClasses.select)}>
+    <select {type} {name} {id} class={twMerge(selectStyle, customClasses.select)} on:change>
         <option value="" disabled selected> Selecione uma opção </option>
         {#each options as option}
             <option value={option.id}>{option.name}</option>
