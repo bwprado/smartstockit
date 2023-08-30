@@ -11,6 +11,9 @@
     export let type: HTMLInputElement["type"] = "text"
     export let name: string = "input"
     export let id: string = "input"
+    export let required: boolean = false
+    export let value: string = ""
+    export let disabled: boolean = false
     export let onInput: (e: Event) => void = () => {}
 
     const inputStyle = cx([
