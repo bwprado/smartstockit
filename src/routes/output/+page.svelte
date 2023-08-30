@@ -21,8 +21,6 @@
         dashboard?.find((item) => item?.product_id === selectedProduct)?.average_price
 
     $: showModal = false
-
-    console.log(outputs)
 </script>
 
 <div class="flex flex-col w-full py-6">
@@ -36,22 +34,22 @@
         columns={[
             {
                 label: "Produto",
-                sort: "productName",
+                key: "productName",
                 type: "string",
             },
             {
                 label: "Quantidade",
-                sort: "amount",
+                key: "amount",
                 type: "number",
             },
             {
                 label: "Preço",
-                sort: "price",
+                key: "price",
                 type: "currency",
             },
             {
                 label: "Data",
-                sort: "created_at",
+                key: "created_at",
                 type: "date",
             },
         ]}
