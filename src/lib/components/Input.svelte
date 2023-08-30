@@ -8,7 +8,7 @@
         label?: string
         input?: string
     } = {}
-    export let type: string = "text"
+    export let type: HTMLInputElement["type"] = "text"
     export let name: string = "input"
     export let id: string = "input"
     export let onInput: (e: Event) => void = () => {}
