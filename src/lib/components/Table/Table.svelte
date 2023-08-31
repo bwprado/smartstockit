@@ -55,7 +55,7 @@
         })
     }
 
-    const thStyle = cva(["px-4", "py-3"], {
+    const thStyle = cva([], {
         variants: {
             direction: {
                 up: "table-sort-asc",
@@ -64,51 +64,59 @@
             },
         },
     })
+
+    const handleRowClick = (event: Event) => {
+        const row = event?.target as HTMLTableRowElement
+        const key = row?.dataset?.key
+        const id = row?.dataset?.id
+        console.log({ key, id, row })
+        // if (key && id) {
+        //     window.location.href = `/input/${id}`
+        // }
+    }
 </script>
 
-<div class="overflow-x-auto rounded-md table">
-    <table class="w-full text-left">
-        <thead class="whitespace-nowrap">
-            <tr>
-                {#each columns as column}
-                    <th
-                        scope="col"
-                        class={thStyle({ direction: sorting === column.label ? direction : "no" })}
-                    >
-                        {#if column.key}
-                            <button
-                                class="hover:opacity-90"
-                                on:click={() => {
-                                    handleSort(column.key, direction)
-                                    direction = direction === "down" ? "up" : "down"
-                                    sorting = column.label
-                                }}
-                            >
-                                {column.label}
-                            </button>
-                        {:else}
+<table class="w-full text-left table">
+    <thead class="whitespace-nowrap">
+        <tr>
+            {#each columns as column}
+                <th
+                    scope="col"
+                    class={thStyle({ direction: sorting === column.label ? direction : "no" })}
+                >
+                    {#if column.key}
+                        <button
+                            class="hover:opacity-90"
+                            on:click={() => {
+                                handleSort(column.key, direction)
+                                direction = direction === "down" ? "up" : "down"
+                                sorting = column.label
+                            }}
+                        >
                             {column.label}
-                        {/if}
-                    </th>
-                {/each}
-            </tr>
-        </thead>
-        <tbody>
-            {#each data as input}
-                <TableRow>
-                    {#each columns as col, i}
-                        {#if i === index}
-                            <TableCellHead>
-                                {col?.key ? checkType(input[col.key], col.type) : ""}
-                            </TableCellHead>
-                        {:else}
-                            <TableCell>
-                                {col?.key ? checkType(input[col.key], col.type) : ""}
-                            </TableCell>
-                        {/if}
-                    {/each}
-                </TableRow>
+                        </button>
+                    {:else}
+                        {column.label}
+                    {/if}
+                </th>
             {/each}
-        </tbody>
-    </table>
-</div>
+        </tr>
+    </thead>
+    <tbody>
+        {#each data as input}
+            <TableRow key={input.id} on:rowClick={handleRowClick}>
+                {#each columns as col, i}
+                    {#if i === index}
+                        <TableCellHead>
+                            {col?.key ? checkType(input[col.key], col.type) : ""}
+                        </TableCellHead>
+                    {:else}
+                        <TableCell>
+                            {col?.key ? checkType(input[col.key], col.type) : ""}
+                        </TableCell>
+                    {/if}
+                {/each}
+            </TableRow>
+        {/each}
+    </tbody>
+</table>

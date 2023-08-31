@@ -36,8 +36,8 @@
             { label: "Produto", key: "productName", type: "string" },
             { label: "Quantidade", key: "amount", type: "number" },
             { label: "Preço", key: "price", type: "currency" },
-            { label: "Data de Vencimento", key: "expiration_date", type: "date" },
-            { label: "Produto Fresco", key: "fresh", type: "string" },
+            { label: "Data Vencimento", key: "expiration_date", type: "date" },
+            { label: "Data Entrada", key: "created_at", type: "date" },
         ]}
         data={inputs}
     />
