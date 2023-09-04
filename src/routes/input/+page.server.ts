@@ -25,15 +25,18 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
 export const actions: Actions = {
     default: async ({ request, locals: { supabase } }) => {
         const inputData = Object.fromEntries(await request.formData())
-        console.log(inputData)
 
         inputData?.fresh && delete inputData.fresh
-        const { data, error: err } = await supabase.from('inventory').insert([inputData])
+        const price = +inputData?.price
+        const amount = +inputData?.amount
+        const expiration_date = inputData?.expiration_date === "" && null
+        const { data, error: err } = await supabase.from('inventory').insert([{ ...inputData, amount, price, expiration_date }])
 
         if (err) {
-            console.error(err)
-            throw err
+            console.log(err)
+            return { status: 500, body: "Erro ao fazer entrada de inventório" }
         }
 
+        return { status: 200, body: "Entrada de inventório feita com sucesso" }
     }
 }
