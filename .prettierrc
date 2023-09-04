@@ -7,11 +7,13 @@
         {
             "files": "*.svelte",
             "options": {
+                "printWidth": 100,
                 "svelteBracketNewLine": true,
                 "svelteIndentScriptAndStyle": true,
                 "svelteAllowShorthand": true,
                 "svelteSortOrder": "options-scripts-styles-markup",
                 "bracketSameLine": true,
+                "semi": false,
                 "plugins": ["prettier-plugin-svelte"]
             }
         }
