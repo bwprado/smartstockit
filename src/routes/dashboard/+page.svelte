@@ -16,7 +16,7 @@
                 { label: "Produto", key: "product_name", type: "string" },
                 { label: "Quantidade", key: "total_amount", type: "number" },
                 { label: "Preço Médio", key: "average_price", type: "currency" },
-                { label: "Última Compra", key: "last_purchase", type: "date" },
+                { label: "Último Registro", key: "last_entry", type: "date" },
             ]}
             data={dashboard}
             index={1}
