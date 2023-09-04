@@ -6,6 +6,14 @@
     const dispatch = createEventDispatcher()
 </script>
 
-<tr class="table-row cursor-pointer" data-key={key} on:click={(e) => dispatch("rowClick", e)}>
+<tr
+    class="table-row cursor-pointer"
+    data-key={key}
+    on:click={(e) =>
+        dispatch("rowClick", {
+            key: key,
+            row: e.currentTarget,
+        })}
+>
     <slot />
 </tr>
