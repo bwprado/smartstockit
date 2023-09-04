@@ -2,8 +2,13 @@
     import Button from "$lib/components/Button.svelte"
     import Input from "$lib/components/Input.svelte"
     import Modal from "$lib/components/Modal.svelte"
+    import SelectSearch from "$lib/components/SelectSearch.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-    import type { PageData } from "./$types"
+    import type { ActionData, PageData } from "./$types"
+    import { getToastStore } from "@skeletonlabs/skeleton"
+
+    const toast = getToastStore()
+
     interface Dashboard {
         product_id: string
         product_name: string
@@ -12,15 +17,25 @@
     }
 
     export let data: PageData
+    export let form: ActionData
+
     const products = data?.products || []
     const outputs = data?.outputs || []
-    const dashboard: Dashboard[] = data?.dashboard || []
-    let selectedProduct = "" as string
-    const averagePrice =
-        dashboard.length > 0 &&
-        dashboard?.find((item) => item?.product_id === selectedProduct)?.average_price
 
     $: showModal = false
+    $: loading = false
+
+    const searchableProducts = products.map((product) => ({
+        value: product.id,
+        label: product.name,
+        keywords: product.name.split(" ").join(", ").toLocaleLowerCase(),
+    }))
+
+    if (form?.status) {
+        toast.trigger({
+            message: form.body,
+        })
+    }
 </script>
 
 <div class="flex flex-col w-full py-6">
@@ -48,7 +63,7 @@
                 type: "currency",
             },
             {
-                label: "Data",
+                label: "Data de Saída",
                 key: "created_at",
                 type: "date",
             },
@@ -58,34 +73,19 @@
 </section>
 
 <Modal bind:showModal headerText="Retirar Produto" confirmFunction={() => console.log("Remove")}>
-    <form slot="body" method="post" class="flex flex-col gap-y-4">
-        <div class="flex flex-col gap-y-1">
-            <Input name="amount" id="amount" type="number" label="Código de barras" />
-            <label for="product">Produto</label>
-            <select
-                name="product"
-                id="product"
-                class=""
-                bind:value={selectedProduct}
-                on:change={() => console.log(selectedProduct)}
-            >
-                {#each products as product}
-                    <option value={product.id}>{product.name}</option>
-                {/each}
-            </select>
-        </div>
-        <div class="flex flex-col gap-y-1">
-            <label for="amount">Quantidade</label>
-            <input
-                name="amount"
-                id="amount"
-                type="number"
-                class="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-            />
-        </div>
-        <input type="hidden" name="price" value={averagePrice} />
-        <button type="submit" class="p-4 bg-red-500 rounded-lg text-gray-100 hover:opacity-50"
-            >Retirar do Estoque</button
+    <form slot="body" method="POST" class="flex flex-col gap-y-4 h-full">
+        <SelectSearch name="product" id="product" label="Produto" options={searchableProducts} />
+        <Input label="Quantidade" id="amount" name="amount" type="number" />
+        <input type="hidden" name="price" value={0} />
+        <Button
+            type="submit"
+            id="retrieve_product"
+            className="w-full mt-auto"
+            on:click={() => (loading = true)}
+            {loading}>Retirar do Estoque</Button
         >
     </form>
+    <svelte:fragment slot="footer">
+        <div />
+    </svelte:fragment>
 </Modal>
