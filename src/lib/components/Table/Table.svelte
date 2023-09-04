@@ -4,10 +4,12 @@
     import TableCell from "./TableCell.svelte"
     import TableCellHead from "./TableCellHead.svelte"
     import TableRow from "./TableRow.svelte"
+    import { goto } from "$app/navigation"
 
     export let columns: { label: string; key?: string; type: string }[] = []
     export let data: any[] = []
     export let index: number = 0
+    export let handleRowClick: (id: string) => void = () => {}
     let direction: "up" | "down" = "down"
     $: direction
     $: sorting = columns[0].key
@@ -65,14 +67,18 @@
         },
     })
 
-    const handleRowClick = (event: Event) => {
-        const row = event?.target as HTMLTableRowElement
-        const key = row?.dataset?.key
-        const id = row?.dataset?.id
-        console.log({ key, id, row })
-        // if (key && id) {
-        //     window.location.href = `/input/${id}`
-        // }
+    type ClickRowEvent = CustomEvent<{
+        key: string
+        row: HTMLTableRowElement
+    }>
+
+    const handleRowClickEvent = (event: ClickRowEvent) => {
+        const { key } = event?.detail
+        if (key) {
+            handleRowClick(key)
+        } else {
+            console.error("Key not found")
+        }
     }
 </script>
 
@@ -104,7 +110,7 @@
     </thead>
     <tbody>
         {#each data as input}
-            <TableRow key={input.id} on:rowClick={handleRowClick}>
+            <TableRow key={input.id} on:rowClick={handleRowClickEvent}>
                 {#each columns as col, i}
                     {#if i === index}
                         <TableCellHead>
