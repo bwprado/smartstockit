@@ -2,7 +2,7 @@
     import { twMerge } from "tailwind-merge"
     import { cx } from "class-variance-authority"
 
-    export let label: string = "Label"
+    export let label: string = ""
     export let customClasses: {
         wrapper?: string
         label?: string
@@ -42,21 +42,23 @@
 </script>
 
 {#if type === "checkbox"}
-    <div>
+    <div class="w-full flex flex-col gap-y-2">
         <label for={name} class="flex items-center gap-x-2">
-            <input {type} {required} {name} {id} class="checkbox" on:change />
             <p class="font-bold dark:text-gray-200 text-sm leading-6 text-gray-900">{label}</p>
         </label>
+        <input {type} {required} {name} {id} class="checkbox" on:change />
     </div>
 {:else}
-    <div class={twMerge("w-full flex flex-col gap-y-1", customClasses.wrapper)}>
-        <label
-            for={name}
-            class={twMerge(
-                "block text-sm leading-6 text-gray-900 font-bold dark:text-gray-200",
-                customClasses.label,
-            )}>{label}</label
-        >
+    <div class={twMerge("w-full flex flex-col gap-y-2", customClasses.wrapper)}>
+        {#if label}
+            <label
+                for={name}
+                class={twMerge(
+                    "block text-sm leading-6 text-gray-900 font-bold dark:text-gray-200",
+                    customClasses.label,
+                )}>{label}</label
+            >
+        {/if}
         <input
             {disabled}
             {required}
