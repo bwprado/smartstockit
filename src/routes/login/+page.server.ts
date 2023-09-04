@@ -1,6 +1,6 @@
 import { AuthApiError } from "@supabase/supabase-js"
-import { redirect, type Actions, error } from "@sveltejs/kit"
-import delay from 'lodash/delay'
+import { redirect } from "@sveltejs/kit"
+import type { Actions } from "./$types"
 
 export const actions: Actions = {
     default: async ({ request, locals: { supabase } }) => {
@@ -9,11 +9,12 @@ export const actions: Actions = {
         const { error: err } = await supabase.auth.signInWithPassword(loginData as { email: string, password: string })
         if (err) {
             if (err instanceof AuthApiError && err.status === 400) {
-                return error(401, err.message)
+                return { status: 400, body: "Email ou password inválidos." }
             } else {
-                return error(500, err.message)
+                return { status: 500, body: "Erro desconhecido." }
             }
         }
-        throw redirect(301, "/")
+        console.log("Login successful")
+        throw redirect(301, "/dashboard")
     }
 }
