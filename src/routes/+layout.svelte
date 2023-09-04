@@ -1,12 +1,28 @@
 <script lang="ts">
     import "../app.css"
     import { page } from "$app/stores"
-    import { AppShell, Toast, initializeStores } from "@skeletonlabs/skeleton"
+    import {
+        AppShell,
+        Modal,
+        Toast,
+        initializeStores,
+    } from "@skeletonlabs/skeleton"
     import type { LayoutData } from "./$types"
+    import {
+        computePosition,
+        autoUpdate,
+        offset,
+        shift,
+        flip,
+        arrow,
+    } from "@floating-ui/dom"
+    import { storePopup } from "@skeletonlabs/skeleton"
 
     import Breadcrumbs from "$lib/components/Breadcrumbs.svelte"
     import Header from "$lib/components/Header.svelte"
     import Sidebar from "$lib/components/Sidebar.svelte"
+
+    storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow })
 
     initializeStores()
 
@@ -15,6 +31,7 @@
 </script>
 
 <Toast />
+<Modal />
 
 <svelte:head>
     <title>Inventory VT {$page.url.pathname}</title>
@@ -24,7 +41,9 @@
     <svelte:fragment slot="header">
         <Header session={data?.session || false} user={data?.user} />
     </svelte:fragment>
-    <Breadcrumbs />
+    {#if user}
+        <Breadcrumbs />
+    {/if}
     <svelte:fragment slot="sidebarLeft">
         {#if user}
             <Sidebar
@@ -46,7 +65,9 @@
     <svelte:fragment slot="pageFooter">
         <footer class="flex justify-center items-center">
             <p class="text-xs py-4">
-                <a class="font-bold" href="mailto:bwprado@gmail.com">Working In Progress Dev </a> - All rights reserved 2023.
+                <a class="font-bold" href="mailto:bwprado@gmail.com"
+                    >Working In Progress Dev
+                </a> - All rights reserved 2023.
             </p>
         </footer>
     </svelte:fragment>
