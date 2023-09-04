@@ -1,0 +1,26 @@
+<script lang="ts">
+    import { cva, cx } from "class-variance-authority"
+    import { twMerge } from "tailwind-merge"
+
+    export let id: string = "button"
+    export let type: "button" | "submit" | "reset" = "button"
+    export let customClasses: string = ""
+    export let disabled: boolean = false
+    const btn = cx([
+        "rounded-full",
+        "hover:opacity-80",
+        "text-gray-900",
+        "dark:bg-transparent",
+        "bg-transparent",
+        "dark:text-primary-500",
+        "h-9",
+        "w-9",
+        "flex",
+        "items-center",
+        "justify-center",
+    ])
+</script>
+
+<button class={twMerge(btn, customClasses)} {id} {type} {disabled} on:click>
+    <slot />
+</button>
