@@ -2,24 +2,41 @@
     import Button from "$lib/components/Button.svelte"
     import Input from "$lib/components/Input.svelte"
     import Modal from "$lib/components/Modal.svelte"
-    import Select from "$lib/components/Select.svelte"
+    import SelectSearch from "$lib/components/SelectSearch.svelte"
     import Table from "$lib/components/Table/Table.svelte"
+    import { getToastStore } from "@skeletonlabs/skeleton"
+    import type { ActionData, PageData } from "./$types"
 
-    export let data
-    $: showModal = false
+    const toast = getToastStore()
+
+    export let data: PageData
+    export let form: ActionData
     const products = (data?.products || []).map((product) => ({
         name: product.name,
         id: product.id,
     }))
 
-    $: inputs = data?.inputs || []
+    const searchableProducts = products.map((product) => ({
+        label: product.name,
+        value: product.id,
+        keyword: product.name.split(" ").join(", ").toLowerCase(),
+    }))
 
+    $: showModal = false
+    $: inputs = data?.inputs || []
     $: isFresh = false
+    $: loading = false
 
     const handleChange = (event: Event) => {
         if (event?.target instanceof HTMLInputElement) {
             isFresh = event?.target?.checked
         }
+    }
+
+    if (form?.status) {
+        toast.trigger({
+            message: form.body,
+        })
     }
 </script>
 
@@ -45,8 +62,13 @@
 
 <Modal bind:showModal headerText="Entrada de Produtos" confirmFunction={() => console.log("Test")}>
     <svelte:fragment slot="body">
-        <form method="post" class="flex flex-col gap-y-4">
-            <Select name="product" id="product" options={products} label="Produto" />
+        <form method="POST" class="flex flex-col gap-y-4 h-full">
+            <SelectSearch
+                label="Produto"
+                options={searchableProducts}
+                id="product"
+                name="product"
+            />
             <Input name="amount" id="amount" type="number" label="Quantidade" />
             <Input name="price" id="price" type="number" label="Preço" />
             <Input
@@ -56,9 +78,16 @@
                 label="Produto Fresco"
                 on:change={handleChange}
             />
-            <Input type="date" id="expiring_date" label="Data de Vencimento" disabled={isFresh} />
-            <Button type="submit">Adicionar Entrada</Button>
+            <Input type="date" id="expiration_date" label="Data de Vencimento" name="expiration_date" disabled={isFresh} />
+            <Button
+                type="submit"
+                className="mt-auto w-full"
+                on:click={() => (loading = true)}
+                {loading}>Adicionar Entrada</Button
+            >
         </form>
     </svelte:fragment>
-    <div slot="footer"></div>
+    <svelte:fragment slot="footer">
+        <div></div>
+    </svelte:fragment>
 </Modal>
