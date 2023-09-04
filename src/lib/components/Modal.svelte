@@ -1,6 +1,7 @@
 <script lang="ts">
+    import { X } from "lucide-svelte"
     import Button from "./Button.svelte"
-    import { XCircle } from "lucide-svelte"
+    import IconButton from "./IconButton.svelte"
 
     export let showModal: boolean
     export let confirmFunction: () => void
@@ -60,22 +61,29 @@
     on:click|self={() => dialog.close()}
 >
     <!-- svelte-ignore a11y-no-static-element-interactions -->
-    <div on:click|stopPropagation class="flex flex-col">
-        <div class="self-end">
-            <Button on:click={() => (showModal = false)} intent="secondary" id={"close-modal"}>
-                <XCircle class="text-primary-50" />
-            </Button>
+    <div on:click|stopPropagation class="flex flex-col relative h-full">
+        <div class="grid grid-cols-[max-content,max-content] justify-between">
+            <IconButton on:click={() => (showModal = false)} id="close-modal">
+                <X
+                    class="text-gray-900 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200"
+                />
+            </IconButton>
+            <slot name="action" />
         </div>
         {#if $$slots.header}
             <slot name="header" />
         {:else}
-            <div class="text-md dark:text-gray-200 font-bold text-gray-900 py-4">{headerText}</div>
+            <div class="text-lg dark:text-gray-200 font-bold text-primary-500 py-4">
+                {headerText}
+            </div>
         {/if}
-        <hr />
-        <slot name="body" />
-        <hr />
+        <div class="h-full">
+            <slot name="body" />
+        </div>
         {#if $$slots.footer}
-            <slot name="footer" />
+            <div class="w-full">
+                <slot name="footer" />
+            </div>
         {:else}
             <div class="flex w-full gap-x-4 py-4">
                 <Button on:click={() => (showModal = false)}>Cancelar</Button>
