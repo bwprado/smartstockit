@@ -11,6 +11,7 @@
     export let type: string = "text"
     export let name: string = "input"
     export let id: string = "input"
+    export let value: string = ""
     export let options: { name: string; id: string }[] = []
     const selectStyle = cx([
         "block",
@@ -34,7 +35,7 @@
     ])
 </script>
 
-<div class={twMerge("w-full flex flex-col py-4", customClasses.wrapper)}>
+<div class={twMerge("w-full flex flex-col gap-y-2", customClasses.wrapper)}>
     <label
         for={name}
         class={twMerge(
@@ -42,7 +43,7 @@
             customClasses.label,
         )}>{label}</label
     >
-    <select {type} {name} {id} class={twMerge(selectStyle, customClasses.select)} on:change>
+    <select {type} {name} {id} class={twMerge(selectStyle, customClasses.select)} on:change {value}>
         <option value="" disabled selected> Selecione uma opção </option>
         {#each options as option}
             <option value={option.id}>{option.name}</option>
