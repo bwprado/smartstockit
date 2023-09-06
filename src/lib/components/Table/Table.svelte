@@ -64,6 +64,10 @@
                 down: "table-sort-dsc",
                 no: "",
             },
+            responsive: {
+                true: "hidden sm:block",
+                false: "",
+            },
         },
     })
 
@@ -85,10 +89,13 @@
 <table class="w-full text-left table">
     <thead class="whitespace-nowrap">
         <tr>
-            {#each columns as column}
+            {#each columns as column, i}
                 <th
                     scope="col"
-                    class={thStyle({ direction: sorting === column.label ? direction : "no" })}
+                    class={thStyle({
+                        direction: sorting === column.label ? direction : "no",
+                        responsive: i === columns.length - 1,
+                    })}
                 >
                     {#if column.key}
                         <button
@@ -117,7 +124,7 @@
                             {col?.key ? checkType(input[col.key], col.type) : ""}
                         </TableCellHead>
                     {:else}
-                        <TableCell>
+                        <TableCell customClass={i === columns.length - 1 ? "hidden sm:block" : ""}>
                             {col?.key ? checkType(input[col.key], col.type) : ""}
                         </TableCell>
                     {/if}
