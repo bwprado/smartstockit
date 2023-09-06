@@ -1,8 +1,9 @@
 <script lang="ts">
     import { page } from "$app/stores"
     import { cva } from "class-variance-authority"
+    import type { SvelteComponent } from "svelte"
 
-    export let navItems: { label: string; link: string }[] = []
+    export let navItems: { label: string; link: string; Icon: SvelteComponent }[] = []
     $: active = $page.url.pathname
     const linkStyle = cva(
         [
@@ -12,6 +13,7 @@
             "rounded-lg",
             "flex",
             "items-center",
+            "gap-x-4",
             "hover:text-primary-50",
         ],
         {
@@ -25,12 +27,13 @@
     )
 </script>
 
-<nav class="h-full w-60 my-auto p-8">
-    <ul class="flex flex-col gap-y-4">
-        {#each navItems as { link, label }}
+<nav class="h-full w-0 sm:w-60 transition-all duration-300 my-auto p-2 sm:p-8">
+    <ul class="flex-col gap-y-4 hidden sm:flex">
+        {#each navItems as { link, label, Icon }}
             <a href={link}>
                 <li class={linkStyle({ active: active === link })}>
-                    {label}
+                    <svelte:component this={Icon} />
+                    <span>{label}</span>
                 </li>
             </a>
         {/each}
