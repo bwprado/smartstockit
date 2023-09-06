@@ -15,13 +15,14 @@
         [
             "rounded-lg",
             "font-bold",
-            "py-2",
+            "py-4",
             "px-4",
             "text-sm",
             "flex",
             "items-center",
             "justify-center",
             "gap-x-4",
+            "w-full",
         ],
         {
             variants: {
