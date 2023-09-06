@@ -2,7 +2,7 @@
     "tabWidth": 4,
     "printWidth": 100,
     "semi": false,
-    "singleQuote": true,
+    "singleQuote": false,
     "svelteBracketNewLine": false,
     "overrides": [
         {
@@ -14,7 +14,7 @@
                 "svelteAllowShorthand": true,
                 "svelteSortOrder": "options-scripts-styles-markup",
                 "bracketSameLine": true,
-                "singleQuote": true,
+                "singleQuote": false,
                 "semi": false,
                 "plugins": ["prettier-plugin-svelte"]
             }
