@@ -55,18 +55,16 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog
-    class="dark:bg-gray-800 bg-white rounded-md shadow-md p-6 h-full right-0 mr-4 w-1/3"
+    class="dark:bg-suface-900 bg-white rounded-md shadow-md p-6 h-full right-0 mr-4 w-4/5 sm:w-1/3"
     bind:this={dialog}
     on:close={() => (showModal = false)}
-    on:click|self={() => dialog.close()}
->
+    on:click|self={() => dialog.close()}>
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div on:click|stopPropagation class="flex flex-col relative h-full">
         <div class="grid grid-cols-[max-content,max-content] justify-between">
             <IconButton on:click={() => (showModal = false)} id="close-modal">
                 <X
-                    class="text-gray-900 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200"
-                />
+                    class="text-surface-800 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200" />
             </IconButton>
             <slot name="action" />
         </div>
@@ -91,8 +89,7 @@
                     on:click={() => {
                         confirmFunction()
                         showModal = false
-                    }}>Salvar</Button
-                >
+                    }}>Salvar</Button>
             </div>
         {/if}
         <!-- svelte-ignore a11y-autofocus -->
