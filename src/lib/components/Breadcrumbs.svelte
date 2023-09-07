@@ -9,7 +9,7 @@
         .map((crumb) => capitalize(crumb))
 </script>
 
-<div class="h-10 w-full flex items-center justify-start px-4 lg:px-28">
+<div class="h-10 w-full flex items-center justify-start px-4 lg:px-28 text-xs">
     <ul class="flex gap-x-4">
         {#each myBreadcrumbs as crumb, i}
             {#if i < myBreadcrumbs.length - 1}
