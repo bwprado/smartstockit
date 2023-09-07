@@ -13,12 +13,14 @@ const config = {
         join(require.resolve("@skeletonlabs/skeleton"), "../**/*.{html,js,svelte,ts}"),
     ],
     theme: {
-        extend: {},
+        fontFamily: {
+            sans: ["Inter", "sans-serif"],
+        },
     },
     plugins: [
         skeleton({
             themes: {
-                preset: ["crimson"],
+                preset: [{ name: "crimson", enhancements: true }],
             },
         }),
     ],
