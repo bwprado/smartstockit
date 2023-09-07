@@ -9,7 +9,15 @@
         popup,
         setModeCurrent,
     } from "@skeletonlabs/skeleton"
-    import { ArrowDown, ArrowUp, Home, LayoutDashboard, Menu, Package, Settings } from "lucide-svelte"
+    import {
+        ArrowDown,
+        ArrowUp,
+        Home,
+        LayoutDashboard,
+        Menu,
+        Package,
+        Settings,
+    } from "lucide-svelte"
     import Button from "./Button.svelte"
     import IconButton from "./IconButton.svelte"
     import MobileSidebar from "./MobileSidebar.svelte"
@@ -32,9 +40,8 @@
         component: {
             ref: MobileSidebar,
             props: {
-                navItems:[
-                    { label: "Home", link: "/", Icon: Home },
-                    { label: "Admin", link: "/admin", Icon: Settings },
+                navItems: [
+                    { label: "Configurações", link: "/settings", Icon: Settings },
                     { label: "Dashboard", link: "/dashboard", Icon: LayoutDashboard },
                     { label: "Produtos", link: "/products", Icon: Package },
                     { label: "Entradas", link: "/input", Icon: ArrowUp },
@@ -51,14 +58,13 @@
 </script>
 
 <header
-    class="flex h-max w-full bg-primary-500 items-center text-gray-200 justify-between py-4 lg:px-28 px-4"
->
-    <div class="hidden sm:block">
-        <a href="/">Inventory</a>
-    </div>
-    <IconButton on:click={handleMenuClick} customClasses="dark:text-gray-200 text-white sm:hidden">
+    class="flex h-max w-full bg-primary-500 items-center text-gray-200 justify-between py-4 lg:pl-8 lg:pr-28 px-4">
+    <IconButton on:click={handleMenuClick} customClasses="dark:text-gray-200 text-white lg:hidden">
         <Menu />
     </IconButton>
+    <div class="hidden sm:block">
+        <a href="/" class="text-xl font-bold">Smart Stock It</a>
+    </div>
     <nav class="align-middle">
         <ul class="flex gap-x-6 items-center">
             <LightSwitch on:click={() => setModeCurrent($modeCurrent ? true : false)} />
@@ -77,8 +83,7 @@
                             initials={user?.name}
                             border="border-4 border-surface-300-600-token hover:!border-white"
                             width="w-12"
-                            cursor="cursor-pointer"
-                        />
+                            cursor="cursor-pointer" />
                     </button>
                     <div class="card p-4 w-72 shadow-xl" data-popup="popupFeatured">
                         <div class="space-y-4">
@@ -87,16 +92,14 @@
                                     initials={user?.name}
                                     border="border-4 border-surface-300-600-token hover:!border-primary-500"
                                     width="w-12"
-                                    cursor="cursor-pointer"
-                                />
+                                    cursor="cursor-pointer" />
                                 <p class="font-bold">{user?.name}</p>
                             </div>
                             <a
                                 class="btn variant-soft w-full"
                                 href="/logout"
                                 target="_blank"
-                                rel="noreferrer"
-                            >
+                                rel="noreferrer">
                                 Logout
                             </a>
                         </div>
