@@ -43,7 +43,7 @@
         {/if}
     </svelte:fragment>
 
-    <div class="px-4 lg:px-28 h-full">
+    <div class="px-4 lg:px-8 xl:px-20 h-full">
         <slot />
     </div>
     <svelte:fragment slot="pageFooter">
