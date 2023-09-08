@@ -63,20 +63,17 @@
             bind:value={inputLabel}
             aria-placeholder={placeholder}
             use:popup={popupSettings}
-            class={inputStyle}
-        />
+            class={inputStyle} />
         <input type="hidden" {name} {id} bind:value={inputValue} />
         <div
             class="card w-full max-w-sm max-h-48 p-4 overflow-y-auto rounded-xl"
             tabindex="-1"
-            data-popup="popupAutocomplete"
-        >
+            data-popup="popupAutocomplete">
             <Autocomplete
                 bind:input={inputLabel}
                 {options}
                 on:selection={onSearchSelection}
-                class="text-gray-900 dark:text-gray-200"
-            />
+                class="text-gray-900 dark:text-gray-200" />
         </div>
     </label>
 </div>
