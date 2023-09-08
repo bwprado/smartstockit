@@ -41,9 +41,9 @@
 </script>
 
 <div class="flex flex-col w-full py-6">
-    <section class="flex justify-between">
+    <section class="flex justify-between py-4">
         <h1 class="text-2xl font-bold">Lista de Entradas</h1>
-        <Button on:click={() => (showModal = true)}>Adicionar Entrada</Button>
+        <Button className="max-w-max" on:click={() => (showModal = true)}>Adicionar Entrada</Button>
     </section>
 </div>
 
@@ -56,8 +56,7 @@
             { label: "Data Vencimento", key: "expiration_date", type: "date" },
             { label: "Data Entrada", key: "created_at", type: "date" },
         ]}
-        data={inputs}
-    />
+        data={inputs} />
 </section>
 
 <Modal bind:showModal headerText="Entrada de Produtos" confirmFunction={() => console.log("Test")}>
@@ -67,8 +66,7 @@
                 label="Produto"
                 options={searchableProducts}
                 id="product"
-                name="product"
-            />
+                name="product" />
             <Input name="amount" id="amount" type="number" label="Quantidade" />
             <Input name="price" id="price" type="number" label="Preço" />
             <Input
@@ -76,15 +74,18 @@
                 name="fresh"
                 id="fresh"
                 label="Produto Fresco"
-                on:change={handleChange}
-            />
-            <Input type="date" id="expiration_date" label="Data de Vencimento" name="expiration_date" disabled={isFresh} />
+                on:change={handleChange} />
+            <Input
+                type="date"
+                id="expiration_date"
+                label="Data de Vencimento"
+                name="expiration_date"
+                disabled={isFresh} />
             <Button
                 type="submit"
                 className="mt-auto w-full"
                 on:click={() => (loading = true)}
-                {loading}>Adicionar Entrada</Button
-            >
+                {loading}>Adicionar Entrada</Button>
         </form>
     </svelte:fragment>
     <svelte:fragment slot="footer">
