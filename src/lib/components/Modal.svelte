@@ -16,46 +16,9 @@
     }
 </script>
 
-<style>
-    dialog::backdrop {
-        background: rgba(0, 0, 0, 0.3);
-    }
-    dialog[open] {
-        animation: move 0.5s cubic-bezier(0.34, 1.46, 0.74, 1);
-    }
-    @keyframes zoom {
-        from {
-            transform: scale(0.95);
-        }
-        to {
-            transform: scale(1);
-        }
-    }
-
-    @keyframes move {
-        from {
-            transform: translateX(100%);
-        }
-        to {
-            transform: translateX(0);
-        }
-    }
-    dialog[open]::backdrop {
-        animation: fade 0.2s ease-out;
-    }
-    @keyframes fade {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-</style>
-
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog
-    class="dark:bg-suface-900 bg-white rounded-md shadow-md p-6 h-full right-0 mr-4 w-4/5 sm:w-1/3"
+    class="dark:bg-surface-800 bg-white rounded-md shadow-md p-6 h-full right-0 mr-4 w-full sm:w-2/3 md:w-1/2 lg:w-2/5"
     bind:this={dialog}
     on:close={() => (showModal = false)}
     on:click|self={() => dialog.close()}>
@@ -95,3 +58,40 @@
         <!-- svelte-ignore a11y-autofocus -->
     </div>
 </dialog>
+
+<style>
+    dialog::backdrop {
+        background: rgba(0, 0, 0, 0.3);
+    }
+    dialog[open] {
+        animation: move 0.3s cubic-bezier(0.34, 1.4, 0.84, 1);
+    }
+    @keyframes zoom {
+        from {
+            transform: scale(0.95);
+        }
+        to {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes move {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+    dialog[open]::backdrop {
+        animation: fade 0.2s ease-out;
+    }
+    @keyframes fade {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+</style>
