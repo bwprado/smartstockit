@@ -3,6 +3,7 @@
     import { cva } from "class-variance-authority"
     import IconButton from "./IconButton.svelte"
     import { X } from "lucide-svelte"
+    import Footer from "./Footer.svelte"
 
     export let navItems: { label: string; link: string }[] = []
     export let onClick: () => void = () => {}
@@ -30,10 +31,9 @@
 </script>
 
 <nav
-    class="bg-gray-200 dark:bg-gray-800 h-full flex flex-col gap-y-20 w-full transition-all duration-300 p-8 rounded-lg"
->
+    class="bg-gray-200 dark:bg-surface-800 h-full flex flex-col gap-y-20 w-full transition-all duration-300 p-8 rounded-lg">
     <div class="flex items-center justify-between">
-        <h1 class="text-primary-500 text-2xl font-bold">Inventory - VT</h1>
+        <h1 class="text-primary-500 text-2xl font-bold">Smart Stock It</h1>
         <IconButton on:click={onClick}>
             <X />
         </IconButton>
@@ -47,10 +47,5 @@
             </a>
         {/each}
     </ul>
-    <footer class="flex justify-center items-center mt-auto">
-        <p class="text-xs py-4">
-            <a class="font-bold" href="mailto:bwprado@gmail.com">Working In Progress Dev </a> - All rights
-            reserved 2023.
-        </p>
-    </footer>
+    <Footer customClass="mt-auto" />
 </nav>
