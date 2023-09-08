@@ -1,10 +1,19 @@
 <script>
-    import { initializeStores } from "@skeletonlabs/skeleton"
+    import { Toast, initializeStores } from "@skeletonlabs/skeleton"
     import "../../app.css"
 
     initializeStores()
 </script>
 
-<div class="h-screen w-screen flex items-center justify-center">
+<Toast />
+
+<div class="h-auto w-auto">
     <slot />
 </div>
+
+<style>
+    :root {
+        --theme-font-family-base: "Roboto", sans-serif;
+        --theme-font-family-heading: "Roboto", sans-serif;
+    }
+</style>
