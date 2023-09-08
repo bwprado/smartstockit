@@ -41,7 +41,7 @@
 <div class="flex flex-col w-full py-6">
     <section class="flex justify-between">
         <h1 class="text-2xl font-bold">Lista de Saídas</h1>
-        <Button on:click={() => (showModal = true)}>Retirar Produto</Button>
+        <Button className="max-w-max" on:click={() => (showModal = true)}>Retirar Produto</Button>
     </section>
 </div>
 <section class="table-container">
@@ -68,8 +68,7 @@
                 type: "date",
             },
         ]}
-        data={outputs}
-    />
+        data={outputs} />
 </section>
 
 <Modal bind:showModal headerText="Retirar Produto" confirmFunction={() => console.log("Remove")}>
@@ -82,8 +81,7 @@
             id="retrieve_product"
             className="w-full mt-auto"
             on:click={() => (loading = true)}
-            {loading}>Retirar do Estoque</Button
-        >
+            {loading}>Retirar do Estoque</Button>
     </form>
     <svelte:fragment slot="footer">
         <div />
