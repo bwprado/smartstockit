@@ -9,6 +9,7 @@
     import Header from "$lib/components/Header.svelte"
     import Sidebar from "$lib/components/Sidebar.svelte"
     import { ArrowDown, ArrowUp, LayoutDashboard, Package, Settings } from "lucide-svelte"
+    import Footer from "$lib/components/Footer.svelte"
 
     storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow })
 
@@ -21,12 +22,9 @@
 <Toast />
 <Modal />
 
-<svelte:head>
-    <title>Inventory {$page.url.pathname}</title>
-</svelte:head>
-
 <AppShell>
     <svelte:fragment slot="header">
+        <title>Smart Stock It{` - ${$page.url.pathname}`}</title>
         <Header session={data?.session || false} user={data?.user} />
     </svelte:fragment>
     {#if user}
@@ -36,25 +34,19 @@
         {#if user}
             <Sidebar
                 navItems={[
-                    { label: "Admin", link: "/admin", Icon: Settings },
+                    { label: "Configurações", link: "/settings", Icon: Settings },
                     { label: "Dashboard", link: "/dashboard", Icon: LayoutDashboard },
                     { label: "Produtos", link: "/products", Icon: Package },
                     { label: "Entradas", link: "/input", Icon: ArrowUp },
                     { label: "Saídas", link: "/output", Icon: ArrowDown },
-                ]}
-            />
+                ]} />
         {/if}
     </svelte:fragment>
 
-    <div class="px-4 lg:px-28">
+    <div class="px-4 lg:px-28 h-full">
         <slot />
     </div>
     <svelte:fragment slot="pageFooter">
-        <footer class="flex justify-center items-center">
-            <p class="text-xs py-4">
-                <a class="font-bold" href="mailto:bwprado@gmail.com">Working In Progress Dev </a> - All
-                rights reserved 2023.
-            </p>
-        </footer>
+        <Footer customClass="pb-4" />
     </svelte:fragment>
 </AppShell>
