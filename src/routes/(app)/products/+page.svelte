@@ -9,6 +9,8 @@
     import type { ActionData, PageData } from "./$types"
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
     import { invalidate, invalidateAll } from "$app/navigation"
+    import SelectSearch from "$lib/components/SelectSearch.svelte"
+    import { twMerge } from "tailwind-merge"
 
     const toast = getToastStore()
     const modal = getModalStore()
@@ -22,6 +24,7 @@
     $: selectedProduct
     $: loading = false
     $: products = data?.products || []
+    $: categories = data?.categories || []
 
     const handleRowClick = (id: string) => {
         selectedProduct = products.find((product) => product.id === id) || undefined
@@ -72,42 +75,43 @@
 </script>
 
 <div class="flex flex-col gap-y-10 w-full">
-    <section class="flex justify-between">
-        <h1 class="text-2xl font-bold">Lista de Produtos</h1>
+    <section class="flex flex-col sm:flex-row justify-between gap-4 pt-8">
+        <h1 class="text-xl sm:text-2xl font-bold whitespace-nowrap">Lista de Produtos</h1>
         <Button
+            className="max-w-max"
             on:click={() => {
                 selectedProduct = undefined
                 showModal = true
-            }}>Adicionar Produto</Button
-        >
+            }}>Adicionar Produto</Button>
     </section>
 
-    <section class="table-container">
+    <section class={twMerge("table-container", "rounded-md")}>
         <Table
             columns={[
                 { label: "Nome", key: "name", type: "string" },
                 { label: "Unidade", key: "unit", type: "string" },
                 { label: "Saldo", key: "balance", type: "number" },
+                { label: "Minínmo", key: "min", type: "number" },
+                { label: "Máximo", key: "max", type: "number" },
+                { label: "Aviso", key: "warning", type: "boolean" },
+                { label: "Categoria", key: "category", type: "string" },
             ]}
             data={products}
-            index={1}
-            {handleRowClick}
-        />
+            index={0}
+            {handleRowClick} />
     </section>
 </div>
 
 <Modal
     bind:showModal
     confirmFunction={() => console.log("Save adition")}
-    headerText={selectedProduct ? "Editar Produto" : "Adicionar Produto"}
->
+    headerText={selectedProduct ? "Editar Produto" : "Adicionar Produto"}>
     <svelte:fragment slot="action">
         {#if selectedProduct}
             <form method="POST" action="?/deleteUser">
                 <IconButton on:click={handleDeleteClick}>
                     <Trash
-                        class="text-gray-900 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200"
-                    />
+                        class="text-gray-900 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200" />
                 </IconButton>
             </form>
         {/if}
@@ -116,16 +120,37 @@
         slot="body"
         method="POST"
         class="grid grid-rows-[auto,max-content] w-full h-full"
-        action={selectedProduct ? "?/editProduct" : "?/addProduct"}
-    >
-        <div class="flex flex-col w-full">
+        action={selectedProduct ? "?/editProduct" : "?/addProduct"}>
+        <div class="flex flex-col w-full gap-6">
             <Input
                 label="Nome"
                 name="name"
                 type="text"
+                id="name"
                 required
-                value={selectedProduct?.name || ""}
-            />
+                value={selectedProduct?.name || ""} />
+            <Input label="Código" name="code" type="text" value={selectedProduct?.code || ""} />
+            <SelectSearch label="Categoria" options={categories} id="category" name="category" />
+            <div class="grid grid-cols-2 gap-x-4">
+                <Input
+                    label="Quantidade Mínima"
+                    name="min"
+                    id="min"
+                    type="btn-number"
+                    value={selectedProduct?.min || ""} />
+                <Input
+                    label="Quantidade Máxima"
+                    name="max"
+                    id="max"
+                    type="btn-number"
+                    value={selectedProduct?.max || ""} />
+            </div>
+            <Input
+                label="Aviso de Quantidade Mínima"
+                name="warning"
+                id="warning"
+                type="checkbox"
+                value={selectedProduct?.warning || ""} />
             <Select
                 label="Unidade"
                 name="unit"
@@ -135,15 +160,13 @@
                     { name: "kg", id: "kg" },
                     { name: "l", id: "l" },
                 ]}
-                id="unit"
-            />
+                id="unit" />
             {#if selectedProduct}
                 <Input name="id" id="id" value={selectedProduct.id} type="hidden" />
             {/if}
         </div>
         <Button type="submit" id="add_product" on:click={() => (loading = true)} {loading}
-            >{selectedProduct ? "Editar" : "Adicionar"}</Button
-        >
+            >{selectedProduct ? "Editar" : "Adicionar"}</Button>
     </form>
     <svelte:fragment slot="footer">
         <div />
