@@ -24,6 +24,8 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession, g
         const { data, error } = await supabase
             .from('products')
             .select()
+            .eq('user', session.user.id)
+            
         return session ? error ? [] : data : []
     }
     const fetchDashboardData = async (): Promise<IDashboard[]> => {
