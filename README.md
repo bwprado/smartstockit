@@ -1,4 +1,4 @@
-# Inventory - VT
+# Smart Stock It - App
 
 Project created to test my Svelte skills using Supabase.
 
