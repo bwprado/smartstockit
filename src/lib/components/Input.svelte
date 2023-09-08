@@ -1,69 +1,60 @@
 <script lang="ts">
-    import { twMerge } from 'tailwind-merge'
-    import { cx } from 'class-variance-authority'
+    import { twMerge } from "tailwind-merge"
+    import { cx } from "class-variance-authority"
+    import Checkbox from "./Checkbox.svelte"
+    import InputNumber from "./InputNumber.svelte"
 
-    export let label: string = ''
+    export let label: string = ""
     export let customClasses: {
         wrapper?: string
         label?: string
         input?: string
     } = {}
-    export let type: HTMLInputElement['type'] = 'text'
-    export let name: string = 'input'
-    export let id: string = 'input'
+    export let type: HTMLInputElement["type"] = "text"
+    export let name: string = "input"
+    export let id: string = "input"
     export let required: boolean = false
-    export let value: string = ''
+    export let value: string = ""
     export let disabled: boolean = false
-    export let placeholder: string = ''
+    export let placeholder: string = ""
     export let onInput: (e: Event) => void = () => {}
 
     const inputStyle = cx([
-        'block',
-        'w-full',
-        'rounded-md',
-        'border-0',
-        'py-1.5',
-        'px-2',
-        'h-10',
-        'text-gray-900',
-        'ring-1',
-        'ring-inset',
-        'ring-gray-300',
-        'placeholder:text-gray-400',
-        'focus:ring-2',
-        'focus:ring-inset',
-        'focus:ring-indigo-600',
-        'sm:text-sm',
-        'sm:leading-6',
-        'outline-none',
-        '[appearance:textfield]',
-        '[&::-webkit-outer-spin-button]:appearance-none',
-        '[&::-webkit-inner-spin-button]:appearance-none',
+        "block",
+        "w-full",
+        "rounded-md",
+        "border-0",
+        "py-1.5",
+        "px-2",
+        "h-10",
+        "text-surface-900",
+        "ring-1",
+        "ring-inset",
+        "ring-gray-300",
+        "placeholder:text-gray-400",
+        "focus:ring-2",
+        "focus:ring-inset",
+        "focus:ring-indigo-600",
+        "sm:text-sm",
+        "sm:leading-6",
+        "outline-none",
+        "[appearance:textfield]",
+        "[&::-webkit-outer-spin-button]:appearance-none",
+        "[&::-webkit-inner-spin-button]:appearance-none",
     ])
 </script>
 
-{#if type === 'checkbox'}
-    <div class="w-full flex flex-col gap-y-2">
-        <label for={name} class="flex items-center gap-x-2">
-            <p class="font-bold dark:text-gray-200 text-sm leading-6 text-gray-900">{label}</p>
-        </label>
-        <input
-            {type}
-            {required}
-            {name}
-            {id}
-            {placeholder}
-            aria-placeholder={placeholder}
-            class="checkbox"
-            on:change />
-    </div>
+{#if type === "checkbox"}
+    <Checkbox {disabled} {required} {name} {id} {value} {label} on:change={() => console.log("changed")} />
+{:else if type === "btn-number"}
+    <InputNumber {disabled} {required} {name} {id} {value} {label} />
 {:else}
-    <div class={twMerge('w-full flex flex-col gap-y-2', customClasses.wrapper)}>
+    <div class={twMerge("w-full flex flex-col gap-y-2", customClasses.wrapper)}>
         {#if label}
             <label
                 for={name}
                 class={twMerge(
-                    'block text-sm leading-6 text-gray-900 font-bold dark:text-gray-200',
+                    "block text-sm leading-6 text-gray-900 font-bold dark:text-gray-200",
                     customClasses.label,
                 )}>{label}</label>
         {/if}
