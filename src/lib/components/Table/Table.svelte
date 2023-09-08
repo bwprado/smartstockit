@@ -86,7 +86,7 @@
     }
 </script>
 
-<table class="w-full text-left table">
+<table class="w-full text-left table rounded-md text-sm">
     <thead class="whitespace-nowrap">
         <tr>
             {#each columns as column, i}
@@ -95,8 +95,7 @@
                     class={thStyle({
                         direction: sorting === column.label ? direction : "no",
                         responsive: i === columns.length - 1,
-                    })}
-                >
+                    })}>
                     {#if column.key}
                         <button
                             class="hover:opacity-90"
@@ -104,8 +103,7 @@
                                 handleSort(column.key, direction)
                                 direction = direction === "down" ? "up" : "down"
                                 sorting = column.label
-                            }}
-                        >
+                            }}>
                             {column.label}
                         </button>
                     {:else}
