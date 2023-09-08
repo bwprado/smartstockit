@@ -5,9 +5,9 @@
     import Modal from "$lib/components/Modal.svelte"
     import Select from "$lib/components/Select.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-    import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
-    import { Trash } from "lucide-svelte"
-    import type { IProfile } from "../../hooks.server"
+    import { Tab, TabGroup, getModalStore, getToastStore } from "@skeletonlabs/skeleton"
+    import { Grid2x2, Trash, Users } from "lucide-svelte"
+    import type { IProfile } from "../../../hooks.server"
     import type { PageData } from "./$types"
 
     const modal = getModalStore()
@@ -68,43 +68,59 @@
             },
         })
     }
+
+    let tabSet: number = 0
 </script>
 
-<svelte:head>
-    <title>Inventory - VT / Admin</title>
-</svelte:head>
+<TabGroup>
+    <Tab bind:group={tabSet} name="users" value={0}>
+        <div class="text-sm flex flex-col items-center justify-center gap-y-2">
+            <Users size={20} />
+            <span>Usuários</span>
+        </div>
+    </Tab>
+    <Tab bind:group={tabSet} name="categories" value={1}>
+        <div class="text-sm flex flex-col items-center justify-center gap-y-2">
+            <Grid2x2 size={20} />
+            <span>Categorias</span>
+        </div>
+    </Tab>
+    <svelte:fragment slot="panel">
+        {#if tabSet === 0}
+            <div class="flex flex-col sm:flex-row justify-between items-center pb-10 gap-4">
+                <h1 class="text-xl font-bold whitespace-nowrap">Usuários</h1>
+                <Button id="add_user" intent="primary" type="button" on:click={handleAddButtonClick}
+                    >Adicionar Usuário</Button>
+            </div>
 
-<div class="flex justify-between items-center py-4">
-    <h1 class="text-xl font-bold">Usuários</h1>
-    <Button id="add_user" intent="primary" type="button" on:click={handleAddButtonClick}
-        >Adicionar Usuário</Button
-    >
-</div>
-
-<div class="table-container">
-    <Table
-        columns={[
-            { label: "Nome", key: "name", type: "string" },
-            { label: "Email", key: "email", type: "string" },
-            { label: "Tipo", key: "role", type: "string" },
-        ]}
-        {handleRowClick}
-        data={users}
-    />
-</div>
+            <div class="table-container">
+                <Table
+                    columns={[
+                        { label: "Nome", key: "name", type: "string" },
+                        { label: "Email", key: "email", type: "string" },
+                        { label: "Tipo", key: "role", type: "string" },
+                    ]}
+                    {handleRowClick}
+                    data={users} />
+            </div>
+        {:else if tabSet === 1}
+            (tab panel 2 contents)
+        {:else if tabSet === 2}
+            (tab panel 3 contents)
+        {/if}
+    </svelte:fragment>
+</TabGroup>
 
 <Modal
     headerText={selectedUser ? "Editar Usuário" : "Adicionar Usuário"}
     bind:showModal
-    confirmFunction={() => console.log("Confirmation modal")}
->
+    confirmFunction={() => console.log("Confirmation modal")}>
     <svelte:fragment slot="action">
         {#if selectedUser}
             <form method="POST" action="?/deleteUser">
                 <IconButton on:click={handleDeleteClick}>
                     <Trash
-                        class="text-gray-900 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200"
-                    />
+                        class="text-gray-900 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200" />
                 </IconButton>
             </form>
         {/if}
@@ -116,16 +132,14 @@
                 name="name"
                 label="Nome"
                 type="text"
-                value={selectedUser ? selectedUser?.name : ""}
-            />
+                value={selectedUser ? selectedUser?.name : ""} />
             <Input
                 id="email"
                 name="email"
                 label="Email"
                 type="email"
                 value={selectedUser ? selectedUser?.email : ""}
-                disabled={selectedUser ? true : false}
-            />
+                disabled={selectedUser ? true : false} />
             <Select
                 id="role"
                 name="role"
@@ -134,16 +148,14 @@
                     { name: "Administrador", id: "admin" },
                     { name: "Usuário", id: "user" },
                 ]}
-                value={selectedUser ? selectedUser?.role : ""}
-            />
+                value={selectedUser ? selectedUser?.role : ""} />
             <Button
                 type="submit"
                 id="save_user"
                 {loading}
                 intent="primary"
                 className="w-full mt-auto"
-                on:click={() => (loading = true)}>Salvar</Button
-            >
+                on:click={() => (loading = true)}>Salvar</Button>
         </form>
     </svelte:fragment>
     <svelte:fragment slot="footer">
