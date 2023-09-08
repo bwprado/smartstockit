@@ -27,8 +27,9 @@
     )
 </script>
 
-<nav class="h-full w-0 sm:w-60 transition-all duration-300 my-auto p-2 sm:p-8">
-    <ul class="flex-col gap-y-4 hidden sm:flex">
+<nav
+    class="h-full w-0 sm:w-60 transition-all duration-300 my-auto p-2 sm:p-8 hidden lg:block bg-surface-800">
+    <ul class="flex-col gap-y-4 flex">
         {#each navItems as { link, label, Icon }}
             <a href={link}>
                 <li class={linkStyle({ active: active === link })}>
