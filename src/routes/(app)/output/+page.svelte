@@ -1,7 +1,9 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte"
+    import EmptyWrapper from "$lib/components/EmptyWrapper.svelte"
     import Input from "$lib/components/Input.svelte"
     import Modal from "$lib/components/Modal.svelte"
+    import PageHeader from "$lib/components/PageHeader.svelte"
     import SelectSearch from "$lib/components/SelectSearch.svelte"
     import Table from "$lib/components/Table/Table.svelte"
     import type { ActionData, PageData } from "./$types"
@@ -38,38 +40,38 @@
     }
 </script>
 
-<div class="flex flex-col w-full py-6">
-    <section class="flex justify-between">
-        <h1 class="text-2xl font-bold">Lista de Saídas</h1>
-        <Button className="max-w-max" on:click={() => (showModal = true)}>Retirar Produto</Button>
+<PageHeader title="Saídas">
+    <Button class="w-fit" on:click={() => (showModal = true)}>Retirar Produto</Button>
+</PageHeader>
+
+<EmptyWrapper title="Sem dados" message="Nenhuma saída registrada ainda." length={outputs.length}>
+    <section class="table-container rounded-lg" slot="content">
+        <Table
+            columns={[
+                {
+                    label: "Produto",
+                    key: "productName",
+                    type: "string",
+                },
+                {
+                    label: "Quantidade",
+                    key: "amount",
+                    type: "number",
+                },
+                {
+                    label: "Preço",
+                    key: "price",
+                    type: "currency",
+                },
+                {
+                    label: "Data de Saída",
+                    key: "created_at",
+                    type: "date",
+                },
+            ]}
+            data={outputs} />
     </section>
-</div>
-<section class="table-container">
-    <Table
-        columns={[
-            {
-                label: "Produto",
-                key: "productName",
-                type: "string",
-            },
-            {
-                label: "Quantidade",
-                key: "amount",
-                type: "number",
-            },
-            {
-                label: "Preço",
-                key: "price",
-                type: "currency",
-            },
-            {
-                label: "Data de Saída",
-                key: "created_at",
-                type: "date",
-            },
-        ]}
-        data={outputs} />
-</section>
+</EmptyWrapper>
 
 <Modal bind:showModal headerText="Retirar Produto" confirmFunction={() => console.log("Remove")}>
     <form slot="body" method="POST" class="flex flex-col gap-y-4 h-full">
@@ -79,7 +81,7 @@
         <Button
             type="submit"
             id="retrieve_product"
-            className="w-full mt-auto"
+            class="w-full mt-auto"
             on:click={() => (loading = true)}
             {loading}>Retirar do Estoque</Button>
     </form>
