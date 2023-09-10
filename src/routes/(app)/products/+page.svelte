@@ -1,33 +1,38 @@
 <script lang="ts">
+    import { invalidate, invalidateAll } from "$app/navigation"
     import Button from "$lib/components/Button.svelte"
+    import EmptyWrapper from "$lib/components/EmptyWrapper.svelte"
     import IconButton from "$lib/components/IconButton.svelte"
     import Input from "$lib/components/Input.svelte"
     import Modal from "$lib/components/Modal.svelte"
+    import PageHeader from "$lib/components/PageHeader.svelte"
+    import RadioGroup from "$lib/components/RadioGroup.svelte"
     import Select from "$lib/components/Select.svelte"
-    import Table from "$lib/components/Table/Table.svelte"
-    import { Trash } from "lucide-svelte"
-    import type { ActionData, PageData } from "./$types"
-    import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
-    import { invalidate, invalidateAll } from "$app/navigation"
     import SelectSearch from "$lib/components/SelectSearch.svelte"
+    import Table from "$lib/components/Table/Table.svelte"
+    import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
+    import { Plus, QrCode, Trash } from "lucide-svelte"
     import { twMerge } from "tailwind-merge"
+    import type { Product } from "../../../types/supabase"
+    import type { ActionData, PageServerData } from "./$types"
+    import Composition from "$lib/components/Composition.svelte"
 
     const toast = getToastStore()
     const modal = getModalStore()
 
-    export let data: PageData
+    export let data: PageServerData
     export let form: ActionData
 
-    let selectedProduct: PageData["products"][0] | undefined
+    let selectedProduct: Product | undefined
+    let categoryValue: string = ""
+    let selectedType: string = "product"
 
     $: showModal = false
     $: selectedProduct
     $: loading = false
-    $: products = data?.products || []
-    $: categories = data?.categories || []
 
     const handleRowClick = (id: string) => {
-        selectedProduct = products.find((product) => product.id === id) || undefined
+        selectedProduct = data.products.find((product) => product.id === id) || undefined
         showModal = true
     }
 
@@ -72,34 +77,80 @@
             },
         })
     }
+
+    const handleAddCategory = async (e: MouseEvent) => {
+        e.preventDefault()
+        if (categoryValue === "") {
+            toast.trigger({
+                message: "O nome da categoria não pode ser vazio.",
+            })
+            return
+        }
+        const res = await fetch(`/api/add-category`, {
+            method: "POST",
+            body: JSON.stringify({ name: categoryValue, ref: "products" }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        const json = (await res.json()) || {}
+        const { error, data: category } = json
+        if (error) {
+            console.log(error)
+
+            toast.trigger({
+                message: "Erro ao criar categoria, entre em contato com o suporte.",
+            })
+        } else {
+            toast.trigger({
+                message: "Categoria criada com sucesso.",
+            })
+        }
+        invalidate("/products")
+        data.categories = [...data.categories, category]
+    }
+
+    const handleReadBarcode = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+            const video = document.querySelector("#barcode video")
+            if (video) {
+                video.srcObject = stream
+                video.play()
+            }
+        })
+    }
 </script>
 
-<div class="flex flex-col gap-y-10 w-full">
-    <section class="flex flex-col sm:flex-row justify-between gap-4 pt-8">
-        <h1 class="text-xl sm:text-2xl font-bold whitespace-nowrap">Lista de Produtos</h1>
+<div class="flex flex-col gap-y-10 w-full h-full">
+    <PageHeader title="Produtos">
         <Button
-            className="max-w-max"
+            class="max-w-max"
             on:click={() => {
                 selectedProduct = undefined
                 showModal = true
             }}>Adicionar Produto</Button>
-    </section>
-
-    <section class={twMerge("table-container", "rounded-md")}>
-        <Table
-            columns={[
-                { label: "Nome", key: "name", type: "string" },
-                { label: "Unidade", key: "unit", type: "string" },
-                { label: "Saldo", key: "balance", type: "number" },
-                { label: "Minínmo", key: "min", type: "number" },
-                { label: "Máximo", key: "max", type: "number" },
-                { label: "Aviso", key: "warning", type: "boolean" },
-                { label: "Categoria", key: "category", type: "string" },
-            ]}
-            data={products}
-            index={0}
-            {handleRowClick} />
-    </section>
+    </PageHeader>
+    <EmptyWrapper
+        message="Nenhum Produto adicionado ainda, para adicionar um produto basta clicar no botão acima."
+        length={data.products.length}>
+        <section class={twMerge("table-container", "rounded-lg")} slot="content">
+            <Table
+                columns={[
+                    { label: "Nome", key: "name", type: "string" },
+                    { label: "Unidade", key: "unit", type: "string" },
+                    { label: "Saldo", key: "balance", type: "number" },
+                    { label: "Minínmo", key: "min", type: "number" },
+                    { label: "Máximo", key: "max", type: "number" },
+                    { label: "Aviso", key: "warning", type: "boolean" },
+                    { label: "Categoria", key: "category", type: "string" },
+                ]}
+                data={data.products}
+                index={0}
+                {handleRowClick} />
+        </section>
+    </EmptyWrapper>
 </div>
 
 <Modal
@@ -109,7 +160,7 @@
     <svelte:fragment slot="action">
         {#if selectedProduct}
             <form method="POST" action="?/deleteUser">
-                <IconButton on:click={handleDeleteClick}>
+                <IconButton on:click={handleDeleteClick} intent="secondary">
                     <Trash
                         class="text-gray-900 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200" />
                 </IconButton>
@@ -117,40 +168,73 @@
         {/if}
     </svelte:fragment>
     <form
+        on:submit
         slot="body"
         method="POST"
         class="grid grid-rows-[auto,max-content] w-full h-full"
         action={selectedProduct ? "?/editProduct" : "?/addProduct"}>
         <div class="flex flex-col w-full gap-6">
+            <RadioGroup
+                label="Tipo de Produto"
+                name="radio-product-type"
+                bind:selected={selectedType}
+                options={[
+                    { label: "Produto", value: "product" },
+                    { label: "Insumo", value: "raw" },
+                    { label: "Kit", value: "kit" },
+                ]} />
             <Input
                 label="Nome"
                 name="name"
                 type="text"
                 id="name"
                 required
+                placeholder="Nome do Produto"
                 value={selectedProduct?.name || ""} />
-            <Input label="Código" name="code" type="text" value={selectedProduct?.code || ""} />
-            <SelectSearch label="Categoria" options={categories} id="category" name="category" />
+            <div class="flex items-end gap-x-4">
+                <Input
+                    id="barcode"
+                    label="Código"
+                    name="barcode"
+                    type="text"
+                    value={selectedProduct?.barcode || ""}
+                    placeholder="79823980123989" />
+                <Button id="read-barcode" class="max-w-max" on:click={handleReadBarcode}
+                    ><QrCode /></Button>
+            </div>
+            <div class="grid grid-cols-[1fr,max-content] gap-x-4 items-end justify-center">
+                <SelectSearch
+                    label="Categoria"
+                    on:change={(e) => (categoryValue = e?.target?.value || "")}
+                    options={data.categories.map((cat) => ({ label: cat.name, value: cat.id }))}
+                    id="category"
+                    name="category"
+                    placeholder="Categoria do Produto" />
+                <Button on:click={handleAddCategory} type="submit" intent="primary">
+                    <Plus size={25} class="text-primary-500 dark:text-white" />
+                </Button>
+            </div>
             <div class="grid grid-cols-2 gap-x-4">
                 <Input
                     label="Quantidade Mínima"
                     name="min"
                     id="min"
                     type="btn-number"
-                    value={selectedProduct?.min || ""} />
+                    value={`${selectedProduct?.min}` || ""} />
                 <Input
                     label="Quantidade Máxima"
                     name="max"
                     id="max"
                     type="btn-number"
-                    value={selectedProduct?.max || ""} />
+                    value={`${selectedProduct?.max}` || ""} />
             </div>
             <Input
                 label="Aviso de Quantidade Mínima"
                 name="warning"
                 id="warning"
                 type="checkbox"
-                value={selectedProduct?.warning || ""} />
+                message="Avisa quando a quantidade mínima for atingida"
+                selected={selectedProduct?.warning || false} />
             <Select
                 label="Unidade"
                 name="unit"
@@ -164,6 +248,7 @@
             {#if selectedProduct}
                 <Input name="id" id="id" value={selectedProduct.id} type="hidden" />
             {/if}
+            <Composition label="Composição" />
         </div>
         <Button type="submit" id="add_product" on:click={() => (loading = true)} {loading}
             >{selectedProduct ? "Editar" : "Adicionar"}</Button>
