@@ -24,18 +24,28 @@
         "block",
         "w-full",
         "rounded-s-md",
-        "border-0",
         "py-1.5",
         "px-2",
         "h-10",
-        "text-gray-900",
+        "text-surface-900",
+        "dark:bg-surface-700/50",
+        "dark:text-surface-100",
+        "bg-gray-50/50",
+        "dark:placeholder:text-surface-400",
+        "placeholder:text-surface-200",
+        "focus:outline-none",
         "ring-1",
         "ring-inset",
-        "ring-gray-300",
-        "placeholder:text-gray-400",
+        "ring-surface-100",
+        "dark:ring-1",
+        "dark:ring-inset",
+        "dark:ring-surface-500",
         "focus:ring-2",
         "focus:ring-inset",
-        "focus:ring-indigo-600",
+        "focus:ring-primary-600",
+        "dark:focus:ring-2",
+        "dark:focus:ring-inset",
+        "dark:focus:ring-primary-600",
         "sm:text-sm",
         "sm:leading-6",
         "outline-none",
@@ -62,16 +72,17 @@
             {id}
             {value}
             type="number"
+            inputmode="numeric"
             class={twMerge(inputStyle, customClasses.input)} />
         <button
             type="button"
-            class="bg-gray-50 text-surface-900 flex items-center justify-center border-r"
+            class="bg-gray-50 dark:bg-surface-700 text-surface-900 flex items-center justify-center border-r border-surface-200 dark:border-surface-500 ring-inset ring-surface-100 dark:ring-surface-500"
             on:click={() => _value--}>
             <Minus class="text-primary-500" />
         </button>
         <button
             type="button"
-            class="bg-gray-50 text-surface-900 rounded-e-lg flex items-center justify-center"
+            class="bg-gray-50 dark:bg-surface-700 text-surface-900 rounded-e-lg flex items-center justify-center ring-inset ring-surface-100 dark:ring-surface-500"
             on:click={() => _value++}>
             <Plus class="text-primary-500" />
         </button>
