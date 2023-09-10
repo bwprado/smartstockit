@@ -6,6 +6,7 @@
     import { ArrowBigDown } from "lucide-svelte"
     import { getToastStore } from "@skeletonlabs/skeleton"
     import type { ActionData } from "./$types"
+    import { cx } from "class-variance-authority"
 
     const toast = getToastStore()
 
@@ -22,16 +23,34 @@
             classes: "text-error",
         })
     }
+
+    const divWrapper = cx([
+        "grid",
+        "sm:grid-cols-2",
+        "rounded-xl",
+        "sm:border",
+        "dark:border-gray-500",
+        "w-full",
+        "sm:m-10",
+        "h-auto",
+        "sm:h-[800px]",
+        "overflow-hidden",
+        "items-center",
+        "justify-center",
+        "sm:gap-y-10",
+        "snap-mandatory",
+        "snap-y",
+        "bg-blend-multiply",
+    ])
 </script>
 
-<div
-    class="grid sm:grid-cols-2 rounded-xl sm:border dark:border-gray-500 w-full sm:m-10 h-auto sm:h-[800px] overflow-hidden items-center justify-center sm:gap-y-10 snap-mandatory snap-y bg-blend-multiply">
-    <div class="h-screen sm:h-full snap-start">
+<div class={divWrapper}>
+    <div class="h-screen sm:h-full snap-start relative">
         <div
             class="absolute inset-0 bg-cover -z-10 bg-center"
             style="background-image: url(https://vhjquurwdlkrfmaxfygm.supabase.co/storage/v1/object/public/images/pexels-winson-2701434.jpg?t=2023-09-06T00%3A55%3A13.176Z);" />
         <div
-            class="bg-gradient-to-r from-surface-900 to-surface-900/20 h-full sm:p-8 flex flex-col justify-between snap-start items-center">
+            class="bg-gradient-to-r from-surface-900 to-surface-900/20 h-full sm:p-8 grid grid-rows-[max-content,auto,max-content] justify-between snap-start items-center">
             <header class="p-6 text-white w-full">
                 <h1 class="text-4xl font-bold">Smart Stock It</h1>
                 <p class="text-sm text-surface-200">
@@ -54,37 +73,38 @@
                     </p>
                 </section>
             </main>
-            <div class="flex flex-col items-center justify-center">
+            <div class="flex flex-col items-center justify-center sm:hidden py-10 sm:py-0">
                 <p>Clique para criar sua conta</p>
                 <IconButton
-                    customClasses="h-10 rounded-full"
+                    class="h-10 rounded-full"
                     on:click={() => {
                         bottom.scrollIntoView({ behavior: "smooth" })
                     }}>
                     <ArrowBigDown class="text-white animate-bounce" />
                 </IconButton>
             </div>
-            <Footer customClass="pb-4" />
         </div>
     </div>
     <div
         bind:this={bottom}
-        class="w-full py-8 px-8 sm:px-12 lg:px-32 sm:h-full h-screen snap-start grid grid-rows-[1fr,max-content,1fr] items-end hero-gradient"
+        class="w-full py-8 px-[15%] sm:h-full h-screen snap-start flex flex-col gap-y-4 items-center justify-center hero-gradient"
         id="bottom">
-        <div />
-        <form method="POST" action="?/signup" class="flex flex-col gap-y-6 w-full">
+        <form method="POST" action="?/email" class="flex flex-col gap-y-6 w-full">
             <h1 class="font-bold text-2xl">Criar uma Conta Gratuita</h1>
             <p>Entre com seu Email</p>
             <Input id="email" name="email" type="text" placeholder="email@email.com" />
             <Button type="submit" id="login">Criar Conta</Button>
-            <div
-                class="grid grid-cols-[1fr,max-content,1fr] items-center justify-center w-full gap-x-4">
-                <div class="border-b-[1px] border-tertiary-400" />
-                <p class="uppercase text-xs text-tertiary-400">ou continue com</p>
-                <div class="border-b-[1px] border-tertiary-400" />
-            </div>
+        </form>
+        <div
+            class="grid grid-cols-[1fr,max-content,1fr] items-center justify-center w-full gap-x-4">
+            <div class="border-b-[1px] border-tertiary-400" />
+            <p class="uppercase text-xs text-tertiary-400">ou continue com</p>
+            <div class="border-b-[1px] border-tertiary-400" />
+        </div>
+        <form action="?/google" class="w-full" method="post">
             <button
-                class="flex items-center justify-center bg-surface-900 rounded-lg border border-scale-500 hover:bg-secondary-500/10 transition w-full h-10">
+                type="submit"
+                class="flex items-center justify-center bg-surface-900 rounded-lg border border-surface-400 hover:bg-secondary-500/10 transition w-full h-10">
                 <div
                     class="relative flex items-center justify-center shrink-0 h-10 w-10 rounded-lg group overflow-hidden transition">
                     <img
@@ -92,10 +112,9 @@
                         src="https://supabase.com/docs/img/icons/google-icon.svg"
                         alt="Google Icon" />
                 </div>
-                <h5 class="text-base text-scale-1200 px-4">Google</h5>
+                <h5 class="text-base text-surface-200 px-4">Google</h5>
             </button>
         </form>
-        <Footer />
     </div>
 </div>
 
