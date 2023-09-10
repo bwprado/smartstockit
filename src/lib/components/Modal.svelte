@@ -24,20 +24,21 @@
     on:click|self={() => dialog.close()}>
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div on:click|stopPropagation class="flex flex-col relative h-full">
-        <div class="grid grid-cols-[max-content,max-content] justify-between">
-            <IconButton on:click={() => (showModal = false)} id="close-modal">
+        <div
+            class="grid grid-cols-[max-content,auto,max-content] justify-between h-fit pb-4 items-center border-b border-surface-50 dark:border-surface-500 mb-8">
+            <IconButton on:click={() => (showModal = false)} id="close-modal" intent="secondary">
                 <X
-                    class="text-surface-800 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200" />
+                    class="text-surface-800 dark:text-primary-500" />
             </IconButton>
+            {#if $$slots.header}
+                <slot name="header" />
+            {:else}
+                <div class="text-lg dark:text-gray-200 font-bold text-primary-500">
+                    {headerText}
+                </div>
+            {/if}
             <slot name="action" />
         </div>
-        {#if $$slots.header}
-            <slot name="header" />
-        {:else}
-            <div class="text-lg dark:text-gray-200 font-bold text-primary-500 py-4">
-                {headerText}
-            </div>
-        {/if}
         <div class="h-full">
             <slot name="body" />
         </div>
