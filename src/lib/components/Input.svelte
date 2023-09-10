@@ -17,24 +17,36 @@
     export let value: string = ""
     export let disabled: boolean = false
     export let placeholder: string = ""
+    export let selected: boolean = false
+    export let message: string = ""
     export let onInput: (e: Event) => void = () => {}
 
     const inputStyle = cx([
         "block",
         "w-full",
         "rounded-md",
-        "border-0",
         "py-1.5",
         "px-2",
         "h-10",
         "text-surface-900",
+        "dark:bg-surface-700/50",
+        "dark:text-surface-100",
+        "bg-gray-50/50",
+        "dark:placeholder:text-surface-400",
+        "placeholder:text-surface-200",
+        "focus:outline-none",
         "ring-1",
         "ring-inset",
-        "ring-gray-300",
-        "placeholder:text-gray-400",
+        "ring-surface-100",
+        "dark:ring-1",
+        "dark:ring-inset",
+        "dark:ring-surface-500",
         "focus:ring-2",
         "focus:ring-inset",
-        "focus:ring-indigo-600",
+        "focus:ring-primary-600",
+        "dark:focus:ring-2",
+        "dark:focus:ring-inset",
+        "dark:focus:ring-primary-600",
         "sm:text-sm",
         "sm:leading-6",
         "outline-none",
@@ -45,7 +57,7 @@
 </script>
 
 {#if type === "checkbox"}
-    <Checkbox {disabled} {required} {name} {id} {value} {label} on:change={() => console.log("changed")} />
+    <Checkbox {selected} {disabled} {required} {name} {id} {value} {label} {message} />
 {:else if type === "btn-number"}
     <InputNumber {disabled} {required} {name} {id} {value} {label} />
 {:else}
