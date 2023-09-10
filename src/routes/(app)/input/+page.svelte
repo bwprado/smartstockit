@@ -6,6 +6,8 @@
     import Table from "$lib/components/Table/Table.svelte"
     import { getToastStore } from "@skeletonlabs/skeleton"
     import type { ActionData, PageData } from "./$types"
+    import PageHeader from "$lib/components/PageHeader.svelte"
+    import EmptyWrapper from "$lib/components/EmptyWrapper.svelte"
 
     const toast = getToastStore()
 
@@ -40,24 +42,26 @@
     }
 </script>
 
-<div class="flex flex-col w-full py-6">
-    <section class="flex justify-between py-4">
-        <h1 class="text-2xl font-bold">Lista de Entradas</h1>
-        <Button className="max-w-max" on:click={() => (showModal = true)}>Adicionar Entrada</Button>
-    </section>
-</div>
+<PageHeader title="Entradas">
+    <Button class="w-fit" on:click={() => (showModal = true)}>Adicionar Entrada</Button>
+</PageHeader>
 
-<section class="table-container">
-    <Table
-        columns={[
-            { label: "Produto", key: "productName", type: "string" },
-            { label: "Quantidade", key: "amount", type: "number" },
-            { label: "Preço", key: "price", type: "currency" },
-            { label: "Data Vencimento", key: "expiration_date", type: "date" },
-            { label: "Data Entrada", key: "created_at", type: "date" },
-        ]}
-        data={inputs} />
-</section>
+<EmptyWrapper
+    title="Sem dados"
+    message="Você ainda não realizou nenhuma saída, clique no botão cima para fazê-lo"
+    length={inputs.length}>
+    <section class="table-container rounded-lg" slot="content">
+        <Table
+            columns={[
+                { label: "Produto", key: "productName", type: "string" },
+                { label: "Quantidade", key: "amount", type: "number" },
+                { label: "Preço", key: "price", type: "currency" },
+                { label: "Data Vencimento", key: "expiration_date", type: "date" },
+                { label: "Data Entrada", key: "created_at", type: "date" },
+            ]}
+            data={inputs} />
+    </section>
+</EmptyWrapper>
 
 <Modal bind:showModal headerText="Entrada de Produtos" confirmFunction={() => console.log("Test")}>
     <svelte:fragment slot="body">
@@ -83,7 +87,7 @@
                 disabled={isFresh} />
             <Button
                 type="submit"
-                className="mt-auto w-full"
+                class="mt-auto w-full"
                 on:click={() => (loading = true)}
                 {loading}>Adicionar Entrada</Button>
         </form>
