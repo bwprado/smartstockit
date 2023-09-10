@@ -1,14 +1,8 @@
-import { PUBLIC_SUPABASE_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public'
-import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit'
-import { error, type Handle } from '@sveltejs/kit'
+import { PUBLIC_SUPABASE_KEY, PUBLIC_SUPABASE_URL } from "$env/static/public"
+import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit"
+import { error, type Handle } from "@sveltejs/kit"
 
-export interface IProfile {
-    id: string
-    role: "user" | "admin"
-    name: string
-    email: string
-
-}
+const unprotectedRoutes = ["/", "/login", "/signup", "/signup/verify", "/logout"]
 
 export const handle: Handle = async ({ event, resolve }) => {
     event.locals.supabase = createSupabaseServerClient({
@@ -18,8 +12,11 @@ export const handle: Handle = async ({ event, resolve }) => {
     })
 
     event.locals.getSession = async () => {
-        const { data: { session }, error:err } = await event.locals.supabase.auth.getSession()
-        if(err) return null
+        const {
+            data: { session },
+            error: err,
+        } = await event.locals.supabase.auth.getSession()
+        if (err) return null
         return session
     }
 
@@ -32,12 +29,18 @@ export const handle: Handle = async ({ event, resolve }) => {
         return data
     }
 
-    event.locals.getUserProfile = async () => {
-        const { data: { session } } = await event.locals.supabase.auth.getSession()
+    event.locals.getProfile = async () => {
+        const {
+            data: { session },
+        } = await event.locals.supabase.auth.getSession()
 
         if (!session) return null
 
-        const { data, error: err } = await event.locals.supabase.from('profiles').select('*').eq('id', session.user.id).single()
+        const { data, error: err } = await event.locals.supabase
+            .from("profiles")
+            .select()
+            .eq("id", session.user.id)
+            .single()
 
         if (err) {
             console.error(err)
@@ -50,6 +53,14 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.signOut = async () => {
         const { error } = await event.locals.supabase.auth.signOut()
         if (error) throw new Error(error.message)
+    }
+
+    if (!unprotectedRoutes.includes(event.url.pathname)) {
+        if (!(await event.locals.getSession())) {
+            throw error(401, {
+                message: "Unauthorized",
+            })
+        }
     }
 
     const response = await resolve(event)
