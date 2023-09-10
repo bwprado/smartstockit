@@ -1,40 +1,52 @@
-<script>
+<script lang="ts">
     import Button from "$lib/components/Button.svelte"
     import Footer from "$lib/components/Footer.svelte"
-    import IconButton from "$lib/components/IconButton.svelte"
+    import Input from "$lib/components/Input.svelte"
     import { ArrowBigRight } from "lucide-svelte"
+    import type { PageData } from "./$types"
+
+    export let data: PageData
+    const { email } = data
 </script>
 
 <div
-    class="grid sm:grid-cols-2 rounded-xl sm:border dark:border-surface-500 w-full sm:m-10 h-auto sm:h-[800px] overflow-hidden items-center justify-center sm:gap-y-10 hero-gradient">
-    <div class="h-screen sm:h-full snap-start">
-        <div
-            class="bg-gradient-to-r from-surface-900 to-surface-900/20 h-full sm:p-8 flex flex-col justify-between snap-start items-center">
-            <header class="px-6 py-10 text-white w-full">
-                <h1 class="text-4xl font-bold">Continue com seu Email</h1>
-                <p class="text-sm text-surface-200">
-                    Por favor, prossiga com o login usando seu endereço de email.
+    class="rounded-xl sm:border dark:border-surface-500 w-full sm:m-10 h-auto sm:h-[800px] overflow-hidden items-center justify-center sm:gap-y-10 hero-gradient grid grid-cols-2">
+    <div
+        class="bg-gradient-to-r from-surface-900 to-surface-900/20 h-full sm:p-8 grid grid-rows-[0.5fr,1fr,0.5fr] justify-between snap-start items-center">
+        <header class="px-6 pt-10 text-white w-full mb-auto">
+            <h1 class="text-4xl font-bold">Continue com seu Email</h1>
+            <p class="text-sm text-surface-200">
+                Por favor, prossiga com o login usando seu endereço de email.
+            </p>
+        </header>
+        <main class="container mx-auto p-4">
+            <section class="bg-surface-800 rounded-xl shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Instruções</h2>
+                <p class="text-surface-300">
+                    Após o login, você receberá um email de verificação para continuar. Neste email
+                    você encontrará um link para confirmar sua conta e também um código de
+                    verificação. Você precisará deste código para confirmar sua conta.
                 </p>
-            </header>
-            <main class="container mx-auto mt-8 p-4">
-                <section class="bg-surface-800 rounded-xl shadow p-6">
-                    <h2 class="text-xl font-semibold mb-4">Instruções</h2>
-                    <p class="text-surface-300">
-                        Após o login, você receberá um email de verificação para continuar.
-                    </p>
-                </section>
-            </main>
-            <div class="flex flex-col items-center justify-center">
-                <Button
-                    type="button"
-                    on:click={() => {
-                        // Implement your email login redirection logic here
-                    }}>
-                    Fazer Login
-                    <ArrowBigRight class="text-white animate-pulse" />
-                </Button>
-            </div>
-            <Footer customClass="pb-4" />
-        </div>
+            </section>
+        </main>
+    </div>
+    <div class="px-[15%] grid grid-rows-[1fr,2fr,1fr] items-center justify-center h-full p-6">
+        <header class="text-white w-full mb-auto pt-10">
+            <h1 class="text-4xl font-bold">Verificação</h1>
+            <p class="text-sm text-surface-200">
+                Após essa verificação você será direcionado para o seu aplicativo.
+            </p>
+        </header>
+        <form
+            action="?/verify"
+            method="post"
+            class="flex flex-col items-center justify-center gap-y-6">
+            <Input type="email" name="email" placeholder="Email" value={email || ""} />
+            <Input type="text" name="token" placeholder="Token" />
+            <Button type="submit">
+                Verificar Conta
+                <ArrowBigRight class="text-white animate-pulse" />
+            </Button>
+        </form>
     </div>
 </div>
