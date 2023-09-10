@@ -1,12 +1,15 @@
 import { AuthApiError } from "@supabase/supabase-js"
 import { redirect } from "@sveltejs/kit"
 import type { Actions } from "./$types"
+import { user } from "$lib/stores"
 
 export const actions: Actions = {
-    default: async ({ request, locals: { supabase } }) => {
+    "email-password": async ({ request, locals: { supabase, getSession } }) => {
         const loginData = Object.fromEntries(await request.formData()) || {}
 
-        const { error: err } = await supabase.auth.signInWithPassword(loginData as { email: string, password: string })
+        const { data, error: err } = await supabase.auth.signInWithPassword(
+            loginData as { email: string; password: string },
+        )
         if (err) {
             if (err instanceof AuthApiError && err.status === 400) {
                 return { status: 400, body: "Email ou password inválidos." }
@@ -14,7 +17,37 @@ export const actions: Actions = {
                 return { status: 500, body: "Erro desconhecido." }
             }
         }
-        console.log("Login successful")
+
+        const session = await getSession()
+
+        if (session) {
+            const { data: userData, error: userErr } = await supabase
+                .from("profiles")
+                .select()
+                .eq("id", data.user.id)
+                .single()
+
+            if (userErr) {
+                console.log(userErr)
+                return { status: 500, body: "Erro desconhecido." }
+            }
+
+            user.set(userData[0] || {})
+        }
+
         throw redirect(301, "/dashboard")
-    }
+    },
+    google: async ({ locals: { supabase } }) => {
+        const { data, error: err } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+        })
+
+        if (err) {
+            console.log(err)
+            return { status: 500, body: "Erro desconhecido." }
+        }
+        console.log("Login successful")
+
+        throw redirect(301, "/dashboard")
+    },
 }
