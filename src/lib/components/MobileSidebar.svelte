@@ -47,5 +47,5 @@
             </a>
         {/each}
     </ul>
-    <Footer customClass="mt-auto" />
+    <Footer class="mt-auto" />
 </nav>
