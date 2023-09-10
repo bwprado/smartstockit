@@ -9,12 +9,13 @@
     export let intent: "primary" | "secondary" | "danger" = "primary"
     export let loading: boolean = false
     export let disabled: boolean = false
-    export let className: string = ""
+    let className: string = ""
+    export { className as class }
 
     const btnStyle = cva(
         [
             "rounded-lg",
-            'h-10',
+            "h-10",
             "font-bold",
             "py-2",
             "px-4",
