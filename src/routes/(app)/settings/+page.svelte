@@ -75,13 +75,11 @@
 <TabGroup>
     <Tab bind:group={tabSet} name="users" value={0}>
         <div class="text-sm flex flex-col items-center justify-center gap-y-2">
-            <Users size={20} />
             <span>Usuários</span>
         </div>
     </Tab>
     <Tab bind:group={tabSet} name="categories" value={1}>
         <div class="text-sm flex flex-col items-center justify-center gap-y-2">
-            <Grid2x2 size={20} />
             <span>Categorias</span>
         </div>
     </Tab>
@@ -89,11 +87,11 @@
         {#if tabSet === 0}
             <div class="flex flex-col sm:flex-row justify-between items-center pb-10 gap-4">
                 <h1 class="text-xl font-bold whitespace-nowrap">Usuários</h1>
-                <Button id="add_user" intent="primary" type="button" on:click={handleAddButtonClick}
+                <Button id="add_user" intent="primary" type="button" class="w-fit" on:click={handleAddButtonClick}
                     >Adicionar Usuário</Button>
             </div>
 
-            <div class="table-container">
+            <div class="table-container rounded-lg">
                 <Table
                     columns={[
                         { label: "Nome", key: "name", type: "string" },
@@ -154,7 +152,7 @@
                 id="save_user"
                 {loading}
                 intent="primary"
-                className="w-full mt-auto"
+                class="w-full mt-auto"
                 on:click={() => (loading = true)}>Salvar</Button>
         </form>
     </svelte:fragment>
