@@ -17,21 +17,33 @@
         "block",
         "w-full",
         "rounded-md",
-        "border-0",
         "py-1.5",
         "px-2",
         "h-10",
-        "text-gray-900",
+        "text-surface-900",
+        "dark:bg-surface-700/50",
+        "dark:text-surface-100",
+        "bg-gray-50/50",
+        "dark:placeholder:text-surface-400",
+        "placeholder:text-surface-200",
         "ring-1",
         "ring-inset",
-        "ring-gray-300",
-        "placeholder:text-gray-400",
+        "ring-surface-100",
+        "dark:ring-1",
+        "dark:ring-inset",
+        "dark:ring-surface-500",
         "focus:ring-2",
         "focus:ring-inset",
-        "focus:ring-indigo-600",
+        "focus:ring-primary-500",
+        "dark:focus:ring-2",
+        "dark:focus:ring-inset",
+        "dark:focus:ring-primary-500",
         "sm:text-sm",
         "sm:leading-6",
         "outline-none",
+        "[appearance:textfield]",
+        "[&::-webkit-outer-spin-button]:appearance-none",
+        "[&::-webkit-inner-spin-button]:appearance-none",
     ])
 </script>
 
@@ -41,10 +53,9 @@
         class={twMerge(
             "block text-sm font-bold leading-6 text-gray-900 dark:text-gray-200",
             customClasses.label,
-        )}>{label}</label
-    >
+        )}>{label}</label>
     <select {type} {name} {id} class={twMerge(selectStyle, customClasses.select)} on:change {value}>
-        <option value="" disabled selected> Selecione uma opção </option>
+        <option value="" disabled selected> Selecione uma opção</option>
         {#each options as option}
             <option value={option.id}>{option.name}</option>
         {/each}
