@@ -1,7 +1,6 @@
 import { AuthApiError } from "@supabase/supabase-js"
 import { redirect } from "@sveltejs/kit"
 import type { Actions } from "./$types"
-import { user } from "$lib/stores"
 
 export const actions: Actions = {
     "email-password": async ({ request, locals: { supabase, getSession } }) => {
@@ -31,8 +30,6 @@ export const actions: Actions = {
                 console.log(userErr)
                 return { status: 500, body: "Erro desconhecido." }
             }
-
-            user.set(userData[0] || {})
         }
 
         throw redirect(301, "/dashboard")
