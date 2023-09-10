@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores"
-    import type { PopupSettings } from "@skeletonlabs/skeleton"
+    import type { ModalSettings, ModalStore, PopupSettings } from "@skeletonlabs/skeleton"
     import {
         Avatar,
         LightSwitch,
@@ -9,22 +9,13 @@
         popup,
         setModeCurrent,
     } from "@skeletonlabs/skeleton"
-    import {
-        ArrowDown,
-        ArrowUp,
-        Home,
-        LayoutDashboard,
-        Menu,
-        Package,
-        Settings,
-    } from "lucide-svelte"
+    import { ArrowDown, ArrowUp, LayoutDashboard, Menu, Package, Settings } from "lucide-svelte"
     import Button from "./Button.svelte"
     import IconButton from "./IconButton.svelte"
     import MobileSidebar from "./MobileSidebar.svelte"
-    import type { ModalSettings, ModalComponent, ModalStore } from "@skeletonlabs/skeleton"
-
-    export let user: any
-    export let session: any
+    import type { LayoutServerData, PageData } from "../../routes/$types"
+    import type { Session } from "@supabase/supabase-js"
+    import type { Profile } from "../../types/supabase"
 
     const popupFeatured: PopupSettings = {
         event: "click",
@@ -55,10 +46,12 @@
     const handleMenuClick = () => {
         modalStore.trigger(modalSettings)
     }
+    export let profile: Profile
+    export let session: Session
 </script>
 
 <header
-    class="flex h-max w-full bg-primary-500 items-center text-gray-200 justify-between py-4 lg:pl-8 lg:pr-28 px-4">
+    class="flex h-max w-full bg-primary-500 items-center text-gray-200 justify-between py-4 px-4">
     <IconButton on:click={handleMenuClick} customClasses="dark:text-gray-200 text-white lg:hidden">
         <Menu />
     </IconButton>
@@ -68,19 +61,17 @@
     <nav class="align-middle">
         <ul class="flex gap-x-6 items-center">
             <LightSwitch on:click={() => setModeCurrent($modeCurrent ? true : false)} />
-            {#if !user}
+            {#if !session}
                 <li aria-current={$page.url.pathname.startsWith("/login")}>
                     <a href="/login">
                         <Button id="login" intent="secondary">Login</Button>
                     </a>
                 </li>
-            {/if}
-
-            {#if user}
+            {:else}
                 <li>
                     <button class="" use:popup={popupFeatured}>
                         <Avatar
-                            initials={user?.name}
+                            initials={profile?.name}
                             border="border-4 border-surface-300-600-token hover:!border-white"
                             width="w-12"
                             cursor="cursor-pointer" />
@@ -89,11 +80,11 @@
                         <div class="space-y-4">
                             <div class="flex gap-x-2 items-center">
                                 <Avatar
-                                    initials={user?.name}
+                                    initials={profile?.name}
                                     border="border-4 border-surface-300-600-token hover:!border-primary-500"
                                     width="w-12"
                                     cursor="cursor-pointer" />
-                                <p class="font-bold">{user?.name}</p>
+                                <p class="font-bold">{profile?.name}</p>
                             </div>
                             <a
                                 class="btn variant-soft w-full"
