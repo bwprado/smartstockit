@@ -1,58 +1,35 @@
 <script lang="ts">
     import { page } from "$app/stores"
-    import type { ModalSettings, ModalStore, PopupSettings } from "@skeletonlabs/skeleton"
-    import {
-        Avatar,
-        LightSwitch,
-        getModalStore,
-        modeCurrent,
-        popup,
-        setModeCurrent,
-    } from "@skeletonlabs/skeleton"
-    import { ArrowDown, ArrowUp, LayoutDashboard, Menu, Package, Settings } from "lucide-svelte"
+    import type { PopupSettings } from "@skeletonlabs/skeleton"
+    import { Avatar, LightSwitch, modeCurrent, popup, setModeCurrent } from "@skeletonlabs/skeleton"
+    import type { Session } from "@supabase/supabase-js"
+    import { ArrowDown, ArrowUp, Box, LayoutDashboard, Menu, Settings } from "lucide-svelte"
+    import type { Profile } from "../../types/supabase"
     import Button from "./Button.svelte"
+    import Footer from "./Footer.svelte"
     import IconButton from "./IconButton.svelte"
     import MobileSidebar from "./MobileSidebar.svelte"
-    import type { LayoutServerData, PageData } from "../../routes/$types"
-    import type { Session } from "@supabase/supabase-js"
-    import type { Profile } from "../../types/supabase"
+    import Modal from "./Modal.svelte"
+    import SidebarItem from "./SidebarItem.svelte"
+
+    export let profile: Profile
+    export let session: Session
 
     const popupFeatured: PopupSettings = {
         event: "click",
         target: "popupFeatured",
         placement: "bottom",
     }
-
-    const modalStore: ModalStore = getModalStore()
-    const modalSettings: ModalSettings = {
-        position: "items-start h-full",
-        title: "Menu",
-        type: "component",
-        component: {
-            ref: MobileSidebar,
-            props: {
-                navItems: [
-                    { label: "Configurações", link: "/settings", Icon: Settings },
-                    { label: "Dashboard", link: "/dashboard", Icon: LayoutDashboard },
-                    { label: "Produtos", link: "/products", Icon: Package },
-                    { label: "Entradas", link: "/input", Icon: ArrowUp },
-                    { label: "Saídas", link: "/output", Icon: ArrowDown },
-                ],
-                onClick: () => modalStore.close(),
-            },
-        },
-    }
+    $: showModal = false
 
     const handleMenuClick = () => {
-        modalStore.trigger(modalSettings)
+        showModal = true
     }
-    export let profile: Profile
-    export let session: Session
 </script>
 
 <header
     class="flex h-max w-full bg-primary-500 items-center text-gray-200 justify-between py-4 px-4">
-    <IconButton on:click={handleMenuClick} customClasses="dark:text-gray-200 text-white lg:hidden">
+    <IconButton on:click={handleMenuClick} class="dark:text-gray-200 text-white lg:hidden">
         <Menu />
     </IconButton>
     <div class="hidden sm:block">
@@ -100,4 +77,30 @@
             {/if}
         </ul>
     </nav>
+    <Modal
+        bind:showModal
+        headerText="Menu"
+        confirmFunction={() => console.log("Test")}
+        position="left">
+        <svelte:fragment slot="body">
+            <MobileSidebar>
+                <SidebarItem label="Configurações" link="/settings">
+                    <Settings size={20} />
+                </SidebarItem>
+                <SidebarItem label="Dashboard" link="/dashboard">
+                    <LayoutDashboard size={20} />
+                </SidebarItem>
+                <SidebarItem label="Produtos" link="/products">
+                    <Box size={20} />
+                </SidebarItem>
+                <SidebarItem label="Entradas" link="/input">
+                    <ArrowUp size={20} />
+                </SidebarItem>
+                <SidebarItem label="Saídas" link="/output">
+                    <ArrowDown size={20} />
+                </SidebarItem>
+            </MobileSidebar>
+        </svelte:fragment>
+        <Footer class="mt-auto" slot="footer" />
+    </Modal>
 </header>
