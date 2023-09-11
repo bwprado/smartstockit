@@ -30,9 +30,9 @@
 
 <a href={link} class="w-full">
     <li class={linkStyle({ active: $page.url.pathname === link })}>
-        <div class="w-fit">
+        <div class="w-fit text-surface-900 dark:text-white">
             <slot />
         </div>
-        <span>{label}</span>
+        <span class="text-surface-900 dark:text-white">{label}</span>
     </li>
 </a>
