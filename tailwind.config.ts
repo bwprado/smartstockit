@@ -16,6 +16,29 @@ const config = {
         fontFamily: {
             sans: ["Inter", "sans-serif"],
         },
+        extend: {
+            animation: {
+                "modal-left": "modal-left 0.3s cubic-bezier(0.34, 1.4, 0.84, 1)",
+            },
+            keyframes: {
+                "modal-left": {
+                    "0%": { transform: "translateX(-100%)" },
+                    "100%": { transform: "translateX(0)" },
+                },
+                "modal-right": {
+                    "0%": { transform: "translateX(100%)" },
+                    "100%": { transform: "translateX(0)" },
+                },
+                zoom: {
+                    "0%": { transform: "scale(0.95)" },
+                    "100%": { transform: "scale(1)" },
+                },
+                fade: {
+                    "0%": { opacity: "0" },
+                    "100%": { opacity: "1" },
+                },
+            },
+        },
     },
     plugins: [
         skeleton({
