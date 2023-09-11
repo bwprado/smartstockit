@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { twMerge } from "tailwind-merge"
     import { cx } from "class-variance-authority"
-    import Checkbox from "./Checkbox.svelte"
     import { Minus, Plus } from "lucide-svelte"
+    import { twMerge } from "tailwind-merge"
 
     export let label: string = ""
     export let customClasses: {
@@ -70,7 +69,7 @@
             {required}
             {name}
             {id}
-            {value}
+            bind:value={value}
             type="number"
             inputmode="numeric"
             class={twMerge(inputStyle, customClasses.input)} />
