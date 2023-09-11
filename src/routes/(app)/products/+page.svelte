@@ -171,7 +171,7 @@
         on:submit
         slot="body"
         method="POST"
-        class="grid grid-rows-[auto,max-content] w-full h-full"
+        class="grid grid-rows-[auto,max-content] w-full h-full gap-y-4"
         action={selectedProduct ? "?/editProduct" : "?/addProduct"}>
         <div class="flex flex-col w-full gap-6">
             <RadioGroup
@@ -191,6 +191,24 @@
                 required
                 placeholder="Nome do Produto"
                 value={selectedProduct?.name || ""} />
+            <div class="flex gap-x-4">
+                <Input
+                    label="Marca"
+                    name="brand"
+                    type="text"
+                    id="brand"
+                    required
+                    placeholder="Marca do Produto"
+                    value={selectedProduct?.brand || ""} />
+                <Input
+                    label="Fornecedor"
+                    name="supplier"
+                    type="text"
+                    id="supplier"
+                    required
+                    placeholder="Fornecedor"
+                    value={selectedProduct?.supplier || ""} />
+            </div>
             <div class="flex items-end gap-x-4">
                 <Input
                     id="barcode"
@@ -228,13 +246,6 @@
                     type="btn-number"
                     value={`${selectedProduct?.max}` || ""} />
             </div>
-            <Input
-                label="Aviso de Quantidade Mínima"
-                name="warning"
-                id="warning"
-                type="checkbox"
-                message="Avisa quando a quantidade mínima for atingida"
-                selected={selectedProduct?.warning || false} />
             <Select
                 label="Unidade"
                 name="unit"
@@ -248,10 +259,17 @@
             {#if selectedProduct}
                 <Input name="id" id="id" value={selectedProduct.id} type="hidden" />
             {/if}
-            <Composition label="Composição" />
+            <Composition
+                label="Composição"
+                options={[
+                    { label: "Açucar", value: "sugar" },
+                    { label: "Trigo", value: "trigo" },
+                ]} />
         </div>
-        <Button type="submit" id="add_product" on:click={() => (loading = true)} {loading}
-            >{selectedProduct ? "Editar" : "Adicionar"}</Button>
+        <div class="py-6 sm:py-0">
+            <Button type="submit" id="add_product" on:click={() => (loading = true)} {loading}
+                >{selectedProduct ? "Editar" : "Adicionar"}</Button>
+        </div>
     </form>
     <svelte:fragment slot="footer">
         <div />
