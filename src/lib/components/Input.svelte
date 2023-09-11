@@ -19,7 +19,6 @@
     export let placeholder: string = ""
     export let selected: boolean = false
     export let message: string = ""
-    export let onInput: (e: Event) => void = () => {}
 
     const inputStyle = cx([
         "block",
@@ -59,7 +58,7 @@
 {#if type === "checkbox"}
     <Checkbox {selected} {disabled} {required} {name} {id} {value} {label} {message} />
 {:else if type === "btn-number"}
-    <InputNumber {disabled} {required} {name} {id} {value} {label} />
+    <InputNumber {disabled} {required} {name} {id} bind:value {label} />
 {:else}
     <div class={twMerge("w-full flex flex-col gap-y-2", customClasses.wrapper)}>
         {#if label}
@@ -73,13 +72,16 @@
         <input
             {disabled}
             {required}
-            {type}
+            type="text"
+            pattern={type === "number" ? "[0-9]*" : ""}
             {name}
             {id}
             {value}
             {placeholder}
             aria-placeholder={placeholder}
             class={twMerge(inputStyle, customClasses.input)}
-            on:input={onInput} />
+            on:keydown
+            on:keypress
+            on:input />
     </div>
 {/if}
