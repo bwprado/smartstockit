@@ -30,7 +30,7 @@
             variants: {
                 intent: {
                     primary: ["bg-primary-500", "text-primary-50", "hover:bg-primary-700"],
-                    secondary: ["bg-white", "text-primary-500", "hover:bg-gray-900"],
+                    secondary: ["bg-surface-700", "text-surface-100", "hover:bg-primary-500"],
                     danger: ["bg-red-500", "text-gray-100", "hover:bg-red-700"],
                 },
             },
