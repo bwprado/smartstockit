@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { cva } from "class-variance-authority"
     import { X } from "lucide-svelte"
     import Button from "./Button.svelte"
     import IconButton from "./IconButton.svelte"
@@ -6,6 +7,7 @@
     export let showModal: boolean
     export let confirmFunction: () => void
     export let headerText: string = ""
+    export let position: "right" | "left" | "top" | "bottom" | "center" = "right"
 
     let dialog: HTMLDialogElement
 
@@ -14,11 +16,41 @@
     } else if (dialog && !showModal) {
         dialog.close()
     }
+
+    const dialogStyle = cva(
+        [
+            "dark:bg-surface-800",
+            "bg-white",
+            "sm:rounded-s-md",
+            "shadow-md",
+            "p-6",
+            "h-full",
+            "max-h-full",
+            "w-full",
+            "max-w-full",
+            "sm:w-2/3",
+            "md:w-1/2",
+            "lg:w-2/5",
+            "overflow-y-auto",
+            "overflow-x-hidden",
+        ],
+        {
+            variants: {
+                position: {
+                    top: "top-0",
+                    center: "top-1/2",
+                    bottom: "bottom-0",
+                    left: "ml-0 animate-modal-left",
+                    right: "mr-0 animate-[modal-right_0.3s_cubic-bezier(0.34,1.4,0.84,1)] transition-all",
+                },
+            },
+        },
+    )
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog
-    class="dark:bg-surface-800 bg-white rounded-md shadow-md p-6 h-full right-0 mr-4 w-full sm:w-2/3 md:w-1/2 lg:w-2/5"
+    class={dialogStyle({ position })}
     bind:this={dialog}
     on:close={() => (showModal = false)}
     on:click|self={() => dialog.close()}>
@@ -27,8 +59,7 @@
         <div
             class="grid grid-cols-[max-content,auto,max-content] justify-between h-fit pb-4 items-center border-b border-surface-50 dark:border-surface-500 mb-8">
             <IconButton on:click={() => (showModal = false)} id="close-modal" intent="secondary">
-                <X
-                    class="text-surface-800 dark:text-primary-500" />
+                <X />
             </IconButton>
             {#if $$slots.header}
                 <slot name="header" />
@@ -76,7 +107,15 @@
         }
     }
 
-    @keyframes move {
+    @keyframes moveRight {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+    @keyframes moveLeft {
         from {
             transform: translateX(100%);
         }
