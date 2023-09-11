@@ -6,18 +6,23 @@
         type PopupSettings,
     } from "@skeletonlabs/skeleton"
     import { cx } from "class-variance-authority"
+    import { twMerge } from "tailwind-merge"
 
-    let inputValue: string = ""
-    let inputLabel: string = ""
+    export let selected: { value: string; label: string } = { value: "", label: "" }
     export let name: string = ""
     export let label: string = ""
     export let options: AutocompleteOption[] = []
     export let id: string = ""
     export let placeholder: string = ""
+    export let customClasses: {
+        wrapper?: string
+        label?: string
+        input?: string
+    } = {}
 
     let popupSettings: PopupSettings = {
         event: "focus-click",
-        target: "popupAutocomplete",
+        target: `popupAutocomplete-${name}`,
         placement: "bottom",
     }
 
@@ -56,36 +61,36 @@
     ])
 
     const onSearchSelection = (event: CustomEvent<AutocompleteOption>): void => {
-        inputLabel = event.detail.label as string
-        inputValue = event.detail.value as string
+        selected.label = event.detail.label as string
+        selected.value = event.detail.value as string
     }
 </script>
 
 <div class="grid grid-flow-row">
-    <label for={name} class="pb-2">
+    <label for={name} class={twMerge("pb-2", customClasses.label)}>
         <p class="font-bold dark:text-gray-200 text-sm leading-6 text-gray-900">{label}</p>
     </label>
-    <form action="?/addCategory" class="flex gap-x-4 items-center justify-center">
+    <div class="flex gap-x-4 items-center justify-center">
         <input
             type="search"
-            id={label}
+            {id}
             {name}
             {placeholder}
+            on:input
             on:change
-            bind:value={inputLabel}
+            bind:value={selected.label}
             aria-placeholder={placeholder}
             use:popup={popupSettings}
-            class={inputStyle} />
-        <input type="hidden" {name} {id} bind:value={inputValue} />
-        <slot name="action" />
-    </form>
+            class={twMerge(inputStyle, customClasses.input)} />
+        <input type="hidden" {name} {id} bind:value={selected.value} />
+    </div>
     <div
-        class="card w-full max-w-sm max-h-48 p-4 overflow-y-auto rounded-xl dark:bg-surface-700 bg-white shadow-md"
+        class="card w-full max-w-xs max-h-48 p-4 overflow-y-auto rounded-lg dark:bg-surface-700 bg-white shadow-md z-10"
         tabindex="-1"
-        data-popup="popupAutocomplete">
+        data-popup={`popupAutocomplete-${name}`}>
         <Autocomplete
-            bind:input={inputLabel}
             {options}
+            on:keypress
             on:selection={onSearchSelection}
             class="text-gray-900 dark:text-gray-200"
             emptyState="Nenhum resutado encontrado." />
