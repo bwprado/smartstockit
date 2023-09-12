@@ -3,6 +3,8 @@
     import IconButton from "./IconButton.svelte"
     import Input from "./Input.svelte"
     import SelectSearch from "./SelectSearch.svelte"
+    import type { Autocomplete, AutocompleteOption } from "@skeletonlabs/skeleton"
+    import { createEventDispatcher } from "svelte"
 
     export let key: string = ""
     export let compItem: { value: string; label: string; amount: number } = {
@@ -13,7 +15,15 @@
     export let options: { value: string; label: string }[] = []
 
     const handleInput = (e: Event) => {
-        compItem.amount = e?.currentTarget ? Number(e?.currentTarget?.value) : 0
+        const input = e?.currentTarget as HTMLInputElement
+        compItem.amount = +input.value
+    }
+
+    const dispatch = createEventDispatcher()
+    const handleSelection = (e: CustomEvent<AutocompleteOption>) => {
+        compItem.value = e.detail.value as string
+        compItem.label = e.detail.label
+        dispatch("selection", e.detail)
     }
 </script>
 
@@ -23,7 +33,8 @@
             {options}
             name={compItem.label}
             id={compItem.value}
-            bind:selected={compItem}
+            bind:inputValue={compItem.label}
+            on:selection={handleSelection}
             placeholder="Digite o nome do insumo"
             customClasses={{
                 wrapper: "w-full",
