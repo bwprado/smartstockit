@@ -36,7 +36,7 @@
                     type="radio"
                     id={option.label}
                     value={option.value} />
-                <p class="text-surface-900 dark:text-white text-xs dark:hover:text-primary-500">
+                <p class="text-surface-900 dark:text-white text-sm dark:hover:text-primary-500">
                     {option.label}
                 </p>
             </label>
