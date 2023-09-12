@@ -25,12 +25,23 @@
             "justify-center",
             "gap-x-4",
             "w-full",
+            "disabled:bg-surface-200",
+            "disabled:text-surface-400",
+            "disabled:cursor-not-allowed",
+            "disabled:dark:bg-surface-700/30",
+            "disabled:dark:text-surface-600",
         ],
         {
             variants: {
                 intent: {
                     primary: ["bg-primary-500", "text-primary-50", "hover:bg-primary-700"],
-                    secondary: ["bg-surface-700", "text-surface-100", "hover:bg-primary-500"],
+                    secondary: [
+                        "bg-surface-700",
+                        "text-surface-100",
+                        "hover:bg-white",
+                        "hover:text-primary-500",
+                        "hover:dark:text-primary-500",
+                    ],
                     danger: ["bg-red-500", "text-gray-100", "hover:bg-red-700"],
                 },
             },
