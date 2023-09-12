@@ -7,28 +7,30 @@ declare global {
         interface Locals {
             supabase: SupabaseClient
             getSession(): Promise<Session | null>
-            getProfile(): Promise<IProfile>
+            getProfile(): Promise<Profile>
             signIn(email: string, password: string): Promise<{ user: User; session: Session }>
             signOut(): void
         }
         interface PageData {
-            session: Promise<Session | null>
-            profile: Promise<Profile>
+            session?: Promise<Session | null>
+            profile?: Promise<Profile>
         }
 
         interface LayoutData {
-            session: Promise<Session | null>
-            profile: Promise<Profile>
+            session?: Promise<Session | null>
+            profile?: Promise<Profile>
         }
 
         interface LayoutServerLoad {
-            session: Promise<Session | null>
-            profile: Promise<Profile | null>
+            session?: Promise<Session | null>
+            profile?: Promise<Profile | null>
         }
 
         interface PageServerLoad {
             email?: string
             supabase?: Promise<SupabaseClient>
+            profile?: Promise<Profile | null>
+            session?: Promise<Session | null>
         }
     }
 }
