@@ -11,6 +11,7 @@
     import MobileSidebar from "./MobileSidebar.svelte"
     import Modal from "./Modal.svelte"
     import SidebarItem from "./SidebarItem.svelte"
+    import MenuItems from "./MenuItems.svelte"
 
     export let profile: Profile
     export let session: Session
@@ -84,21 +85,7 @@
         position="left">
         <svelte:fragment slot="body">
             <MobileSidebar>
-                <SidebarItem label="Configurações" link="/settings">
-                    <Settings size={20} />
-                </SidebarItem>
-                <SidebarItem label="Dashboard" link="/dashboard">
-                    <LayoutDashboard size={20} />
-                </SidebarItem>
-                <SidebarItem label="Produtos" link="/products">
-                    <Box size={20} />
-                </SidebarItem>
-                <SidebarItem label="Entradas" link="/input">
-                    <ArrowUp size={20} />
-                </SidebarItem>
-                <SidebarItem label="Saídas" link="/output">
-                    <ArrowDown size={20} />
-                </SidebarItem>
+                <MenuItems />
             </MobileSidebar>
         </svelte:fragment>
         <Footer class="mt-auto" slot="footer" />

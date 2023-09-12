@@ -35,16 +35,16 @@ export const actions: Actions = {
         throw redirect(301, "/dashboard")
     },
     google: async ({ locals: { supabase } }) => {
-        const { data, error: err } = await supabase.auth.signInWithOAuth({
-            provider: "google",
-        })
-
-        if (err) {
-            console.log(err)
-            return { status: 500, body: "Erro desconhecido." }
-        }
-        console.log("Login successful")
-
-        throw redirect(301, "/dashboard")
+        // const { data, error } = await supabase.auth.signInWithIdToken({
+        //     token: response.credential,
+        //     nonce: "NONCE", // must be the same one as provided in data-nonce (if any)
+        // })
+        // if (err) {
+        //     console.log(err)
+        //     return { status: 500, body: "Erro desconhecido." }
+        // }
+        // console.log("Login successful")
+        // console.log(data)
+        // throw redirect(301, "/dashboard")
     },
 }

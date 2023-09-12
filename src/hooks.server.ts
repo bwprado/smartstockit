@@ -1,6 +1,6 @@
 import { PUBLIC_SUPABASE_KEY, PUBLIC_SUPABASE_URL } from "$env/static/public"
 import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit"
-import { error, type Handle } from "@sveltejs/kit"
+import { error, fail, type Handle } from "@sveltejs/kit"
 
 const unprotectedRoutes = ["/", "/login", "/signup", "/signup/verify", "/logout"]
 
@@ -16,7 +16,9 @@ export const handle: Handle = async ({ event, resolve }) => {
             data: { session },
             error: err,
         } = await event.locals.supabase.auth.getSession()
-        if (err) return null
+        if (err) {
+            fail(401, { message: "Unauthorized" })
+        }
         return session
     }
 
@@ -25,7 +27,10 @@ export const handle: Handle = async ({ event, resolve }) => {
             email,
             password,
         })
-        if (error) throw new Error(error.message)
+        if (error) {
+            console.error(error)
+            throw new Error(error.message)
+        }
         return data
     }
 

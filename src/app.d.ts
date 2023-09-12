@@ -28,6 +28,7 @@ declare global {
 
         interface PageServerLoad {
             email?: string
+            supabase?: Promise<SupabaseClient>
         }
     }
 }

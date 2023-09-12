@@ -4,6 +4,7 @@
     import { getToastStore } from "@skeletonlabs/skeleton"
     import type { ActionData } from "./$types.js"
     import Footer from "$lib/components/Footer.svelte"
+    import { page } from "$app/stores"
 
     const toastStore = getToastStore()
 
@@ -15,6 +16,13 @@
             background: "bg-error-500",
         })
     }
+
+    // async function handleSignInWithGoogle(response: any) {
+    //     const { data, error } = await $page.supabase.auth.signInWithIdToken({
+    //         token: response.credential,
+    //         nonce: "NONCE", // must be the same one as provided in data-nonce (if any)
+    //     })
+    // }
 </script>
 
 <div
@@ -50,6 +58,26 @@
                         alt="Google Icon" />
                 </div>
                 <h5 class="text-base text-scale-1200 px-4">Google</h5>
+                <div
+                    id="g_id_onload"
+                    data-client_id="<client ID>"
+                    data-context="signin"
+                    data-ux_mode="popup"
+                    data-callback="handleSignInWithGoogle"
+                    data-nonce=""
+                    data-auto_select="true"
+                    data-itp_support="true">
+                </div>
+
+                <div
+                    class="g_id_signin"
+                    data-type="standard"
+                    data-shape="pill"
+                    data-theme="outline"
+                    data-text="signin_with"
+                    data-size="large"
+                    data-logo_alignment="left">
+                </div>
             </button>
         </form>
     </div>
