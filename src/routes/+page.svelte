@@ -1,6 +1,10 @@
 <script lang="ts">
     import "../app.css"
     import Button from "$lib/components/Button.svelte"
+    import type { PageData } from "./$types"
+
+    export let data: PageData
+    const { session } = data || { session: null }
 </script>
 
 <title>Smart Stock It</title>
@@ -11,16 +15,15 @@
     </div>
     <ul>
         <li>
-            <a href="/login">
-                <Button id="login" intent="secondary">Login</Button>
+            <a href={session ? "/dashboard" : "/login"}>
+                <Button id="login" intent="secondary">{session ? "Dashboard" : "Login"}</Button>
             </a>
         </li>
     </ul>
 </header>
 
 <div class="flex flex-col gap-y-20 py-10 px-4 scroll-y snap-mandatory items-center">
-    <div
-        class="flex flex-col items-center justify-center text-white gap-y-8 h-screen snap-center">
+    <div class="flex flex-col items-center justify-center text-white gap-y-8 h-screen snap-center">
         <h1 class="text-6xl font-bold">Gerencie seu estoque com facilidade</h1>
         <p class="text-xl">
             Bem-vindo ao nosso aplicativo de estoque, a solução perfeita para o seu negócio.
