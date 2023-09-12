@@ -79,13 +79,6 @@
     }
 
     const handleAddCategory = async (e: MouseEvent) => {
-        e.preventDefault()
-        if (categoryValue === "") {
-            toast.trigger({
-                message: "O nome da categoria não pode ser vazio.",
-            })
-            return
-        }
         const res = await fetch(`/api/add-category`, {
             method: "POST",
             body: JSON.stringify({ name: categoryValue, ref: "products" }),
@@ -120,6 +113,17 @@
                 video.play()
             }
         })
+    }
+
+    const handleAddBrand = () => {}
+    const handleAddProductClick = () => {}
+    let brand
+    let supplier
+    let category
+    let product = {
+        brand: "",
+        supplier: "",
+        category: "",
     }
 </script>
 
@@ -167,12 +171,7 @@
             </form>
         {/if}
     </svelte:fragment>
-    <form
-        on:submit
-        slot="body"
-        method="POST"
-        class="grid grid-rows-[auto,max-content] w-full h-full gap-y-4"
-        action={selectedProduct ? "?/editProduct" : "?/addProduct"}>
+    <div slot="body" class="grid grid-rows-[auto,max-content] w-full h-full gap-y-4">
         <div class="flex flex-col w-full gap-6">
             <RadioGroup
                 label="Tipo de Produto"
@@ -191,47 +190,79 @@
                 required
                 placeholder="Nome do Produto"
                 value={selectedProduct?.name || ""} />
-            <div class="flex gap-x-4">
-                <Input
-                    label="Marca"
-                    name="brand"
-                    type="text"
-                    id="brand"
-                    required
-                    placeholder="Marca do Produto"
-                    value={selectedProduct?.brand || ""} />
-                <Input
-                    label="Fornecedor"
-                    name="supplier"
-                    type="text"
-                    id="supplier"
-                    required
-                    placeholder="Fornecedor"
-                    value={selectedProduct?.supplier || ""} />
-            </div>
-            <div class="flex items-end gap-x-4">
-                <Input
-                    id="barcode"
-                    label="Código"
-                    name="barcode"
-                    type="text"
-                    value={selectedProduct?.barcode || ""}
-                    placeholder="79823980123989" />
-                <Button id="read-barcode" class="max-w-max" on:click={handleReadBarcode}
-                    ><QrCode /></Button>
-            </div>
-            <div class="grid grid-cols-[1fr,max-content] gap-x-4 items-end justify-center">
-                <SelectSearch
-                    label="Categoria"
-                    on:change={(e) => (categoryValue = e?.target?.value || "")}
-                    options={data.categories.map((cat) => ({ label: cat.name, value: cat.id }))}
-                    id="category"
-                    name="category"
-                    placeholder="Categoria do Produto" />
-                <Button on:click={handleAddCategory} type="submit" intent="primary">
-                    <Plus size={25} class="text-primary-500 dark:text-white" />
+            <SelectSearch
+                on:selection={(e) => {
+                    brand = e.detail
+                    product.brand = e.detail.label
+                }}
+                label="Marca"
+                name="brand"
+                id="brand"
+                required
+                message="Selecione uma marca"
+                bind:inputValue={product.brand}
+                placeholder="Marca do Produto"
+                options={[{ value: "uniao", label: "União" }]}>
+                <Button
+                    slot="action"
+                    on:click={handleAddBrand}
+                    type="submit"
+                    intent="secondary"
+                    class="w-fit"
+                    disabled={product.brand === ""}>
+                    <Plus size={25} />
                 </Button>
-            </div>
+            </SelectSearch>
+            <SelectSearch
+                on:selection={(e) => {
+                    supplier = e.detail
+                    product.supplier = e.detail.label
+                }}
+                label="Fornecedor"
+                name="supplier"
+                id="supplier"
+                placeholder="Fornecedor"
+                bind:inputValue={product.supplier}>
+                <Button
+                    slot="action"
+                    on:click={handleAddBrand}
+                    type="submit"
+                    intent="secondary"
+                    class="w-fit"
+                    disabled={product.supplier === ""}>
+                    <Plus size={25} />
+                </Button>
+            </SelectSearch>
+            <Input
+                id="barcode"
+                label="Código"
+                name="barcode"
+                type="text"
+                value={selectedProduct?.barcode || ""}
+                placeholder="79823980123989">
+                <Button slot="action" id="read-barcode" class="w-fit" on:click={handleReadBarcode}
+                    ><QrCode /></Button>
+            </Input>
+            <SelectSearch
+                on:selection={(e) => {
+                    category = e.detail
+                    product.category = e.detail.label
+                }}
+                label="Categoria"
+                options={data.categories.map((cat) => ({ label: cat.name, value: cat.id }))}
+                id="category"
+                name="category"
+                placeholder="Categoria do Produto">
+                <Button
+                    slot="action"
+                    on:click={handleAddCategory}
+                    type="submit"
+                    intent="secondary"
+                    class="w-fit"
+                    disabled={product.category === ""}>
+                    <Plus size={25} />
+                </Button>
+            </SelectSearch>
             <div class="grid grid-cols-2 gap-x-4">
                 <Input
                     label="Quantidade Mínima"
@@ -267,10 +298,10 @@
                 ]} />
         </div>
         <div class="py-6 sm:py-0">
-            <Button type="submit" id="add_product" on:click={() => (loading = true)} {loading}
+            <Button id="add_product" on:click={handleAddProductClick} {loading}
                 >{selectedProduct ? "Editar" : "Adicionar"}</Button>
         </div>
-    </form>
+    </div>
     <svelte:fragment slot="footer">
         <div />
     </svelte:fragment>
