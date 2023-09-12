@@ -12,6 +12,8 @@ export interface Product {
     category: string
     barcode: string
     composition: string[]
+    supplier: string
+    brand: string
 }
 
 export interface Profile {
