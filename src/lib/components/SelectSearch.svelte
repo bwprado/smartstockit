@@ -6,14 +6,20 @@
         type PopupSettings,
     } from "@skeletonlabs/skeleton"
     import { cx } from "class-variance-authority"
+    import { createEventDispatcher } from "svelte"
     import { twMerge } from "tailwind-merge"
 
     export let selected: { value: string; label: string } = { value: "", label: "" }
+    export let inputValue: string = ""
     export let name: string = ""
     export let label: string = ""
     export let options: AutocompleteOption[] = []
     export let id: string = ""
     export let placeholder: string = ""
+    export let disabled: boolean = false
+    export let message: string = ""
+    export let required: boolean = false
+
     export let customClasses: {
         wrapper?: string
         label?: string
@@ -60,29 +66,40 @@
         "[&::-webkit-inner-spin-button]:appearance-none",
     ])
 
+    const dispatch = createEventDispatcher()
+
     const onSearchSelection = (event: CustomEvent<AutocompleteOption>): void => {
         selected.label = event.detail.label as string
         selected.value = event.detail.value as string
+        dispatch("selection", selected)
     }
 </script>
 
-<div class="grid grid-flow-row">
+<div class="grid grid-flow-row w-full">
     <label for={name} class={twMerge("pb-2", customClasses.label)}>
         <p class="font-bold dark:text-gray-200 text-sm leading-6 text-gray-900">{label}</p>
     </label>
-    <div class="flex gap-x-4 items-center justify-center">
-        <input
-            type="search"
-            {id}
-            {name}
-            {placeholder}
-            on:input
-            on:change
-            bind:value={selected.label}
-            aria-placeholder={placeholder}
-            use:popup={popupSettings}
-            class={twMerge(inputStyle, customClasses.input)} />
+    <div class="flex flex-col gap-y-1 items-start justify-center w-full">
+        <div class="flex gap-x-4 items-center justify-between w-full">
+            <input
+                type="search"
+                {id}
+                {name}
+                {placeholder}
+                {disabled}
+                {required}
+                on:input
+                on:change
+                bind:value={inputValue}
+                aria-placeholder={placeholder}
+                use:popup={popupSettings}
+                class={twMerge(inputStyle, customClasses.input)} />
+            <slot name="action" />
+        </div>
         <input type="hidden" {name} {id} bind:value={selected.value} />
+        {#if required || message}
+            <p class="text-xs text-surface-200 dark:text-surface-400">{message}</p>
+        {/if}
     </div>
     <div
         class="card w-full max-w-xs max-h-48 p-4 overflow-y-auto rounded-lg dark:bg-surface-700 bg-white shadow-md z-10"
@@ -90,6 +107,7 @@
         data-popup={`popupAutocomplete-${name}`}>
         <Autocomplete
             {options}
+            bind:input={inputValue}
             on:keypress
             on:selection={onSearchSelection}
             class="text-gray-900 dark:text-gray-200"
