@@ -17,6 +17,7 @@ export const handle: Handle = async ({ event, resolve }) => {
             error: err,
         } = await event.locals.supabase.auth.getSession()
         if (err) {
+            console.log(err)
             fail(401, { message: "Unauthorized" })
         }
         return session
