@@ -69,19 +69,26 @@
                     customClasses.label,
                 )}>{label}</label>
         {/if}
-        <input
-            {disabled}
-            {required}
-            type="text"
-            pattern={type === "number" ? "[0-9]*" : ""}
-            {name}
-            {id}
-            {value}
-            {placeholder}
-            aria-placeholder={placeholder}
-            class={twMerge(inputStyle, customClasses.input)}
-            on:keydown
-            on:keypress
-            on:input />
+        <div class="flex gap-x-4 items-center justify-between">
+            <input
+                {disabled}
+                {required}
+                {type}
+                {name}
+                {id}
+                {value}
+                {placeholder}
+                aria-placeholder={placeholder}
+                class={twMerge(inputStyle, customClasses.input)}
+                on:keydown
+                on:keypress
+                on:input />
+            <slot name="action" />
+        </div>
+        {#if required || message}
+            <p class="text-xs text-surface-900 dark:text-surface-300">
+                {required ? (message ? `* ${message}` : "* obrigatório") : message}
+            </p>
+        {/if}
     </div>
 {/if}
