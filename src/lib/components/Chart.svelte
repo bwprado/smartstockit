@@ -28,9 +28,6 @@
             },
         })
     })
-    onDestroy(() => {
-        chart.destroy()
-    })
 </script>
 
 <canvas id="myChart" width="400" height="400" bind:this={ctx}></canvas>
