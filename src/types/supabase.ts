@@ -1,19 +1,32 @@
 export interface Product {
-    id: string
-    created_at: string
+    id?: string
+    created_at?: string
     name: string
     unit: string
     balance: number
-    min: number
-    max: number
-    warning: boolean
-    user: string
-    type: "final" | "kit" | "raw"
+    min: number | string
+    max: number | string
+    user?: string
+    type: "product" | "kit" | "raw"
     category: string
     barcode: string
     composition: string[]
     supplier: string
     brand: string
+}
+
+type CompositionForm = { value: string; label: string; amount: number }[]
+type SupplierForm = { value: string; label: string }
+type BrandForm = { value: string; label: string }
+type CategoryForm = { value: string; label: string }
+type UnitForm = { name: string; id: string }
+
+export type ProductForm = Omit<Product, "composition" | "supplier" | "brand" | "category" | "unit"> & {
+    composition: CompositionForm
+    supplier: SupplierForm
+    brand: BrandForm
+    category: CategoryForm
+    unit: UnitForm
 }
 
 export interface Profile {
