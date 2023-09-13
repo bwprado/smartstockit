@@ -8,10 +8,8 @@
     import Breadcrumbs from "$lib/components/Breadcrumbs.svelte"
     import Footer from "$lib/components/Footer.svelte"
     import Header from "$lib/components/Header.svelte"
-    import Sidebar from "$lib/components/Sidebar.svelte"
-    import SidebarItem from "$lib/components/SidebarItem.svelte"
-    import { ArrowDown, ArrowUp, Box, LayoutDashboard, Settings, Settings2 } from "lucide-svelte"
     import MenuItems from "$lib/components/MenuItems.svelte"
+    import Sidebar from "$lib/components/Sidebar.svelte"
 
     storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow })
 
