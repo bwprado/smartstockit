@@ -58,10 +58,15 @@
 
 {#if href}
     <a class={twMerge(btn({ intent }), customClasses)} {href} {id} {type} {disabled} on:click>
-        <slot />
+        <slot name="icon" />
     </a>
 {:else}
-    <button class={twMerge(btn({ intent }), customClasses)} {id} {type} {disabled} on:click|preventDefault>
-        <slot />
+    <button
+        class={twMerge(btn({ intent }), customClasses)}
+        {id}
+        {type}
+        {disabled}
+        on:click|preventDefault>
+        <slot name="icon" />
     </button>
 {/if}
