@@ -2,6 +2,7 @@
     import { twMerge } from "tailwind-merge"
     import Button from "./Button.svelte"
     import CompositionItem from "./CompositionItem.svelte"
+    import { isEqual } from "lodash"
 
     export let label: string = ""
     export let name: string = "input"
@@ -12,14 +13,13 @@
     } = {}
 
     export let options: { value: string; label: string }[] = []
-    let composition: { value: string; label: string; amount: number }[] = []
+    export let composition: { value: string; label: string; amount: number }[] = []
     let selected: { value: string; label: string } = {
         value: "",
         label: "",
     }
 </script>
 
-<p class="text-xs text-white">{selected.label}</p>
 <label
     for={name}
     class={twMerge(
@@ -36,22 +36,23 @@
     </thead>
     <tbody class="relative">
         {#each composition as item}
-            {#key item.value}
+            {#key composition.length}
                 <CompositionItem
                     on:selection={(e) => {
                         selected = e.detail
                     }}
-                    bind:compItem={item}
-                    key={item.value}
+                    bind:amount={item.amount}
+                    bind:label={item.label}
+                    bind:value={item.value}
                     {options}
+                    key={item.value}
                     on:click={() => {
-                        composition = composition.filter((c) => c != item)
+                        composition = composition.filter((c) => !isEqual(c, item))
                     }} />
             {/key}
         {/each}
     </tbody>
 </table>
-<div class="text-white">{JSON.stringify(composition)}</div>
 <Button
     intent="secondary"
     class="w-fit text-xs"
