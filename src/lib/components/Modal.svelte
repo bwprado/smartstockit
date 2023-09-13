@@ -59,7 +59,9 @@
         <div
             class="grid grid-cols-[max-content,auto,max-content] justify-between h-fit pb-4 items-center border-b border-surface-50 dark:border-surface-500 mb-8">
             <IconButton on:click={() => (showModal = false)} id="close-modal" intent="secondary">
-                <X />
+                <svelte:fragment slot="icon">
+                    <X />
+                </svelte:fragment>
             </IconButton>
             {#if $$slots.header}
                 <slot name="header" />
