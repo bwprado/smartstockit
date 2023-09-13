@@ -73,10 +73,10 @@
             <input
                 {disabled}
                 {required}
-                {type}
+                type="text"
                 {name}
                 {id}
-                {value}
+                bind:value
                 {placeholder}
                 aria-placeholder={placeholder}
                 class={twMerge(inputStyle, customClasses.input)}
