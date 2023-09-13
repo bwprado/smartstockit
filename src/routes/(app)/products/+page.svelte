@@ -1,6 +1,7 @@
 <script lang="ts">
     import { invalidate, invalidateAll } from "$app/navigation"
     import Button from "$lib/components/Button.svelte"
+    import Composition from "$lib/components/Composition.svelte"
     import EmptyWrapper from "$lib/components/EmptyWrapper.svelte"
     import IconButton from "$lib/components/IconButton.svelte"
     import Input from "$lib/components/Input.svelte"
@@ -13,9 +14,8 @@
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
     import { Plus, QrCode, Trash } from "lucide-svelte"
     import { twMerge } from "tailwind-merge"
-    import type { Product } from "../../../types/supabase"
+    import type { ProductForm } from "../../../types/supabase"
     import type { ActionData, PageServerData } from "./$types"
-    import Composition from "$lib/components/Composition.svelte"
 
     const toast = getToastStore()
     const modal = getModalStore()
@@ -23,16 +23,26 @@
     export let data: PageServerData
     export let form: ActionData
 
-    let selectedProduct: Product | undefined
-    let categoryValue: string = ""
-    let selectedType: string = "product"
+    let initialValue: ProductForm = {
+        composition: [],
+        name: "",
+        unit: { name: "", id: "" },
+        min: 0,
+        max: 0,
+        balance: 0,
+        barcode: "",
+        brand: { value: "", label: "" },
+        category: { value: "", label: "" },
+        supplier: { value: "", label: "" },
+        type: "product" as "product" | "raw" | "kit",
+    }
 
     $: showModal = false
-    $: selectedProduct
+    $: selectedProduct = initialValue
     $: loading = false
 
     const handleRowClick = (id: string) => {
-        selectedProduct = data.products.find((product) => product.id === id) || undefined
+        selectedProduct = data.products.find((product) => product.id === id) || selectedProduct
         showModal = true
     }
 
@@ -81,7 +91,7 @@
     const handleAddCategory = async (e: MouseEvent) => {
         const res = await fetch(`/api/add-category`, {
             method: "POST",
-            body: JSON.stringify({ name: categoryValue, ref: "products" }),
+            body: JSON.stringify({ name: selectedProduct.category, ref: "products" }),
             headers: {
                 "Content-Type": "application/json",
             },
@@ -103,27 +113,21 @@
         data.categories = [...data.categories, category]
     }
 
-    const handleReadBarcode = (e) => {
+    const handleReadBarcode = (e: MouseEvent) => {
         e.preventDefault()
         e.stopPropagation()
         navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
-            const video = document.querySelector("#barcode video")
-            if (video) {
-                video.srcObject = stream
-                video.play()
-            }
+            // const video = document.querySelector("#barcode video")
+            // if (video) {
+            //     video.srcObject = stream
+            //     video.play()
+            // }
         })
     }
 
     const handleAddBrand = () => {}
-    const handleAddProductClick = () => {}
-    let brand
-    let supplier
-    let category
-    let product = {
-        brand: "",
-        supplier: "",
-        category: "",
+    const handleAddProductClick = () => {
+        console.log(selectedProduct)
     }
 </script>
 
@@ -132,7 +136,7 @@
         <Button
             class="max-w-max"
             on:click={() => {
-                selectedProduct = undefined
+                selectedProduct = initialValue
                 showModal = true
             }}>Adicionar Produto</Button>
     </PageHeader>
@@ -165,8 +169,10 @@
         {#if selectedProduct}
             <form method="POST" action="?/deleteUser">
                 <IconButton on:click={handleDeleteClick} intent="secondary">
-                    <Trash
-                        class="text-gray-900 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200" />
+                    <svelte:fragment slot="icon">
+                        <Trash
+                            class="text-gray-900 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200" />
+                    </svelte:fragment>
                 </IconButton>
             </form>
         {/if}
@@ -176,7 +182,7 @@
             <RadioGroup
                 label="Tipo de Produto"
                 name="radio-product-type"
-                bind:selected={selectedType}
+                bind:selected={selectedProduct.type}
                 options={[
                     { label: "Produto", value: "product" },
                     { label: "Insumo", value: "raw" },
@@ -189,18 +195,22 @@
                 id="name"
                 required
                 placeholder="Nome do Produto"
-                value={selectedProduct?.name || ""} />
+                bind:value={selectedProduct.name} />
             <SelectSearch
                 on:selection={(e) => {
-                    brand = e.detail
-                    product.brand = e.detail.label
+                    selectedProduct.brand.value = e.detail.value
+                    selectedProduct.brand.label = e.detail.label
+                }}
+                on:input={(e) => {
+                    if (e?.target.value === "") {
+                        selectedProduct.brand.value = ""
+                    }
                 }}
                 label="Marca"
                 name="brand"
                 id="brand"
                 required
-                message="Selecione uma marca"
-                bind:inputValue={product.brand}
+                bind:inputValue={selectedProduct.brand.label}
                 placeholder="Marca do Produto"
                 options={[{ value: "uniao", label: "União" }]}>
                 <Button
@@ -209,27 +219,34 @@
                     type="submit"
                     intent="secondary"
                     class="w-fit"
-                    disabled={product.brand === ""}>
+                    disabled={selectedProduct.brand.label === "" ||
+                        selectedProduct.brand.value !== ""}>
                     <Plus size={25} />
                 </Button>
             </SelectSearch>
             <SelectSearch
                 on:selection={(e) => {
-                    supplier = e.detail
-                    product.supplier = e.detail.label
+                    selectedProduct.supplier.label = e.detail.label
+                    selectedProduct.supplier.value = e.detail.value
+                }}
+                on:input={(e) => {
+                    if (e?.target.value === "") {
+                        selectedProduct.supplier.value = ""
+                    }
                 }}
                 label="Fornecedor"
                 name="supplier"
                 id="supplier"
                 placeholder="Fornecedor"
-                bind:inputValue={product.supplier}>
+                bind:inputValue={selectedProduct.supplier.label}>
                 <Button
                     slot="action"
                     on:click={handleAddBrand}
                     type="submit"
                     intent="secondary"
                     class="w-fit"
-                    disabled={product.supplier === ""}>
+                    disabled={selectedProduct.supplier.label === "" ||
+                        selectedProduct.supplier.value !== ""}>
                     <Plus size={25} />
                 </Button>
             </SelectSearch>
@@ -238,20 +255,26 @@
                 label="Código"
                 name="barcode"
                 type="text"
-                value={selectedProduct?.barcode || ""}
+                bind:value={selectedProduct.barcode}
                 placeholder="79823980123989">
                 <Button slot="action" id="read-barcode" class="w-fit" on:click={handleReadBarcode}
                     ><QrCode /></Button>
             </Input>
             <SelectSearch
                 on:selection={(e) => {
-                    category = e.detail
-                    product.category = e.detail.label
+                    selectedProduct.category.value = e.detail.value
+                    selectedProduct.category.label = e.detail.label
+                }}
+                on:input={(e) => {
+                    if (e?.target.value === "") {
+                        selectedProduct.category.value = ""
+                    }
                 }}
                 label="Categoria"
                 options={data.categories.map((cat) => ({ label: cat.name, value: cat.id }))}
                 id="category"
                 name="category"
+                bind:inputValue={selectedProduct.category.label}
                 placeholder="Categoria do Produto">
                 <Button
                     slot="action"
@@ -259,7 +282,8 @@
                     type="submit"
                     intent="secondary"
                     class="w-fit"
-                    disabled={product.category === ""}>
+                    disabled={selectedProduct.category.label === "" ||
+                        selectedProduct.category.value !== ""}>
                     <Plus size={25} />
                 </Button>
             </SelectSearch>
@@ -269,28 +293,29 @@
                     name="min"
                     id="min"
                     type="btn-number"
-                    value={`${selectedProduct?.min}` || ""} />
+                    bind:value={selectedProduct.min} />
                 <Input
                     label="Quantidade Máxima"
                     name="max"
                     id="max"
                     type="btn-number"
-                    value={`${selectedProduct?.max}` || ""} />
+                    bind:value={selectedProduct.max} />
             </div>
             <Select
                 label="Unidade"
                 name="unit"
-                value={selectedProduct?.unit || ""}
+                bind:value={selectedProduct.unit.id}
                 options={[
-                    { name: "und", id: "und" },
-                    { name: "kg", id: "kg" },
-                    { name: "l", id: "l" },
+                    { name: "Unidade", id: "und" },
+                    { name: "Kilograma", id: "kg" },
+                    { name: "Litro", id: "l" },
                 ]}
                 id="unit" />
             {#if selectedProduct}
-                <Input name="id" id="id" value={selectedProduct.id} type="hidden" />
+                <input name="id" id="id" value={selectedProduct.id} type="hidden" />
             {/if}
             <Composition
+                bind:composition={selectedProduct.composition}
                 label="Composição"
                 options={[
                     { label: "Açucar", value: "sugar" },
