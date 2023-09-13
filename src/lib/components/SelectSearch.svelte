@@ -108,7 +108,6 @@
         <Autocomplete
             {options}
             bind:input={inputValue}
-            on:keypress
             on:selection={onSearchSelection}
             class="text-gray-900 dark:text-gray-200"
             emptyState="Nenhum resutado encontrado." />
