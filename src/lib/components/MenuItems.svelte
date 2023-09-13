@@ -1,5 +1,5 @@
 <script>
-    import { ArrowDown, ArrowUp, Box, LayoutDashboard, Settings } from "lucide-svelte"
+    import { ArrowDown, ArrowUp, Box, LayoutDashboard, Settings, UserSquare2 } from "lucide-svelte"
 
     import SidebarItem from "./SidebarItem.svelte"
 </script>
@@ -11,7 +11,7 @@
     <Box size={20} />
 </SidebarItem>
 <SidebarItem label="Clientes" link="/customers">
-    <Box size={20} />
+    <UserSquare2 size={20} />
 </SidebarItem>
 <SidebarItem label="Entradas" link="/input">
     <ArrowUp size={20} />
