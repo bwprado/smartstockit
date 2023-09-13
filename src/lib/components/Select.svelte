@@ -54,7 +54,7 @@
             "block text-sm font-bold leading-6 text-gray-900 dark:text-gray-200",
             customClasses.label,
         )}>{label}</label>
-    <select {type} {name} {id} class={twMerge(selectStyle, customClasses.select)} on:change {value}>
+    <select {type} {name} {id} class={twMerge(selectStyle, customClasses.select)} on:change bind:value>
         <option value="" disabled selected> Selecione uma opção</option>
         {#each options as option}
             <option value={option.id}>{option.name}</option>
