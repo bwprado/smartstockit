@@ -1,6 +1,7 @@
 import { PUBLIC_SUPABASE_KEY, PUBLIC_SUPABASE_URL } from "$env/static/public"
 import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit"
-import { error, fail, type Handle } from "@sveltejs/kit"
+import { AuthApiError } from "@supabase/supabase-js"
+import { error, fail, redirect, type Handle } from "@sveltejs/kit"
 
 const unprotectedRoutes = ["/", "/login", "/signup", "/signup/verify", "/logout"]
 
@@ -18,7 +19,12 @@ export const handle: Handle = async ({ event, resolve }) => {
         } = await event.locals.supabase.auth.getSession()
         if (err) {
             console.log(err)
-            fail(401, { message: "Unauthorized" })
+            if (err instanceof AuthApiError && err.status === 400) {
+                throw redirect(303, "/login")
+            }
+            throw fail(500, {
+                message: "Ocorreu um erro ao tentar obter a sessão do usuário.",
+            })
         }
         return session
     }
