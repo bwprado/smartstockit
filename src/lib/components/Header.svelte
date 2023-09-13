@@ -31,7 +31,9 @@
 <header
     class="flex h-max w-full bg-primary-500 items-center text-gray-200 justify-between py-4 px-4">
     <IconButton on:click={handleMenuClick} class="dark:text-gray-200 text-white lg:hidden">
-        <Menu />
+        <svelte:fragment slot="icon">
+            <Menu />
+        </svelte:fragment>
     </IconButton>
     <div class="hidden sm:block">
         <a href="/" class="text-xl font-bold">Smart Stock It</a>
