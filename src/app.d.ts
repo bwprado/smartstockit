@@ -1,5 +1,4 @@
 import { Session, SupabaseClient, User } from "@supabase/supabase-js"
-import type { IProfile } from "./hooks.server"
 import type { Profile } from "./types/supabase"
 
 declare global {
