@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
     import Chart from "chart.js/auto"
-    import { onDestroy, onMount } from "svelte"
+    import { onMount } from "svelte"
 
-    let ctx
-    let chart
+    let ctx: HTMLCanvasElement
+    let chart: Chart
 
     onMount(() => {
         chart = new Chart(ctx, {
@@ -20,6 +20,7 @@
                 ],
             },
             options: {
+                responsive: true,
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -30,4 +31,6 @@
     })
 </script>
 
-<canvas id="myChart" width="400" height="400" bind:this={ctx}></canvas>
+<div class="w-full sm:w-1/2">
+    <canvas id="myChart" width="400" height="400" bind:this={ctx}></canvas>
+</div>
