@@ -19,6 +19,7 @@ const config = {
         extend: {
             animation: {
                 "modal-left": "modal-left 0.3s cubic-bezier(0.34, 1.4, 0.84, 1)",
+                "modal-right": "modal-right 0.3s cubic-bezier(0.34, 1.4, 0.84, 1)",
             },
             keyframes: {
                 "modal-left": {
