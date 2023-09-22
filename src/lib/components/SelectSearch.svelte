@@ -109,6 +109,7 @@
             {options}
             bind:input={inputValue}
             on:selection={onSearchSelection}
+            regionNav="w-full"
             class="text-gray-900 dark:text-gray-200"
             emptyState="Nenhum resutado encontrado." />
     </div>
