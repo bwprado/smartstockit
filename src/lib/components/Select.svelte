@@ -14,6 +14,7 @@
     export let value: string = ""
     export let options: { name: string; id: string }[] = []
     const selectStyle = cx([
+        "select",
         "block",
         "w-full",
         "rounded-md",
@@ -21,10 +22,11 @@
         "px-2",
         "h-10",
         "text-surface-900",
-        "dark:bg-surface-700/50",
+        "dark:bg-surface-700",
         "dark:text-surface-100",
         "bg-gray-50/50",
         "dark:placeholder:text-surface-400",
+        "dark:text-surface-200",
         "placeholder:text-surface-200",
         "ring-1",
         "ring-inset",
@@ -54,7 +56,13 @@
             "block text-sm font-bold leading-6 text-gray-900 dark:text-gray-200",
             customClasses.label,
         )}>{label}</label>
-    <select {type} {name} {id} class={twMerge(selectStyle, customClasses.select)} on:change bind:value>
+    <select
+        {type}
+        {name}
+        {id}
+        class={twMerge(selectStyle, customClasses.select)}
+        on:change
+        bind:value>
         <option value="" disabled selected> Selecione uma opção</option>
         {#each options as option}
             <option value={option.id}>{option.name}</option>
