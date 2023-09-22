@@ -2,17 +2,21 @@ export interface Product {
     id?: string
     created_at?: string
     name: string
-    unit: string
+    unit: Unit
     balance: number
     min: number | string
     max: number | string
     user?: string
     type: "product" | "kit" | "raw"
-    category: string
+    category: Category
     barcode: string
     composition: string[]
-    supplier: string
-    brand: string
+    supplier: Supplier
+    brand: Brand
+    units?: Unit
+    brands?: Brand
+    categories?: Category
+    suppliers?: Supplier
 }
 
 type CompositionForm = { value: string; label: string; amount: number }[]
@@ -21,7 +25,10 @@ type BrandForm = { value: string; label: string }
 type CategoryForm = { value: string; label: string }
 type UnitForm = { name: string; id: string }
 
-export type ProductForm = Omit<Product, "composition" | "supplier" | "brand" | "category" | "unit"> & {
+export type ProductForm = Omit<
+    Product,
+    "composition" | "supplier" | "brand" | "category" | "unit"
+> & {
     composition: CompositionForm
     supplier: SupplierForm
     brand: BrandForm
@@ -76,5 +83,30 @@ export interface Category {
     created_at: string
     name: string
     ref: string
+    user: string
+}
+
+export interface Brand {
+    id: string
+    created_at: string
+    name: string
+    user: string
+}
+
+export interface Supplier {
+    id: string
+    created_at: string
+    name: string
+    address: JSON
+    phone: string
+    email: string
+    user: string
+}
+
+export interface Unit {
+    id: string
+    created_at: string
+    name: string
+    acronym: string
     user: string
 }
