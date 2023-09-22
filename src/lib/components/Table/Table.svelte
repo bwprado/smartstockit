@@ -4,7 +4,7 @@
     import TableCell from "./TableCell.svelte"
     import TableCellHead from "./TableCellHead.svelte"
     import TableRow from "./TableRow.svelte"
-    import { goto } from "$app/navigation"
+    import { get } from "lodash"
 
     export let columns: { label: string; key?: string; type: string }[] = []
     export let data: any[] = []
@@ -19,7 +19,7 @@
 
     const checkType = (value: any, type: string) => {
         if (type === "string") {
-            return value || "Não informado"
+            return value || "-"
         }
         if (type === "number") {
             return +value
@@ -28,10 +28,10 @@
             return formatCurrency(value)
         }
         if (type === "date") {
-            if (value === null || value === undefined || value === "") return "Não informado"
+            if (value === null || value === undefined || value === "") return "-"
             return format(parseISO(value), "dd/MM/yy 'às' HH:mm:ss")
         }
-        return "Não informado"
+        return "-"
     }
 
     const handleSort = (sortBy: string = "", direction: string) => {
@@ -84,6 +84,7 @@
             console.error("Key not found")
         }
     }
+    console.log(data)
 </script>
 
 <table class="w-full text-left table rounded-md text-sm">
@@ -113,17 +114,17 @@
             {/each}
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tbody">
         {#each data as input}
             <TableRow key={input.id} on:rowClick={handleRowClickEvent}>
                 {#each columns as col, i}
                     {#if i === index}
                         <TableCellHead>
-                            {col?.key ? checkType(input[col.key], col.type) : ""}
+                            {col?.key ? checkType(get(input, col.key), col.type) : ""}
                         </TableCellHead>
                     {:else}
                         <TableCell customClass={i === columns.length - 1 ? "hidden sm:block" : ""}>
-                            {col?.key ? checkType(input[col.key], col.type) : ""}
+                            {col?.key ? checkType(get(input, col.key), col.type) : ""}
                         </TableCell>
                     {/if}
                 {/each}
@@ -131,3 +132,6 @@
         {/each}
     </tbody>
 </table>
+
+<style>
+</style>
