@@ -78,16 +78,16 @@
             <span>Usuários</span>
         </div>
     </Tab>
-    <Tab bind:group={tabSet} name="categories" value={1}>
+    <!-- <Tab bind:group={tabSet} name="categories" value={1}>
         <div class="text-sm flex flex-col items-center justify-center gap-y-2">
             <span>Categorias</span>
         </div>
-    </Tab>
+    </Tab> -->
     <svelte:fragment slot="panel">
         {#if tabSet === 0}
             <div class="flex flex-col sm:flex-row justify-between items-center pb-10 gap-4">
                 <h1 class="text-xl font-bold whitespace-nowrap">Usuários</h1>
-                <Button id="add_user" intent="primary" type="button" class="w-fit" on:click={handleAddButtonClick}
+                <Button id="add_user" intent="primary" type="button" class="w-fit" disabled
                     >Adicionar Usuário</Button>
             </div>
 
