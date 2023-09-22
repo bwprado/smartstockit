@@ -3,6 +3,7 @@
     import { X } from "lucide-svelte"
     import Button from "./Button.svelte"
     import IconButton from "./IconButton.svelte"
+    import { fade } from "svelte/transition"
 
     export let showModal: boolean
     export let confirmFunction: () => void
@@ -20,6 +21,7 @@
     const dialogStyle = cva(
         [
             "dark:bg-surface-800",
+            "backdrop:bg-[rgba(0,0,0,0.4)]",
             "bg-white",
             "sm:rounded-s-md",
             "shadow-md",
@@ -40,8 +42,8 @@
                     top: "top-0",
                     center: "top-1/2",
                     bottom: "bottom-0",
-                    left: "ml-0 animate-modal-left",
-                    right: "mr-0 animate-[modal-right_0.3s_cubic-bezier(0.34,1.4,0.84,1)] transition-all",
+                    left: "ml-0 open:animate-modal-left",
+                    right: "mr-0 open:animate-modal-right",
                 },
             },
         },
@@ -53,7 +55,10 @@
     class={dialogStyle({ position })}
     bind:this={dialog}
     on:close={() => (showModal = false)}
-    on:click|self={() => dialog.close()}>
+    on:click|self={() => {
+        console.log('Aqiio')
+        dialog.close()
+    }}>
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div on:click|stopPropagation class="flex flex-col relative h-full">
         <div
@@ -92,48 +97,3 @@
         <!-- svelte-ignore a11y-autofocus -->
     </div>
 </dialog>
-
-<style>
-    dialog::backdrop {
-        background: rgba(0, 0, 0, 0.3);
-    }
-    dialog[open] {
-        animation: move 0.3s cubic-bezier(0.34, 1.4, 0.84, 1);
-    }
-    @keyframes zoom {
-        from {
-            transform: scale(0.95);
-        }
-        to {
-            transform: scale(1);
-        }
-    }
-
-    @keyframes moveRight {
-        from {
-            transform: translateX(100%);
-        }
-        to {
-            transform: translateX(0);
-        }
-    }
-    @keyframes moveLeft {
-        from {
-            transform: translateX(100%);
-        }
-        to {
-            transform: translateX(0);
-        }
-    }
-    dialog[open]::backdrop {
-        animation: fade 0.2s ease-out;
-    }
-    @keyframes fade {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
-    }
-</style>
