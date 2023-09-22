@@ -1,14 +1,33 @@
 import { error, type Actions } from "@sveltejs/kit"
-import type { Category, Product } from "../../../types/supabase.js"
+import type { Brand, Category, Product, Supplier, Unit } from "../../../types/supabase.js"
 import type { PageServerLoad } from "./$types.js"
 import { invalidate } from "$app/navigation"
+
+const transformProducts = (products: Product[]) =>
+    products.map((p) => ({
+        ...p,
+        brands: {
+            value: p?.brands?.id,
+            label: p?.brands?.name,
+        },
+        categories: {
+            value: p?.categories?.id,
+            label: p?.categories?.name,
+        },
+        suppliers: {
+            value: p?.supplier?.id,
+            label: p?.supplier?.name,
+        },
+    }))
 
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
     const session = await getSession()
     const { data: products, error: errProducts } = await supabase
         .from("products")
-        .select()
-        .eq("id", session?.user?.id)
+        .select(
+            "*, units (id, name, acronym), brands (id, name), categories (id, name), supplier (id, name)",
+        )
+        .eq("user", session?.user?.id)
 
     if (errProducts) {
         console.error(errProducts.message)
@@ -25,9 +44,42 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
         throw error(+errCategories.code, errCategories.message)
     }
 
+    const { data: brands, error: errBrands } = await supabase
+        .from("brands")
+        .select()
+        .eq("user", session?.user?.id)
+
+    if (errBrands) {
+        console.error(errBrands.message)
+        throw error(+errBrands.code, errBrands.message)
+    }
+
+    const { data: units, error: errUnits } = await supabase
+        .from("units")
+        .select()
+        .eq("user", session?.user?.id)
+
+    if (errUnits) {
+        console.error(errUnits.message)
+        throw error(+errUnits.code, errUnits.message)
+    }
+
+    const { data: suppliers, error: errSuppliers } = await supabase
+        .from("supplier")
+        .select()
+        .eq("user", session?.user?.id)
+
+    if (errSuppliers) {
+        console.error(errSuppliers.message)
+        throw error(+errSuppliers.code, errSuppliers.message)
+    }
+
     return {
-        products: products as Product[],
+        products: transformProducts(products),
         categories: categories as Category[],
+        brands: brands as Brand[],
+        suppliers: suppliers as Supplier[],
+        units: units as Unit[],
     }
 }
 
