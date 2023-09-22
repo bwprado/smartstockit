@@ -40,9 +40,10 @@
     $: showModal = false
     $: selectedProduct = initialValue
     $: loading = false
+    $: products = data.products
 
     const handleRowClick = (id: string) => {
-        selectedProduct = data.products.find((product) => product.id === id) || selectedProduct
+        selectedProduct = products.find((product) => product.id === id) || selectedProduct
         showModal = true
     }
 
@@ -61,7 +62,7 @@
             response: async (response) => {
                 if (response) {
                     const res = await fetch(
-                        `/api/delete-product?id=${selectedProduct?.id || undefined}`,
+                        `/api/products/delete?id=${selectedProduct?.id || undefined}`,
                         {
                             method: "POST",
                             headers: {
@@ -125,9 +126,52 @@
         })
     }
 
-    const handleAddBrand = () => {}
-    const handleAddProductClick = () => {
-        console.log(selectedProduct)
+    const handleAddBrand = async (e: MouseEvent) => {
+        const res = await fetch(`/api/add-brand`, {
+            method: "POST",
+            body: JSON.stringify({ name: selectedProduct.brand, ref: "products" }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        const json = (await res.json()) || {}
+        const { error, data: brand } = json
+        if (error) {
+            console.log(error)
+
+            toast.trigger({
+                message: "Erro ao criar marca, entre em contato com o suporte.",
+            })
+        } else {
+            toast.trigger({
+                message: "Marca criada com sucesso.",
+            })
+        }
+        invalidate("/products")
+        data.brands = [...data.brands, brand]
+    }
+    const handleAddProductClick = async () => {
+        const res = await fetch(`/api/products/add`, {
+            method: "POST",
+            body: JSON.stringify(selectedProduct),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        const json = (await res.json()) || {}
+        const { error, data: product } = json
+        if (error) {
+            console.log(error)
+            toast.trigger({
+                message: "Erro ao criar produto, entre em contato com o suporte.",
+                classes: "z-50",
+            })
+        } else {
+            toast.trigger({
+                message: "Produto criado com sucesso.",
+            })
+        }
+        products = [...products, product]
     }
 </script>
 
@@ -147,12 +191,13 @@
             <Table
                 columns={[
                     { label: "Nome", key: "name", type: "string" },
-                    { label: "Unidade", key: "unit", type: "string" },
+                    { label: "Unidade", key: "units.acronym", type: "string" },
                     { label: "Saldo", key: "balance", type: "number" },
                     { label: "Minínmo", key: "min", type: "number" },
                     { label: "Máximo", key: "max", type: "number" },
-                    { label: "Aviso", key: "warning", type: "boolean" },
-                    { label: "Categoria", key: "category", type: "string" },
+                    { label: "Categoria", key: "category.label", type: "string" },
+                    { label: "Marca", key: "brand.label", type: "string" },
+                    { label: "Fornecedor", key: "supplier.label", type: "string" },
                 ]}
                 data={data.products}
                 index={0}
@@ -163,15 +208,15 @@
 
 <Modal
     bind:showModal
+    position="right"
     confirmFunction={() => console.log("Save adition")}
-    headerText={selectedProduct ? "Editar Produto" : "Adicionar Produto"}>
+    headerText={selectedProduct.name ? "Editar Produto" : "Adicionar Produto"}>
     <svelte:fragment slot="action">
         {#if selectedProduct}
             <form method="POST" action="?/deleteUser">
                 <IconButton on:click={handleDeleteClick} intent="secondary">
                     <svelte:fragment slot="icon">
-                        <Trash
-                            class="text-gray-900 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200" />
+                        <Trash />
                     </svelte:fragment>
                 </IconButton>
             </form>
@@ -202,7 +247,7 @@
                     selectedProduct.brand.label = e.detail.label
                 }}
                 on:input={(e) => {
-                    if (e?.target.value === "") {
+                    if (e?.target?.value === "") {
                         selectedProduct.brand.value = ""
                     }
                 }}
@@ -230,7 +275,7 @@
                     selectedProduct.supplier.value = e.detail.value
                 }}
                 on:input={(e) => {
-                    if (e?.target.value === "") {
+                    if (e?.target?.value === "") {
                         selectedProduct.supplier.value = ""
                     }
                 }}
@@ -266,7 +311,7 @@
                     selectedProduct.category.label = e.detail.label
                 }}
                 on:input={(e) => {
-                    if (e?.target.value === "") {
+                    if (e?.target?.value === "") {
                         selectedProduct.category.value = ""
                     }
                 }}
@@ -305,26 +350,24 @@
                 label="Unidade"
                 name="unit"
                 bind:value={selectedProduct.unit.id}
-                options={[
-                    { name: "Unidade", id: "und" },
-                    { name: "Kilograma", id: "kg" },
-                    { name: "Litro", id: "l" },
-                ]}
+                options={data.units.map((unit) => ({ name: unit?.name, id: unit?.id }))}
                 id="unit" />
             {#if selectedProduct}
                 <input name="id" id="id" value={selectedProduct.id} type="hidden" />
             {/if}
-            <Composition
-                bind:composition={selectedProduct.composition}
-                label="Composição"
-                options={[
-                    { label: "Açucar", value: "sugar" },
-                    { label: "Trigo", value: "trigo" },
-                ]} />
+            {#if selectedProduct.type === "product"}
+                <Composition
+                    bind:composition={selectedProduct.composition}
+                    label="Composição"
+                    options={[
+                        { label: "Açucar", value: "sugar" },
+                        { label: "Trigo", value: "trigo" },
+                    ]} />
+            {/if}
         </div>
         <div class="py-6 sm:py-0">
             <Button id="add_product" on:click={handleAddProductClick} {loading}
-                >{selectedProduct ? "Editar" : "Adicionar"}</Button>
+                >{selectedProduct.name ? "Editar" : "Adicionar"}</Button>
         </div>
     </div>
     <svelte:fragment slot="footer">
