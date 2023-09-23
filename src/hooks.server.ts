@@ -68,7 +68,10 @@ export const handle: Handle = async ({ event, resolve }) => {
     }
 
     if (!unprotectedRoutes.includes(event.url.pathname)) {
-        if (!(await event.locals.getSession())) {
+        const session = await event.locals.getSession()
+        console.log(session)
+        if (!session) {
+            console.log("no session")
             throw error(401, {
                 message: "Unauthorized",
             })
