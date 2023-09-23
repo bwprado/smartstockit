@@ -1,10 +1,11 @@
 import { Session, SupabaseClient, User } from "@supabase/supabase-js"
+import { Database } from "./DatabaseDefinitions"
 import type { Profile } from "./types/supabase"
 
 declare global {
     namespace App {
         interface Locals {
-            supabase: SupabaseClient
+            supabase: SupabaseClient<Database>
             getSession(): Promise<Session | null>
             getProfile(): Promise<Profile>
             signIn(email: string, password: string): Promise<{ user: User; session: Session }>
