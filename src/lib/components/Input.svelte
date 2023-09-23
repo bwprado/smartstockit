@@ -3,6 +3,7 @@
     import { cx } from "class-variance-authority"
     import Checkbox from "./Checkbox.svelte"
     import InputNumber from "./InputNumber.svelte"
+    import type { FormEventHandler } from "svelte/elements"
 
     export let label: string = ""
     export let customClasses: {
@@ -14,7 +15,7 @@
     export let name: string = "input"
     export let id: string = "input"
     export let required: boolean = false
-    export let value: string = ""
+    export let value: any = undefined
     export let disabled: boolean = false
     export let placeholder: string = ""
     export let selected: boolean = false
@@ -53,6 +54,13 @@
         "[&::-webkit-outer-spin-button]:appearance-none",
         "[&::-webkit-inner-spin-button]:appearance-none",
     ])
+
+    const handleInput = (e: Event) => {
+        value =
+            type === "number"
+                ? +(e.target as HTMLInputElement).value
+                : (e.target as HTMLInputElement).value
+    }
 </script>
 
 {#if type === "checkbox"}
@@ -73,16 +81,15 @@
             <input
                 {disabled}
                 {required}
-                type="text"
+                {type}
                 {name}
                 {id}
-                bind:value
                 {placeholder}
                 aria-placeholder={placeholder}
                 class={twMerge(inputStyle, customClasses.input)}
                 on:keydown
                 on:keypress
-                on:input />
+                on:input={handleInput} />
             <slot name="action" />
         </div>
         {#if required || message}
