@@ -53,7 +53,7 @@
         "lucide-svelte": "0.275.0-beta.0",
         "postcss": "^8.4.27",
         "prettier-plugin-tailwindcss": "^0.5.4",
-        "supabase": ">=1.8.1",
+        "supabase": "^1.99.5",
         "tailwind-merge": "^1.14.0",
         "tailwindcss": "^3.3.3",
         "vite-plugin-svelte": "^3.0.1"
