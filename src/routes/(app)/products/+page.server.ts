@@ -3,29 +3,12 @@ import type { Brand, Category, Product, Supplier, Unit } from "../../../types/su
 import type { PageServerLoad } from "./$types.js"
 import { invalidate } from "$app/navigation"
 
-const transformProducts = (products: Product[]) =>
-    products.map((p) => ({
-        ...p,
-        brands: {
-            value: p?.brands?.id,
-            label: p?.brands?.name,
-        },
-        categories: {
-            value: p?.categories?.id,
-            label: p?.categories?.name,
-        },
-        suppliers: {
-            value: p?.supplier?.id,
-            label: p?.supplier?.name,
-        },
-    }))
-
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
     const session = await getSession()
     const { data: products, error: errProducts } = await supabase
         .from("products")
         .select(
-            "*, units (id, name, acronym), brands (id, name), categories (id, name), supplier (id, name)",
+            "*, units (id, name, acronym), brands (id, name), categories (id, name), suppliers (id, name)",
         )
         .eq("user", session?.user?.id)
 
@@ -65,7 +48,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
     }
 
     const { data: suppliers, error: errSuppliers } = await supabase
-        .from("supplier")
+        .from("suppliers")
         .select()
         .eq("user", session?.user?.id)
 
@@ -75,7 +58,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
     }
 
     return {
-        products: transformProducts(products),
+        products: products as Product[],
         categories: categories as Category[],
         brands: brands as Brand[],
         suppliers: suppliers as Supplier[],
@@ -91,6 +74,7 @@ export const actions: Actions = {
             console.error(err.message)
             throw error(+err.code, err.message)
         }
+        console.log(data)
         invalidate("/products")
     },
     editProduct: async ({ request, locals: { supabase } }) => {
