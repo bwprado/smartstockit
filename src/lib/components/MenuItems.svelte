@@ -1,5 +1,6 @@
 <script>
     import { ArrowDown, ArrowUp, Box, LayoutDashboard, Settings, UserSquare2 } from "lucide-svelte"
+    import { page } from "$app/stores"
 
     import SidebarItem from "./SidebarItem.svelte"
     import SidebarSubItem from "./SidebarSubItem.svelte"
@@ -8,9 +9,10 @@
 <SidebarItem label="Dashboard" link="/dashboard">
     <LayoutDashboard size={20} slot="icon" />
 </SidebarItem>
-<SidebarItem label="Produtos" link="/products">
+<SidebarItem label="Produtos" link="/products" expanded={$page.url.pathname === "/products"}>
     <Box size={20} slot="icon" />
     <svelte:fragment slot="subitem">
+        <SidebarSubItem label="Todos Produtos" link="/products" />
         <SidebarSubItem label="Categorias" link="/categories" />
         <SidebarSubItem label="Marcas" link="/brands" />
         <SidebarSubItem label="Fornecedores" link="/suppliers" />
