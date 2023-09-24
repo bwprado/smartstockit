@@ -10,7 +10,7 @@
 <title>Smart Stock It</title>
 <header
     class="flex h-max w-full bg-primary-500 items-center text-gray-200 justify-between py-4 px-4">
-    <div class="hidden sm:block">
+    <div class="">
         <a href="/" class="text-xl font-bold">Smart Stock It</a>
     </div>
     <ul>
@@ -22,9 +22,10 @@
     </ul>
 </header>
 
-<div class="flex flex-col gap-y-20 py-10 px-4 scroll-y snap-mandatory items-center">
+<div
+    class="flex flex-col gap-y-10 sm:gap-y-20 py-0 sm:py-6 px-4 snap-y snap-mandatory items-center overflow-auto">
     <div class="flex flex-col items-center justify-center text-white gap-y-8 h-screen snap-center">
-        <h1 class="text-6xl font-bold">Gerencie seu estoque com facilidade</h1>
+        <h1 class="text-4xl sm:text-6xl font-bold">Gerencie seu estoque com facilidade</h1>
         <p class="text-xl">
             Bem-vindo ao nosso aplicativo de estoque, a solução perfeita para o seu negócio.
         </p>
