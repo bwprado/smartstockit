@@ -84,7 +84,6 @@
             console.error("Key not found")
         }
     }
-    console.log(data)
 </script>
 
 <table class="w-full text-left table rounded-md text-sm">
