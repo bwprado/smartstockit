@@ -6,8 +6,7 @@
     import Modal from "$lib/components/Modal.svelte"
     import PageHeader from "$lib/components/PageHeader.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-    
-    import { invalidate } from "$app/navigation"
+
     import { Trash } from "lucide-svelte"
     import { twMerge } from "tailwind-merge"
     import type { PageData } from "./$types"
@@ -51,7 +50,6 @@
                     body: JSON.stringify(selectedCategory),
                 })
 
-                invalidate("/categories")
             } catch (error) {
                 console.log(error)
             }
@@ -70,7 +68,7 @@
         }}>Adicionar Categoria</Button>
 </PageHeader>
 <EmptyWrapper
-    message="Nenhum Produto adicionado ainda, para adicionar um produto basta clicar no botão acima."
+    message="Nenhuma Categoria adicionada ainda, para adicionar uma categoria basta clicar no botão acima."
     length={data.categories.length}>
     <section class={twMerge("table-container", "rounded-lg")} slot="content">
         <Table
@@ -87,7 +85,7 @@
     headerText={selectedCategory.name ? "Editar Categoria" : "Adicionar Categoria"}>
     <svelte:fragment slot="action">
         {#if selectedCategory}
-            <form method="POST" action="?/deleteUser">
+            <form method="POST" action="?/deleteCategory">
                 <IconButton on:click={handleDeleteClick} intent="secondary">
                     <svelte:fragment slot="icon">
                         <Trash />
@@ -97,10 +95,9 @@
         {/if}
     </svelte:fragment>
     <div slot="body" class="grid grid-rows-[auto,max-content] w-full h-full gap-y-4">
-        {selectedCategory.name}
         <Input label="Nome" name="name" bind:value={selectedCategory.name} />
         <div class="py-6 sm:py-0">
-            <Button id="add_product" on:click={handleSubmitCategory} {loading}
+            <Button id="add_category" on:click={handleSubmitCategory} {loading}
                 >{selectedCategory.name ? "Editar" : "Adicionar"}</Button>
         </div>
     </div>
