@@ -15,10 +15,13 @@
     const btnStyle = cva(
         [
             "rounded-lg",
-            "h-10",
+            "sm:h-10",
+            "h-8",
             "font-bold",
-            "py-2",
-            "px-4",
+            "sm:py-2",
+            "py-1",
+            "sm:px-4",
+            "px-2",
             "text-sm",
             "flex",
             "items-center",
