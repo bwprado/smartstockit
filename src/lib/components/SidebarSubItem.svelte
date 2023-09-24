@@ -12,7 +12,6 @@
         href={link}
         data-active={active}
         class="flex px-6 py-2 gap-x-4 text-surface-300 rounded-lg hover:text-secondary-500 data-[active=true]:text-secondary-500 data-[active=true]:font-bold">
-        <CornerDownRight size={20} />
         <span>{label}</span>
     </a>
 </li>
