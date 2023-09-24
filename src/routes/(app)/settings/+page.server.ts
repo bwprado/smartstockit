@@ -1,6 +1,6 @@
 import { error, redirect, type Actions } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
-import type { IProfile } from "../../hooks.server"
+import type { Profile, Unit } from "../../../types/supabase"
 
 interface User {
     email: string
@@ -8,28 +8,47 @@ interface User {
 }
 
 export const load: PageServerLoad = async ({ locals: { getSession, supabase } }) => {
-    if (!(await getSession())) {
+    const session = await getSession()
+    if (!session) {
         throw redirect(303, "/login")
     }
     const fetchUsers = async () => {
-        const { data: users, error: err } = await supabase.from("profiles").select("*")
+        const { data: users, error: err } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("user", session.user.id)
 
         if (err) {
             console.log(err)
             throw error(500, err.message)
         }
-        return users as IProfile[]
+        return users as Profile[]
+    }
+
+    const fetchUnits = async () => {
+        const { data: units, error: err } = await supabase
+            .from("units")
+            .select("*")
+            .eq("user", session.user.id)
+
+        if (err) {
+            console.log(err)
+            throw error(500, err.message)
+        }
+
+        return units as Unit[]
     }
 
     return {
         users: fetchUsers(),
+        units: fetchUnits(),
     }
 }
 
 export const actions: Actions = {
     addUser: async ({ request, locals: { supabase } }) => {
         const formData = Object.fromEntries(await request.formData()) as unknown as User &
-            Partial<IProfile>
+            Partial<Profile>
 
         const { data, error } = await supabase.auth.signUp({
             email: formData.email,
@@ -54,5 +73,31 @@ export const actions: Actions = {
         }
 
         return { status: 200, body: "Usuário criado com sucesso" }
+    },
+    addUnit: async ({ request, locals: { supabase, getSession } }) => {
+        const formData = await request.formData()
+        const name = formData.get("unit") as string
+        const acronym = formData.get("acronym") as string
+
+        const session = await getSession()
+        if (!session) {
+            throw redirect(303, "/login")
+        }
+
+        const { data, error: err } = await supabase
+            .from("units")
+            .insert({ name, acronym, user: session.user.id })
+            .select("*")
+            .single()
+
+        if (err) {
+            console.log(err)
+            return {
+                status: 500,
+                body: "Alguma coisa deu errado na criação da unidade",
+            }
+        }
+
+        return { status: 200, body: data }
     },
 }
