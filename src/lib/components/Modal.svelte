@@ -3,12 +3,16 @@
     import { X } from "lucide-svelte"
     import Button from "./Button.svelte"
     import IconButton from "./IconButton.svelte"
+    import { twMerge } from "tailwind-merge"
 
     export let showModal: boolean
     export let closeFunction: () => void = () => (showModal = false)
     export let confirmFunction: () => void
     export let headerText: string = ""
     export let position: "right" | "left" | "top" | "bottom" | "center" = "right"
+    let customClass: string = ""
+
+    export { customClass as class }
 
     let dialog: HTMLDialogElement
 
@@ -57,7 +61,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog
-    class={dialogStyle({ position })}
+    class={twMerge(dialogStyle({ position }), customClass)}
     bind:this={dialog}
     on:close={handleClose}
     on:click|self={() => dialog.close()}>
