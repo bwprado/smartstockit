@@ -10,7 +10,7 @@
     import { Tab, TabGroup, getModalStore, getToastStore } from "@skeletonlabs/skeleton"
     import type { ActionResult } from "@sveltejs/kit"
     import { Trash } from "lucide-svelte"
-    import type { Profile } from "../../../types/supabase"
+    import type { Profile, Unit } from "../../../types/supabase"
     import type { PageData } from "./$types"
 
     const modal = getModalStore()
@@ -22,6 +22,10 @@
     $: showModal = false
     $: showAddUnitModal = false
     $: selectedUser = undefined
+    let selectedUnit: Partial<Unit> = {
+        name: "",
+        acronym: "",
+    }
     $: newUnit = {
         name: "",
         acronym: "",
@@ -35,9 +39,44 @@
         showModal = true
     }
 
-    const handleAddButtonClick = () => {
-        selectedUser = undefined
-        showModal = true
+    const handleUnitRowClick = (id: string) => {
+        selectedUnit = units.find((unit) => unit.id === id) as Partial<Unit>
+        showAddUnitModal = true
+    }
+
+    const handleDeleteUnitClick = () => {
+        const unitId = selectedUnit.id
+        showAddUnitModal = false
+        modal.trigger({
+            type: "confirm",
+            title: "Remover Unidade",
+            body: "Você tem certeza que deseja remover esta unidade? Esta ação não poderá ser desfeita.",
+            response: async (response) => {
+                if (response) {
+                    try {
+                        const res = await fetch(`/api/units?id=${unitId}`, {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        })
+                        const unit = (await res.json()) || {}
+                        console.log(unit)
+                        data.units = data.units.filter((u) => u.id !== unit.id)
+
+                        toast.trigger({
+                            message: "Unidade removida com sucesso!",
+                        })
+                    } catch (error) {
+                        console.log(error)
+
+                        toast.trigger({
+                            message: "Erro ao remover unidade",
+                        })
+                    }
+                }
+            },
+        })
     }
 
     const handleDeleteClick = () => {
@@ -159,7 +198,7 @@
                     { label: "Unidade", key: "name", type: "string" },
                     { label: "Acrônimo", key: "acronym", type: "string" },
                 ]}
-                {handleRowClick}
+                handleRowClick={handleUnitRowClick}
                 data={units} />
         {:else if tabSet === 2}
             (tab panel 3 contents)
@@ -220,16 +259,23 @@
 </Modal>
 
 <Modal
-    headerText="Adicionar Unidade"
+    headerText={selectedUnit.name ? "Editar Unidade" : "Adicionar Unidade"}
     bind:showModal={showAddUnitModal}
     confirmFunction={() => console.log("Confirmation modal")}
+    closeFunction={() => {
+        selectedUnit = {
+            name: "",
+            acronym: "",
+        }
+    }}
     position="right">
     <svelte:fragment slot="action">
-        {#if selectedUser}
-            <form method="POST" action="?/deleteUser">
-                <IconButton on:click={handleDeleteClick}>
-                    <Trash
-                        class="text-gray-900 dark:text-primary-500 hover:text-primary-500 dark:hover:text-gray-200" />
+        {#if selectedUnit.name}
+            <form method="POST" action="?/deleteUnit">
+                <IconButton on:click={handleDeleteUnitClick} intent="secondary">
+                    <svelte:fragment slot="icon">
+                        <Trash />
+                    </svelte:fragment>
                 </IconButton>
             </form>
         {/if}
@@ -240,13 +286,18 @@
             action="?/addUnit"
             class="flex flex-col h-full gap-y-4"
             on:submit|preventDefault={handleAddUnitSubmit}>
-            <Input id="unit" name="unit" label="Unidade" type="text" value={newUnit.name} />
+            <Input
+                id="unit"
+                name="unit"
+                label="Unidade"
+                type="text"
+                value={selectedUnit.name || newUnit.name} />
             <Input
                 id="acronym"
                 name="acronym"
                 label="Acrônimo"
                 type="acronym"
-                value={newUnit.acronym} />
+                value={selectedUnit?.acronym || newUnit.acronym} />
             <Button
                 type="submit"
                 id="save_user"
