@@ -10,7 +10,11 @@
 </SidebarItem>
 <SidebarItem label="Produtos" link="/products">
     <Box size={20} slot="icon" />
-    <SidebarSubItem label="Categorias" link="/categories" slot="subitem" />
+    <svelte:fragment slot="subitem">
+        <SidebarSubItem label="Categorias" link="/categories" />
+        <SidebarSubItem label="Marcas" link="/brands" />
+        <SidebarSubItem label="Fornecedores" link="/suppliers" />
+    </svelte:fragment>
 </SidebarItem>
 <SidebarItem label="Clientes" link="/customers">
     <UserSquare2 size={20} slot="icon" />
