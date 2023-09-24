@@ -9,7 +9,7 @@
     import { createEventDispatcher } from "svelte"
     import { twMerge } from "tailwind-merge"
 
-    export let selected: { value: string; label: string } = { value: "", label: "" }
+    export let selected: any = {}
     export let inputValue: string = ""
     export let name: string = ""
     export let label: string = ""
@@ -69,8 +69,7 @@
     const dispatch = createEventDispatcher()
 
     const onSearchSelection = (event: CustomEvent<AutocompleteOption>): void => {
-        selected.label = event.detail.label as string
-        selected.value = event.detail.value as string
+        selected = event.detail
         dispatch("selection", selected)
     }
 </script>
