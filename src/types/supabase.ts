@@ -10,7 +10,7 @@ export interface Product {
     type: "product" | "kit" | "raw"
     category: Category
     barcode: string
-    composition: string[]
+    composition: { name: string, id: string; amount: number }[]
     supplier: Supplier
     brand: Brand
     units?: Unit
