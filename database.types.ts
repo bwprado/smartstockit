@@ -254,7 +254,7 @@ export interface Database {
         }
         Relationships: []
       }
-      supplier: {
+      suppliers : {
         Row: {
           address: Json | null
           created_at: string
