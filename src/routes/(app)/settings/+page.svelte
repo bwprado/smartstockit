@@ -61,7 +61,6 @@
                             },
                         })
                         const unit = (await res.json()) || {}
-                        console.log(unit)
                         data.units = data.units.filter((u) => u.id !== unit.id)
 
                         toast.trigger({
