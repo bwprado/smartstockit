@@ -1,9 +1,8 @@
 <script lang="ts">
-    import { twMerge } from "tailwind-merge"
     import { cx } from "class-variance-authority"
+    import { twMerge } from "tailwind-merge"
     import Checkbox from "./Checkbox.svelte"
     import InputNumber from "./InputNumber.svelte"
-    import type { FormEventHandler } from "svelte/elements"
 
     export let label: string = ""
     export let customClasses: {
@@ -20,6 +19,7 @@
     export let placeholder: string = ""
     export let selected: boolean = false
     export let message: string = ""
+    export let symbol: string = ""
 
     const inputStyle = cx([
         "block",
@@ -78,18 +78,27 @@
                 )}>{label}</label>
         {/if}
         <div class="flex gap-x-4 items-center justify-between">
-            <input
-                {disabled}
-                {required}
-                {type}
-                {name}
-                {id}
-                {placeholder}
-                aria-placeholder={placeholder}
-                class={twMerge(inputStyle, customClasses.input)}
-                on:keydown
-                on:keypress
-                on:input={handleInput} />
+            <div class="flex items-center h-full w-full">
+                <input
+                    {disabled}
+                    {required}
+                    {type}
+                    {name}
+                    {id}
+                    {placeholder}
+                    {value}
+                    aria-placeholder={placeholder}
+                    class={twMerge(inputStyle, customClasses.input)}
+                    on:keydown
+                    on:keypress
+                    on:input={handleInput} />
+                {#if symbol}
+                    <div
+                        class="rounded-e-md bg-surface-600 h-10 text-xs text-surface-300 flex items-center p-2">
+                        {symbol}
+                    </div>
+                {/if}
+            </div>
             <slot name="action" />
         </div>
         {#if required || message}
