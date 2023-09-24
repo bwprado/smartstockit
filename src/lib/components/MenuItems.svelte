@@ -4,18 +4,21 @@
 
     import SidebarItem from "./SidebarItem.svelte"
     import SidebarSubItem from "./SidebarSubItem.svelte"
+
+    const inventoryLinks = ["/products", "/categories", "/brands", "/suppliers"]
 </script>
 
 <SidebarItem label="Dashboard" link="/dashboard">
     <LayoutDashboard size={20} slot="icon" />
 </SidebarItem>
-<SidebarItem label="Produtos" link="/products" expanded={$page.url.pathname === "/products"}>
+<SidebarItem label="Inventário" link="/products" expanded={inventoryLinks.includes($page.url.pathname)}>
     <Box size={20} slot="icon" />
     <svelte:fragment slot="subitem">
-        <SidebarSubItem label="Todos Produtos" link="/products" />
+        <SidebarSubItem label="Produtos" link="/products" />
         <SidebarSubItem label="Categorias" link="/categories" />
         <SidebarSubItem label="Marcas" link="/brands" />
         <SidebarSubItem label="Fornecedores" link="/suppliers" />
+        <SidebarSubItem label="Unidades de Medida" link="/units" />
     </svelte:fragment>
 </SidebarItem>
 <SidebarItem label="Clientes" link="/customers">
