@@ -14,7 +14,7 @@
     export let name: string = "input"
     export let id: string = "input"
     export let required: boolean = false
-    export let value: any = undefined
+    export let value: any = ""
     export let disabled: boolean = false
     export let placeholder: string = ""
     export let selected: boolean = false
