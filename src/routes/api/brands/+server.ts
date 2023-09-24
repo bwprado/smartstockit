@@ -8,8 +8,20 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
     }
 
     const body = JSON.parse(await request.text())
-    console.log(body)
 
-    // const { data, error } = await supabase.from("brands").insert({}).select()
-    return new Response(body, { status: 202, statusText: "Marca adicionada com sucesso" })
+    const { data, error } = await supabase
+        .from("brands")
+        .insert({ name: body.name, user: session.user.id })
+        .select()
+        .single()
+
+    if (error) {
+        console.log(error)
+        return new Response(JSON.stringify({ error }), { status: 500 })
+    }
+
+    return new Response(JSON.stringify(data), {
+        status: 202,
+        statusText: "Marca adicionada com sucesso",
+    })
 }
