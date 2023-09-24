@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { cx } from "class-variance-authority"
+    import { cva, cx } from "class-variance-authority"
     import { Minus, Plus } from "lucide-svelte"
     import { twMerge } from "tailwind-merge"
 
@@ -52,6 +52,34 @@
         "[&::-webkit-outer-spin-button]:appearance-none",
         "[&::-webkit-inner-spin-button]:appearance-none",
     ])
+    const buttonStyle = cva(
+        [
+            "bg-gray-50",
+            "dark:bg-surface-700",
+            "focus:outline-none",
+            "focus:ring-2",
+            "focus:ring-inset",
+            "focus:ring-primary-600",
+            "dark:focus:ring-2",
+            "dark:focus:ring-inset",
+            "dark:focus:ring-primary-600",
+            "text-surface-900",
+            "flex",
+            "items-center",
+            "justify-center",
+            "border-r",
+            "dark:border-surface-500",
+            "dark:ring-surface-500",
+        ],
+        {
+            variants: {
+                type: {
+                    minus: ["rounded-s-md"],
+                    plus: ["rounded-e-md"],
+                },
+            },
+        },
+    )
 </script>
 
 <div class={twMerge("w-full flex flex-col gap-y-2", customClasses.wrapper)}>
@@ -69,20 +97,14 @@
             {required}
             {name}
             {id}
-            bind:value={value}
+            bind:value
             type="number"
             inputmode="numeric"
             class={twMerge(inputStyle, customClasses.input)} />
-        <button
-            type="button"
-            class="bg-gray-50 dark:bg-surface-700 text-surface-900 flex items-center justify-center border-r border-surface-200 dark:border-surface-500 ring-inset ring-surface-100 dark:ring-surface-500"
-            on:click={() => _value--}>
+        <button type="button" class={buttonStyle({ type: "minus" })} on:click={() => _value--}>
             <Minus class="text-primary-500" />
         </button>
-        <button
-            type="button"
-            class="bg-gray-50 dark:bg-surface-700 text-surface-900 rounded-e-lg flex items-center justify-center ring-inset ring-surface-100 dark:ring-surface-500"
-            on:click={() => _value++}>
+        <button type="button" class={buttonStyle({ type: "plus" })} on:click={() => _value++}>
             <Plus class="text-primary-500" />
         </button>
     </div>
