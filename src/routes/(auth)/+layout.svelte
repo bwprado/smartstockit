@@ -11,7 +11,7 @@
 <svelte:head>
     <title>Smart Stock It - {$page.url.pathname === "/login" ? "Login" : "Criar Conta"}</title>
 </svelte:head>
-<div class="h-auto lg:h-[calc(100vh-44px)] w-auto flex items-center justify-center">
+<div class="h-full lg:h-[calc(100vh-44px)] w-auto flex items-center justify-center">
     <slot />
 </div>
 <Footer />
