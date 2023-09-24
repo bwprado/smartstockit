@@ -1,5 +1,5 @@
 import { json, type RequestHandler } from "@sveltejs/kit"
-import { isNil, omitBy } from "lodash"
+import _ from "lodash"
 
 export const POST: RequestHandler = async ({ locals: { supabase, getSession }, request }) => {
     const session = await getSession()
@@ -16,7 +16,7 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
 
     const body = JSON.parse(await request.text())
 
-    const product = omitBy(
+    const product = _.omitBy(
         {
             name: body.name,
             unit: body.unit?.id || null,
@@ -30,7 +30,7 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
             barcode: body.barcode,
             user: session.user.id,
         },
-        isNil,
+        _.isNil,
     )
 
     const { data, error } = await supabase.from("products").insert(product).select().single()
