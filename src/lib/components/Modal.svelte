@@ -3,9 +3,9 @@
     import { X } from "lucide-svelte"
     import Button from "./Button.svelte"
     import IconButton from "./IconButton.svelte"
-    import { fade } from "svelte/transition"
 
     export let showModal: boolean
+    export let closeFunction: () => void = () => (showModal = false)
     export let confirmFunction: () => void
     export let headerText: string = ""
     export let position: "right" | "left" | "top" | "bottom" | "center" = "right"
@@ -48,22 +48,24 @@
             },
         },
     )
+
+    const handleClose = () => {
+        closeFunction()
+        showModal = false
+    }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog
     class={dialogStyle({ position })}
     bind:this={dialog}
-    on:close={() => (showModal = false)}
-    on:click|self={() => {
-        console.log('Aqiio')
-        dialog.close()
-    }}>
+    on:close={handleClose}
+    on:click|self={() => dialog.close()}>
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div on:click|stopPropagation class="flex flex-col relative h-full">
         <div
             class="grid grid-cols-[max-content,auto,max-content] justify-between h-fit pb-4 items-center border-b border-surface-50 dark:border-surface-500 mb-8">
-            <IconButton on:click={() => (showModal = false)} id="close-modal" intent="secondary">
+            <IconButton on:click={handleClose} id="close-modal" intent="secondary">
                 <svelte:fragment slot="icon">
                     <X />
                 </svelte:fragment>
