@@ -7,7 +7,7 @@
 
     export let showModal: boolean
     export let closeFunction: () => void = () => (showModal = false)
-    export let confirmFunction: () => void
+    export let confirmFunction: () => void = () => {}
     export let headerText: string = ""
     export let position: "right" | "left" | "top" | "bottom" | "center" = "right"
     let customClass: string = ""
