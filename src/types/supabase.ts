@@ -6,6 +6,7 @@ export interface Product {
     balance: number
     min: number | string
     max: number | string
+    price?: number
     user?: string
     type: "product" | "kit" | "raw"
     category: Category
