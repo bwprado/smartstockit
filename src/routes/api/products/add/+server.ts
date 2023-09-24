@@ -1,4 +1,4 @@
-import type { RequestHandler } from "@sveltejs/kit"
+import { json, type RequestHandler } from "@sveltejs/kit"
 import { isNil, omitBy } from "lodash"
 
 export const POST: RequestHandler = async ({ locals: { supabase, getSession }, request }) => {
@@ -6,9 +6,12 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
 
     if (!session) {
         console.log("Unauthorized session, please login.")
-        return new Response(JSON.stringify({ error: "Unauthorized session, please login." }), {
-            status: 401,
-        })
+        return json(
+            { error: "Unauthorized session, please login." },
+            {
+                status: 401,
+            },
+        )
     }
 
     const body = JSON.parse(await request.text())
@@ -16,7 +19,7 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
     const product = omitBy(
         {
             name: body.name,
-            unit: body.unit.id,
+            unit: body.unit?.id || null,
             brand: body.brand?.value || null,
             category: body.category?.value || null,
             supplier: body.supplier?.value || null,
@@ -30,14 +33,14 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
         isNil,
     )
 
-    const { data, error } = await supabase.from("products").insert(product).select()
+    const { data, error } = await supabase.from("products").insert(product).select().single()
 
     if (error) {
         console.log(error)
-        return new Response(JSON.stringify({ error }), { status: 500 })
+        return json({ error }, { status: 500 })
     }
 
-    return new Response(JSON.stringify(data), {
+    return json(data, {
         status: 202,
         statusText: "Produto adicionado com sucesso",
     })
