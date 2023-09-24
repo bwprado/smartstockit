@@ -4,7 +4,7 @@
     import TableCell from "./TableCell.svelte"
     import TableCellHead from "./TableCellHead.svelte"
     import TableRow from "./TableRow.svelte"
-    import { get } from "lodash"
+    import _ from "lodash"
 
     export let columns: { label: string; key?: string; type: string }[] = []
     export let data: any[] = []
@@ -119,11 +119,11 @@
                 {#each columns as col, i}
                     {#if i === index}
                         <TableCellHead>
-                            {col?.key ? checkType(get(input, col.key), col.type) : ""}
+                            {col?.key ? checkType(_.get(input, col.key), col.type) : ""}
                         </TableCellHead>
                     {:else}
                         <TableCell customClass={i === columns.length - 1 ? "hidden sm:block" : ""}>
-                            {col?.key ? checkType(get(input, col.key), col.type) : ""}
+                            {col?.key ? checkType(_.get(input, col.key), col.type) : ""}
                         </TableCell>
                     {/if}
                 {/each}
