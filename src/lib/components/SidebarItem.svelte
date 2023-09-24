@@ -4,7 +4,6 @@
 
     export let label: string = ""
     export let link: string = ""
-    export let active: boolean = false
 
     const linkStyle = cva(
         [
