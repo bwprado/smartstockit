@@ -12,17 +12,18 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
     if (!session) {
         throw redirect(303, "/login")
     }
-    const fetchUsers = async () => {
-        const { data: users, error: err } = await supabase
+    const fetchUserProfile = async () => {
+        const { data: user, error: err } = await supabase
             .from("profiles")
             .select("*")
             .eq("user", session.user.id)
+            .single()
 
         if (err) {
             console.log(err)
             throw error(500, err.message)
         }
-        return users as Profile[]
+        return user as Profile
     }
 
     const fetchUnits = async () => {
@@ -40,7 +41,7 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
     }
 
     return {
-        users: fetchUsers(),
+        user: fetchUserProfile(),
         units: fetchUnits(),
     }
 }
