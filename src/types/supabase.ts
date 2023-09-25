@@ -7,11 +7,12 @@ export interface Product {
     min: number | string
     max: number | string
     price?: number
+    priceCost?: number
     user?: string
     type: "product" | "kit" | "raw"
     category: Category
     barcode: string
-    composition: { name: string, id: string; amount: number }[]
+    composition: { name: string; id: string; amount: number }[]
     supplier: Supplier
     brand: Brand
     units?: Unit
@@ -43,6 +44,10 @@ export interface Profile {
     role: "admin" | "user"
     email: string
     user: string
+    company: string
+    company_code: number
+    image: string
+    phone: number
 }
 
 export interface Unit {
