@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { cx } from "class-variance-authority"
+    import { cva, cx } from "class-variance-authority"
     import { twMerge } from "tailwind-merge"
     import Checkbox from "./Checkbox.svelte"
     import InputNumber from "./InputNumber.svelte"
@@ -19,41 +19,55 @@
     export let placeholder: string = ""
     export let selected: boolean = false
     export let message: string = ""
-    export let symbol: string = ""
+    export let symbol: { text: string; position: "left" | "right" } = {
+        text: "",
+        position: "right",
+    }
 
-    const inputStyle = cx([
-        "block",
-        "w-full",
-        "rounded-md",
-        "py-1.5",
-        "px-2",
-        "h-10",
-        "text-surface-900",
-        "dark:bg-surface-700/50",
-        "dark:text-surface-100",
-        "bg-gray-50/50",
-        "dark:placeholder:text-surface-400",
-        "placeholder:text-surface-200",
-        "focus:outline-none",
-        "ring-1",
-        "ring-inset",
-        "ring-surface-100",
-        "dark:ring-1",
-        "dark:ring-inset",
-        "dark:ring-surface-500",
-        "focus:ring-2",
-        "focus:ring-inset",
-        "focus:ring-primary-600",
-        "dark:focus:ring-2",
-        "dark:focus:ring-inset",
-        "dark:focus:ring-primary-600",
-        "sm:text-sm",
-        "sm:leading-6",
-        "outline-none",
-        "[appearance:textfield]",
-        "[&::-webkit-outer-spin-button]:appearance-none",
-        "[&::-webkit-inner-spin-button]:appearance-none",
-    ])
+    const inputStyle = cva(
+        [
+            "block",
+            "w-full",
+            "rounded-md",
+            "py-1.5",
+            "px-2",
+            "h-10",
+            "text-surface-900",
+            "dark:bg-surface-700/50",
+            "dark:text-surface-100",
+            "bg-gray-50/50",
+            "dark:placeholder:text-surface-400",
+            "placeholder:text-surface-200",
+            "focus:outline-none",
+            "ring-1",
+            "ring-inset",
+            "ring-surface-100",
+            "dark:ring-1",
+            "dark:ring-inset",
+            "dark:ring-surface-500",
+            "focus:ring-2",
+            "focus:ring-inset",
+            "focus:ring-primary-600",
+            "dark:focus:ring-2",
+            "dark:focus:ring-inset",
+            "dark:focus:ring-primary-600",
+            "sm:text-sm",
+            "sm:leading-6",
+            "outline-none",
+            "[appearance:textfield]",
+            "[&::-webkit-outer-spin-button]:appearance-none",
+            "[&::-webkit-inner-spin-button]:appearance-none",
+        ],
+        {
+            variants: {
+                symbolPosition: {
+                    left: "rounded-s-none",
+                    right: "rounded-e-none",
+                    false: "",
+                },
+            },
+        },
+    )
 
     const handleInput = (e: Event) => {
         value =
@@ -61,6 +75,18 @@
                 ? +(e.target as HTMLInputElement).value
                 : (e.target as HTMLInputElement).value
     }
+
+    const symbolStyle = cva(
+        ["bg-surface-600", "h-10", "text-xs", "text-surface-300", "flex", "items-center", "p-2"],
+        {
+            variants: {
+                position: {
+                    left: "rounded-l-md",
+                    right: "rounded-r-md",
+                },
+            },
+        },
+    )
 </script>
 
 {#if type === "checkbox"}
@@ -79,6 +105,11 @@
         {/if}
         <div class="flex gap-x-4 items-center justify-between">
             <div class="flex items-center h-full w-full">
+                {#if symbol.position === "left" && symbol.text}
+                    <div class={symbolStyle({ position: symbol.position })}>
+                        {symbol.text}
+                    </div>
+                {/if}
                 <input
                     {disabled}
                     {required}
@@ -88,14 +119,16 @@
                     {placeholder}
                     {value}
                     aria-placeholder={placeholder}
-                    class={twMerge(inputStyle, customClasses.input)}
+                    class={twMerge(
+                        inputStyle({ symbolPosition: symbol.text ? symbol.position : false }),
+                        customClasses.input,
+                    )}
                     on:keydown
                     on:keypress
                     on:input={handleInput} />
-                {#if symbol}
-                    <div
-                        class="rounded-e-md bg-surface-600 h-10 text-xs text-surface-300 flex items-center p-2">
-                        {symbol}
+                {#if symbol.text && symbol.position === "right"}
+                    <div class={symbolStyle({ position: symbol.position })}>
+                        {symbol.text}
                     </div>
                 {/if}
             </div>
