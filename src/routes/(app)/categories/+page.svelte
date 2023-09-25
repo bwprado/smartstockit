@@ -49,7 +49,6 @@
                     },
                     body: JSON.stringify(selectedCategory),
                 })
-
             } catch (error) {
                 console.log(error)
             }
@@ -72,7 +71,10 @@
     length={data.categories.length}>
     <section class={twMerge("table-container", "rounded-lg")} slot="content">
         <Table
-            columns={[{ label: "Categoria", key: "name", type: "string" }]}
+            columns={[
+                { label: "Categoria", key: "name", type: "string" },
+                { label: "Referência", key: "ref", type: "string" },
+            ]}
             data={data.categories}
             index={0}
             {handleRowClick} />
