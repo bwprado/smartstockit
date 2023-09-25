@@ -12,7 +12,18 @@
 
     const toast = getToastStore()
 
-    let selectedCustomer: any = {}
+    let selectedCustomer: {
+        id?: string
+        name?: string
+        email?: string
+        phone?: string
+        address?: string
+    } = {
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+    }
 
     $: showModal = false
 
@@ -65,7 +76,6 @@
     <Button
         class="max-w-max"
         on:click={() => {
-            selectedCustomer = {}
             showModal = true
         }}>Adicionar Cliente</Button>
 </PageHeader>
@@ -79,7 +89,7 @@
         ]} />
 </EmptyWrapper>
 
-<Modal showModal={true} position="right" headerText="Adicionar Cliente">
+<Modal bind:showModal position="right" headerText="Adicionar Cliente">
     <svelte:fragment slot="action">
         {#if selectedCustomer.id}
             <form method="POST" action="?/deleteUser">
