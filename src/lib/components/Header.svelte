@@ -3,15 +3,14 @@
     import type { PopupSettings } from "@skeletonlabs/skeleton"
     import { Avatar, LightSwitch, modeCurrent, popup, setModeCurrent } from "@skeletonlabs/skeleton"
     import type { Session } from "@supabase/supabase-js"
-    import { ArrowDown, ArrowUp, Box, LayoutDashboard, Menu, Settings } from "lucide-svelte"
+    import { Menu } from "lucide-svelte"
     import type { Profile } from "../../types/supabase"
     import Button from "./Button.svelte"
     import Footer from "./Footer.svelte"
     import IconButton from "./IconButton.svelte"
+    import MenuItems from "./MenuItems.svelte"
     import MobileSidebar from "./MobileSidebar.svelte"
     import Modal from "./Modal.svelte"
-    import SidebarItem from "./SidebarItem.svelte"
-    import MenuItems from "./MenuItems.svelte"
 
     export let profile: Profile
     export let session: Session
