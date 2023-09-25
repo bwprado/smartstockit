@@ -38,7 +38,7 @@
         {/if}
     </svelte:fragment>
 
-    <div class="px-4 lg:px-8 xl:px-20 h-full flex flex-col gap-y-4 sm:gap-y-10">
+    <div class="px-4 lg:px-8 xl:px-20 h-full flex flex-col gap-y-4">
         <Breadcrumbs />
         <slot />
     </div>
