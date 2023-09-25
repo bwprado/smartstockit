@@ -6,7 +6,7 @@
     export let title: string = ""
 </script>
 
-<section class={twMerge("flex flex-row justify-between gap-4", className)}>
+<section class={twMerge("flex flex-row justify-between items-center gap-4", className)}>
     <h1 class="text-lg sm:text-xl font-bold whitespace-nowrap">{title}</h1>
     <slot title="action" />
 </section>
