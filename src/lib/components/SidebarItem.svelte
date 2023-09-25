@@ -57,13 +57,13 @@
             {/if}
         </li>
     </a>
-    {#if $$slots.subitem && expanded}
-        <div
-            transition:slide={{
-                axis: "y",
-                duration: 200,
-            }}>
-            <slot name="subitem" />
-        </div>
-    {/if}
 </button>
+{#if $$slots.subitem && expanded}
+    <div
+        transition:slide={{
+            axis: "y",
+            duration: 200,
+        }}>
+        <slot name="subitem" />
+    </div>
+{/if}
