@@ -366,7 +366,7 @@
     closeFunction={() => (selectedProduct = initialValue)}
     headerText={selectedProduct.id ? "Editar Produto" : "Adicionar Produto"}>
     <svelte:fragment slot="action">
-        {#if selectedProduct}
+        {#if selectedProduct.id}
             <form method="POST" action="?/deleteUser">
                 <IconButton on:click={handleDeleteClick} intent="secondary">
                     <svelte:fragment slot="icon">
@@ -405,6 +405,23 @@
                 <Button slot="action" id="read-barcode" class="w-fit" on:click={handleReadBarcode}
                     ><QrCode /></Button>
             </Input>
+            <div class="w-full flex gap-x-4">
+                <Input
+                    label="Preço de Venda"
+                    name="price"
+                    type="number"
+                    id="price"
+                    placeholder="10,00"
+                    symbol={{ text: "R$", position: "left" }}
+                    bind:value={selectedProduct.price} />
+                <Input
+                    label="Preço de Custo"
+                    name="price_cost"
+                    type="number"
+                    id="price_cost"
+                    placeholder="8,00"
+                    bind:value={selectedProduct.priceCost} />
+            </div>
             <SelectSearch
                 on:selection={(e) => {
                     selectedProduct.brand.value = e.detail.value
