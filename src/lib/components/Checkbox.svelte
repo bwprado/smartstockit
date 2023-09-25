@@ -25,6 +25,7 @@
         "bg-gray-100",
         "border-gray-300",
         "focus:ring-primary-500",
+        "outline-none",
         "dark:focus:ring-primary-600",
         "dark:ring-offset-gray-700",
         "dark:focus:ring-offset-gray-700",
