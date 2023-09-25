@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { cva, cx } from "class-variance-authority"
+    import { cva } from "class-variance-authority"
     import { twMerge } from "tailwind-merge"
 
     let customClasses: string = ""
@@ -13,6 +13,7 @@
     const btn = cva(
         [
             "rounded-full",
+            "outline-none",
             "hover:opacity-80",
             "text-gray-900",
             "dark:bg-transparent",
