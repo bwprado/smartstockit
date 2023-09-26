@@ -50,7 +50,7 @@
                 <li>
                     <button class="" use:popup={popupFeatured}>
                         <Avatar
-                            initials={profile?.name}
+                            initials={profile?.name || "SN"}
                             border="border-4 border-surface-300-600-token hover:!border-white"
                             width="w-12"
                             cursor="cursor-pointer" />
@@ -59,11 +59,11 @@
                         <div class="space-y-4">
                             <div class="flex gap-x-2 items-center">
                                 <Avatar
-                                    initials={profile?.name}
+                                    initials={profile?.name || "SN"}
                                     border="border-4 border-surface-300-600-token hover:!border-primary-500"
                                     width="w-12"
                                     cursor="cursor-pointer" />
-                                <p class="font-bold">{profile?.name}</p>
+                                <p class="font-bold">{profile?.name || "Sem Nome"}</p>
                             </div>
                             <a
                                 class="btn variant-soft w-full"
