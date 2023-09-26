@@ -3,7 +3,7 @@ import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit"
 import { AuthApiError } from "@supabase/supabase-js"
 import { error, fail, redirect, type Handle } from "@sveltejs/kit"
 
-const unprotectedRoutes = ["/", "/login", "/signup", "/signup/verify", "/logout"]
+const unprotectedRoutes = ["/", "/login", "/signup", "/signup/verify", "/logout", "/auth/callback"]
 
 export const handle: Handle = async ({ event, resolve }) => {
     event.locals.supabase = createSupabaseServerClient({
@@ -66,7 +66,6 @@ export const handle: Handle = async ({ event, resolve }) => {
         const { error } = await event.locals.supabase.auth.signOut()
         if (error) throw new Error(error.message)
     }
-
     if (!unprotectedRoutes.includes(event.url.pathname)) {
         const session = await event.locals.getSession()
 
