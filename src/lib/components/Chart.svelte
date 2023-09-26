@@ -14,8 +14,9 @@
                     {
                         label: "Entrada de produtos",
                         data: [12, 19, 3, 5, 2, 3],
-                        borderWidth: 1,
+                        borderWidth: 2,
                         borderRadius: 8,
+                        backgroundColor: "rgb(212, 22, 60, 0.8)",
                     },
                 ],
             },
