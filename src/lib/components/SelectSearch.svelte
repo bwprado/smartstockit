@@ -72,6 +72,12 @@
         selected = event.detail
         dispatch("selection", selected)
     }
+
+    const handleOnChange = (event: Event): void => {
+        if ((event.target as HTMLInputElement).value === "") {
+            dispatch("change", {})
+        }
+    }
 </script>
 
 <div class="grid grid-flow-row w-full">
@@ -88,7 +94,7 @@
                 {disabled}
                 {required}
                 on:input
-                on:change
+                on:change={handleOnChange}
                 bind:value={inputValue}
                 aria-placeholder={placeholder}
                 use:popup={popupSettings}
@@ -101,7 +107,7 @@
         {/if}
     </div>
     <div
-        class="card w-full max-w-xs max-h-48 p-4 overflow-y-auto rounded-lg dark:bg-surface-700 bg-white shadow-md z-10"
+        class="card w-full max-w-sm max-h-48 p-4 overflow-y-auto rounded-lg dark:bg-surface-700 bg-white shadow-md z-10"
         tabindex="-1"
         data-popup={`popupAutocomplete-${name}`}>
         <Autocomplete
