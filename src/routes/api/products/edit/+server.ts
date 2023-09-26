@@ -1,10 +1,9 @@
-import { json, type RequestHandler } from "@sveltejs/kit"
+import { json, type RequestHandler, error } from "@sveltejs/kit"
 
 export const PUT: RequestHandler = async ({ locals: { supabase }, url, request }) => {
     const id = url.searchParams.get("id")
     const { brands, suppliers, units, categories, type, ...body } = await request.json()
 
-    console.log(id)
     const editProduct = {
         ...body,
         type,
@@ -12,6 +11,8 @@ export const PUT: RequestHandler = async ({ locals: { supabase }, url, request }
         brand: body.brand.id,
         category: body.category.id,
         unit: body.unit.id,
+        price: +body.price,
+        cost: +body.cost,
         supplier: body.supplier.id,
     }
 
@@ -19,16 +20,16 @@ export const PUT: RequestHandler = async ({ locals: { supabase }, url, request }
         return json({ message: "ID não informado" }, { status: 400 })
     }
 
-    const { data: product, error } = await supabase
+    const { data: product, error: err } = await supabase
         .from("products")
         .update({ ...editProduct })
         .eq("id", id)
         .select()
         .single()
 
-    if (error) {
-        console.log(error)
-        return json(error, { status: 500 })
+    if (err) {
+        console.log(err)
+        throw error(500, err.message)
     }
 
     return json(product, { status: 200, statusText: "Produto editado com sucesso" })
