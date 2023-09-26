@@ -27,6 +27,8 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
             min: +body.min,
             max: +body.max,
             balance: 0,
+            price: +body.price,
+            cost: +body.cost,
             barcode: body.barcode,
             user: session.user.id,
         },
