@@ -10,7 +10,7 @@ export const actions: Actions = {
             const { data, error } = await supabase.auth.signInWithOAuth({
                 provider,
                 options: {
-                    redirectTo: "https://smartstockit.com/auth/callback/",
+                    redirectTo: `${url.origin}/auth/callback/"`,
                 },
             })
 
@@ -48,8 +48,8 @@ export const actions: Actions = {
                 console.log(userErr)
                 return fail(500, { message: "Erro desconhecido." })
             }
-        }
 
-        throw redirect(301, "/dashboard")
+            throw redirect(301, "/dashboard")
+        }
     },
 }
