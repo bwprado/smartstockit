@@ -6,20 +6,17 @@
     import PageHeader from "$lib/components/PageHeader.svelte"
     import SelectSearch from "$lib/components/SelectSearch.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-    import type { ActionData, PageData } from "./$types"
     import { getToastStore } from "@skeletonlabs/skeleton"
+    import type { ActionData, PageServerData } from "./$types"
+    import { isEmpty } from "lodash"
 
     const toast = getToastStore()
 
-    interface Dashboard {
-        product_id: string
-        product_name: string
-        average_price: number
-        total_amount: number
-    }
-
-    export let data: PageData
+    export let data: PageServerData
     export let form: ActionData
+
+    let selectedInput: any = {}
+    let selectedProduct: any = {}
 
     const products = data?.products || []
     const outputs = data?.outputs || []
@@ -34,9 +31,21 @@
     }))
 
     if (form?.status) {
-        toast.trigger({
-            message: form.body,
-        })
+        if (form?.status === 200) {
+            toast.trigger({
+                message: form.body,
+            })
+        } else {
+            toast.trigger({
+                message: form.body,
+                background: "bg-red-500",
+            })
+        }
+    }
+
+    const handleRowClick = (id: string) => {
+        selectedInput = data.outputs.find((output) => output.id === id)
+        showModal = true
     }
 </script>
 
@@ -69,15 +78,29 @@
                     type: "date",
                 },
             ]}
-            data={outputs} />
+            data={outputs}
+            {handleRowClick} />
     </section>
 </EmptyWrapper>
 
-<Modal bind:showModal headerText="Retirar Produto" confirmFunction={() => console.log("Remove")}>
+<Modal bind:showModal headerText={isEmpty(selectedInput) ? "Retirar Produto" : "Alterar Retirada"}>
     <form slot="body" method="POST" class="flex flex-col gap-y-4 h-full">
-        <SelectSearch name="product" id="product" label="Produto" options={searchableProducts} />
-        <Input label="Quantidade" id="amount" name="amount" type="number" />
-        <input type="hidden" name="price" value={0} />
+        <SelectSearch
+            on:selection={(e) => {
+                selectedInput.product = e.detail.value
+                selectedProduct = products.find((product) => product.id === e.detail.value)
+            }}
+            name="product"
+            id="product"
+            label="Produto"
+            options={searchableProducts}
+            inputValue={selectedProduct.name || ""} />
+        <Input
+            label="Quantidade"
+            id="amount"
+            name="amount"
+            type="btn-number"
+            value={selectedInput?.amount || ""} />
         <Button
             type="submit"
             id="retrieve_product"
