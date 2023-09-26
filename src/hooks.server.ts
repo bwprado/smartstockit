@@ -56,7 +56,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
         if (err) {
             console.error(err)
-            throw error(500, err.message)
+            return []
         }
 
         return data
