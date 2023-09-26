@@ -11,6 +11,8 @@
 
     const toast = getToastStore()
 
+    let selectedProduct: any = {}
+
     export let data: PageData
     export let form: ActionData
     const products = (data?.products || []).map((product) => ({
@@ -36,9 +38,23 @@
     }
 
     if (form?.status) {
-        toast.trigger({
-            message: form.body,
-        })
+        if (form?.status === 200) {
+            toast.trigger({
+                message: form.body,
+            })
+        } else {
+            toast.trigger({
+                message: form.body,
+                background: "bg-error-500",
+            })
+        }
+    }
+
+    const handleProductSelection = (e: CustomEvent) => {
+        const { detail } = e
+        const { value } = detail
+        const product = products.find((product) => product.id === value)
+        selectedProduct = product
     }
 </script>
 
@@ -69,10 +85,18 @@
             <SelectSearch
                 label="Produto"
                 options={searchableProducts}
+                on:selection={handleProductSelection}
+                bind:inputValue={selectedProduct.name}
                 id="product"
                 name="product" />
-            <Input name="amount" id="amount" type="number" label="Quantidade" />
-            <Input name="price" id="price" type="number" label="Preço" />
+            <Input name="amount" id="amount" type="btn-number" label="Quantidade" />
+            <Input
+                name="price"
+                id="price"
+                type="number"
+                step="0.01"
+                label="Preço"
+                symbol={{ position: "left", text: "R$" }} />
             <Input
                 type="checkbox"
                 name="fresh"
@@ -85,11 +109,8 @@
                 label="Data de Vencimento"
                 name="expiration_date"
                 disabled={isFresh} />
-            <Button
-                type="submit"
-                class="mt-auto w-full"
-                on:click={() => (loading = true)}
-                {loading}>Adicionar Entrada</Button>
+            <Button type="submit" class="mt-auto w-full" on:click={() => (loading = true)} {loading}
+                >Adicionar Entrada</Button>
         </form>
     </svelte:fragment>
     <svelte:fragment slot="footer">
