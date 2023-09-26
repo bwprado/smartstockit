@@ -10,6 +10,7 @@
         input?: string
     } = {}
     export let name: string = "input"
+    export let step: string = "0.01"
     export let id: string = "input"
     export let required: boolean = false
     export let value: string = ""
@@ -74,7 +75,7 @@
         {
             variants: {
                 type: {
-                    minus: ["rounded-s-md"],
+                    minus: ["rounded-none"],
                     plus: ["rounded-e-md"],
                 },
             },
@@ -93,6 +94,7 @@
     {/if}
     <div class="grid grid-cols-[2fr,1fr,1fr]">
         <input
+            {step}
             {disabled}
             {required}
             {name}
