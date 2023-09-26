@@ -9,13 +9,15 @@ export const actions: Actions = {
         if (provider === "google") {
             const { data, error } = await supabase.auth.signInWithOAuth({
                 provider,
+                options: {
+                    redirectTo: "https://smartstockit.com/auth/callback/",
+                },
             })
 
             if (error instanceof AuthApiError) {
                 console.log(error)
                 return fail(error.status, { message: error.message })
             }
-            console.log(data)
             throw redirect(301, data?.url as string)
         }
 
@@ -36,7 +38,7 @@ export const actions: Actions = {
         const session = await getSession()
 
         if (session) {
-            const { data: userData, error: userErr } = await supabase
+            const { data: _, error: userErr } = await supabase
                 .from("profiles")
                 .select()
                 .eq("id", data.user.id)
