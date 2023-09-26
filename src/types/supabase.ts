@@ -7,7 +7,7 @@ export interface Product {
     min: number | string
     max: number | string
     price?: number
-    priceCost?: number
+    cost?: number
     user?: string
     type: "product" | "kit" | "raw"
     category: Category
