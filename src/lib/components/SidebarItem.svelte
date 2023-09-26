@@ -45,7 +45,7 @@
 
 <button on:click={$$slots.subitem ? () => (expanded = !expanded) : () => {}}>
     <a href={$$slots.subitem ? undefined : link} class="w-full">
-        <li class={linkStyle({ active: $page.url.pathname === link })}>
+        <li class={linkStyle({ active: $page.url.pathname === link || expanded })}>
             <div class="flex gap-x-6">
                 <div class="w-fit text-surface-900 dark:text-white">
                     <slot name="icon" />
