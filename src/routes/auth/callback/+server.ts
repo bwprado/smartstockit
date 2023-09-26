@@ -11,8 +11,8 @@ export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
             throw error(401, "/login")
         }
 
-        throw redirect(303, "/dashboard")
+        throw redirect(301, "/dashboard")
     }
-
+    console.log("No login code found. Redirecting to /login")
     throw redirect(304, "/login")
 }
