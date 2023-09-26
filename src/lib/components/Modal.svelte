@@ -4,7 +4,8 @@
     import Button from "./Button.svelte"
     import IconButton from "./IconButton.svelte"
     import { twMerge } from "tailwind-merge"
-
+    
+    export { customClass as class }
     export let showModal: boolean
     export let closeFunction: () => void = () => (showModal = false)
     export let confirmFunction: () => void = () => {}
@@ -12,7 +13,6 @@
     export let position: "right" | "left" | "top" | "bottom" | "center" = "right"
     let customClass: string = ""
 
-    export { customClass as class }
 
     let dialog: HTMLDialogElement
 
@@ -37,6 +37,7 @@
             "sm:w-2/3",
             "md:w-1/2",
             "lg:w-2/5",
+            "xl:w-1/3",
             "overflow-y-auto",
             "overflow-x-hidden",
         ],
