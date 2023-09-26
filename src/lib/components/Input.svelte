@@ -13,6 +13,7 @@
     export let type: HTMLInputElement["type"] = "text"
     export let name: string = "input"
     export let id: string = "input"
+    export let step: string = "0.01"
     export let required: boolean = false
     export let value: any = ""
     export let disabled: boolean = false
@@ -92,7 +93,7 @@
 {#if type === "checkbox"}
     <Checkbox {selected} {disabled} {required} {name} {id} {value} {label} {message} />
 {:else if type === "btn-number"}
-    <InputNumber {disabled} {required} {name} {id} bind:value {label} />
+    <InputNumber {disabled} {required} {name} {id} bind:value {label} {step} />
 {:else}
     <div class={twMerge("w-full flex flex-col gap-y-2", customClasses.wrapper)}>
         {#if label}
@@ -111,6 +112,7 @@
                     </div>
                 {/if}
                 <input
+                    {step}
                     {disabled}
                     {required}
                     {type}
