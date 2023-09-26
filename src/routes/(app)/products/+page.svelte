@@ -32,6 +32,8 @@
         min: 0,
         max: 0,
         balance: 0,
+        price: 0,
+        cost: 0,
         barcode: "",
         brand: { value: "", label: "" },
         category: { value: "", label: "" },
@@ -346,8 +348,8 @@
                     { label: "Nome", key: "name", type: "string" },
                     { label: "Unidade", key: "units.acronym", type: "string" },
                     { label: "Saldo", key: "balance", type: "number" },
-                    { label: "Minínmo", key: "min", type: "number" },
-                    { label: "Máximo", key: "max", type: "number" },
+                    { label: "Preço", key: "price", type: "currency" },
+                    { label: "Custo", key: "cost", type: "currency" },
                     { label: "Categoria", key: "categories.name", type: "string" },
                     { label: "Marca", key: "brands.name", type: "string" },
                     { label: "Fornecedor", key: "suppliers.name", type: "string" },
@@ -416,11 +418,12 @@
                     bind:value={selectedProduct.price} />
                 <Input
                     label="Preço de Custo"
-                    name="price_cost"
+                    name="cost"
                     type="number"
-                    id="price_cost"
+                    symbol={{ text: "R$", position: "left" }}
+                    id="cost"
                     placeholder="8,00"
-                    bind:value={selectedProduct.priceCost} />
+                    bind:value={selectedProduct.cost} />
             </div>
             <SelectSearch
                 on:selection={(e) => {
