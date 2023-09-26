@@ -1,0 +1,55 @@
+
+BEGIN
+  -- Execute the query
+  RETURN QUERY 
+  SELECT
+    p.name AS product_name,
+    p.id as product_id,
+    SUM(i.amount) AS total_amount,
+    AVG(i.price) AS average_price,
+    MAX(i.created_at) AS last_entry
+  FROM
+    inventory i
+    JOIN products p ON i.product = p.id
+  GROUP BY
+    p.id, p.name;
+END;
+
+SELECT
+  p.name AS product_name,
+  SUM(i.amount) AS total_amount,
+  AVG(i.price) AS average_price
+FROM
+  inventory i
+  JOIN products p ON i.product = p.id
+GROUP BY
+  p.name;
+
+
+
+BEGIN
+    CREATE TEMPORARY TABLE temp_product_stats AS
+    SELECT 
+        p.name AS product_name,
+        SUM(i.amount) AS total_amount,
+        AVG(i.price) AS average_price
+    FROM 
+        inventory i
+    JOIN 
+        products p ON i.product = p.id
+    GROUP BY 
+        p.name;
+END;
+
+
+create view
+  public.product_stats as
+select
+  p.name as product_name,
+  sum(i.amount) as total_amount,
+  avg(i.price) as average_price
+from
+  inventory i
+  join products p on i.product = p.id
+group by
+  p.name;
