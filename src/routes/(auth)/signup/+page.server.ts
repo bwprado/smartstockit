@@ -22,6 +22,9 @@ export const actions: Actions = {
     google: async ({ locals: { supabase } }) => {
         const { data, error: err } = await supabase.auth.signInWithOAuth({
             provider: "google",
+            options: {
+                redirectTo: "https://smartstockit.com/auth/callback/",
+            },
         })
 
         if (err) {
@@ -31,6 +34,6 @@ export const actions: Actions = {
             }
         }
 
-        throw redirect(303, "/")
+        throw redirect(303, data.url as string)
     },
 }
