@@ -10,6 +10,7 @@
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
     import type { ActionResult } from "@sveltejs/kit"
     import { applyAction, deserialize } from "$app/forms"
+    import type { Unit } from "../../../types/supabase"
 
     const toast = getToastStore()
     const modal = getModalStore()
@@ -20,10 +21,6 @@
     $: loading = false
     $: selectedUnit = {
         id: "",
-        name: "",
-        acronym: "",
-    }
-    $: newUnit = {
         name: "",
         acronym: "",
     }
@@ -62,33 +59,57 @@
         })
     }
 
-    const handleAddUnitSubmit = async (e: { currentTarget: EventTarget & HTMLFormElement }) => {
-        const formData = new FormData(e.currentTarget)
+    const handleSubmit = async () => {
+        loading = true
+        try {
+            if (selectedUnit.id) {
+                const res = await fetch(`/api/units`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        id: selectedUnit.id,
+                        name: selectedUnit.name,
+                        acronym: selectedUnit.acronym,
+                    }),
+                })
 
-        const response = await fetch(e.currentTarget.action, {
-            method: "POST",
-            body: formData,
-        })
+                const updatedUnit: Unit = await res.json()
 
-        const result: ActionResult = deserialize(await response.text())
+                data.units = data.units.map((u) => (u.id === updatedUnit.id ? updatedUnit : u))
 
-        if (result.type === "success") {
-            data.units = [...data.units, result?.data?.body]
-            showModal = false
+                toast.trigger({
+                    message: "Unidade editada com sucesso.",
+                })
+            } else {
+                const res = await fetch(`/api/units`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        name: selectedUnit.name,
+                        acronym: selectedUnit.acronym,
+                    }),
+                })
+
+                const newUnit: Unit = await res.json()
+
+                data.units = [...data.units, newUnit]
+
+                toast.trigger({
+                    message: "Unidade adicionada com sucesso.",
+                })
+            }
+        } catch (error) {
+            console.log(error)
             toast.trigger({
-                message: "Unidade adicionada com sucesso",
-            })
-        } else {
-            toast.trigger({
-                message: "Erro ao adicionar unidade",
+                message: "Ocorreu um erro ao adicionar a unidade, tente novamente mais tarde.",
             })
         }
-        newUnit = {
-            name: "",
-            acronym: "",
-        }
+        showModal = false
         loading = false
-        applyAction(result)
     }
 </script>
 
@@ -114,20 +135,18 @@
 <Modal
     bind:showModal
     position="right"
-    headerText={selectedUnit.name ? "Editar Unidade" : "Adicionar Unidade"}>
+    headerText={selectedUnit.id ? "Editar Unidade" : "Adicionar Unidade"}>
     <svelte:fragment slot="action">
-        {#if selectedUnit.name}
-            <form method="POST" action="?/deleteUser">
-                <IconButton on:click={handleDeleteClick} intent="secondary">
-                    <svelte:fragment slot="icon">
-                        <Trash />
-                    </svelte:fragment>
-                </IconButton>
-            </form>
+        {#if selectedUnit.id}
+            <IconButton on:click={handleDeleteClick} intent="secondary">
+                <svelte:fragment slot="icon">
+                    <Trash />
+                </svelte:fragment>
+            </IconButton>
         {/if}
     </svelte:fragment>
 
-    <div slot="body">
+    <div slot="body" class="flex flex-col gap-y-4">
         <Input
             label="Nome da Unidade"
             placeholder="Ex: Quilograma"
@@ -135,5 +154,18 @@
             id="name"
             name="name"
             type="text" />
+        <Input
+            label="Acrônimo"
+            placeholder="Ex: kg"
+            bind:value={selectedUnit.acronym}
+            id="acronym"
+            name="acronym"
+            type="text" />
     </div>
+    <svelte:fragment slot="footer">
+        <div class="py-6 sm:py-0">
+            <Button id="add_product" on:click={handleSubmit} {loading}
+                >{selectedUnit.id ? "Editar" : "Adicionar"}</Button>
+        </div>
+    </svelte:fragment>
 </Modal>
