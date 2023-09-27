@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
 
         if (err) {
             console.log(err)
-            throw fail(404, { message: "Não existe perfil ainda." })
+            return {}
         }
         return user as Profile
     }
