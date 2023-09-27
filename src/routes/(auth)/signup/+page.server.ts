@@ -10,7 +10,7 @@ export const actions: Actions = {
         const { error } = await supabase.auth.signUp({
             email,
             password,
-            options: { emailRedirectTo: `${url.origin}` },
+            options: { emailRedirectTo: `https://smartstockit.com` },
         })
 
         if (error) {
@@ -25,7 +25,7 @@ export const actions: Actions = {
         const { data, error: err } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
-                redirectTo: `${url.origin}/auth/callback/`,
+                redirectTo: `https://smartstockit.com/auth/callback/`,
             },
         })
 

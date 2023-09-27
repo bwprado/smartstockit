@@ -10,7 +10,7 @@ export const actions: Actions = {
             const { data, error } = await supabase.auth.signInWithOAuth({
                 provider,
                 options: {
-                    redirectTo: `${url.origin}/auth/callback/"`,
+                    redirectTo: `https://smartstockit.com/auth/callback/`,
                 },
             })
 
