@@ -9,9 +9,6 @@ export const actions: Actions = {
         if (provider === "google") {
             const { data, error } = await supabase.auth.signInWithOAuth({
                 provider,
-                options: {
-                    redirectTo: "http://localhost:5173/auth/callback/",
-                },
             })
 
             if (error instanceof AuthApiError) {
