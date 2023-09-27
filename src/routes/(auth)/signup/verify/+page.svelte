@@ -1,6 +1,5 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte"
-    import Footer from "$lib/components/Footer.svelte"
     import Input from "$lib/components/Input.svelte"
     import { ArrowBigRight } from "lucide-svelte"
     import type { PageData } from "./$types"
@@ -23,18 +22,17 @@
             <section class="bg-surface-800 rounded-xl shadow p-6">
                 <h2 class="text-xl font-semibold mb-4">Instruções</h2>
                 <p class="text-surface-300">
-                    Após o login, você receberá um email de verificação para continuar. Neste email
-                    você encontrará um link para confirmar sua conta e também um código de
-                    verificação. Você precisará deste código para confirmar sua conta.
+                    Um email foi enviado para <span class="font-semibold">{email}</span> com um link
+                    de verificação. Por favor, verifique seu email e clique no link para continuar.
                 </p>
             </section>
         </main>
     </div>
     <div class="px-[15%] grid grid-rows-[1fr,2fr,1fr] items-center justify-center h-full p-6">
         <header class="text-white w-full mb-auto pt-10">
-            <h1 class="text-4xl font-bold">Verificação</h1>
+            <h1 class="text-4xl font-bold">Email Verificado</h1>
             <p class="text-sm text-surface-200">
-                Após essa verificação você será direcionado para o seu aplicativo.
+                Seu email foi verificado, agora basta fazer login para continuar.
             </p>
         </header>
         <form
@@ -42,9 +40,9 @@
             method="post"
             class="flex flex-col items-center justify-center gap-y-6">
             <Input type="email" name="email" placeholder="Email" value={email || ""} />
-            <Input type="text" name="token" placeholder="Token" />
+            <Input type="password" name="password" placeholder="Password" />
             <Button type="submit">
-                Verificar Conta
+                Fazer Login
                 <ArrowBigRight class="text-white animate-pulse" />
             </Button>
         </form>

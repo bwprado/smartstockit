@@ -1,4 +1,4 @@
-import { error, type Actions } from "@sveltejs/kit"
+import { error, type Actions, fail } from "@sveltejs/kit"
 import type { Brand, Category, Product, Supplier, Unit } from "../../../types/supabase.js"
 import type { PageServerLoad } from "./$types.js"
 import { invalidate } from "$app/navigation"
@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 
     if (errProducts) {
         console.error(errProducts.message)
-        throw error(+errProducts.code, errProducts.message)
+        throw fail(+errProducts.code, { message: errProducts.message })
     }
 
     const { data: categories, error: errCategories } = await supabase
@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 
     if (errCategories) {
         console.error(errCategories.message)
-        throw error(+errCategories.code, errCategories.message)
+        throw fail(+errCategories.code, { message: errCategories.message })
     }
 
     const { data: brands, error: errBrands } = await supabase
@@ -34,7 +34,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 
     if (errBrands) {
         console.error(errBrands.message)
-        throw error(+errBrands.code, errBrands.message)
+        throw fail(+errBrands.code, { message: errBrands.message })
     }
 
     const { data: units, error: errUnits } = await supabase
@@ -44,7 +44,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 
     if (errUnits) {
         console.error(errUnits.message)
-        throw error(+errUnits.code, errUnits.message)
+        throw fail(+errUnits.code, { message: errUnits.message })
     }
 
     const { data: suppliers, error: errSuppliers } = await supabase
@@ -54,7 +54,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
 
     if (errSuppliers) {
         console.error(errSuppliers.message)
-        throw error(+errSuppliers.code, errSuppliers.message)
+        throw fail(+errSuppliers.code, { message: errSuppliers.message })
     }
 
     return {
@@ -72,7 +72,7 @@ export const actions: Actions = {
         const { data, error: err } = await supabase.from("products").insert([formData]).select()
         if (err) {
             console.error(err.message)
-            throw error(+err.code, err.message)
+            throw fail(+err.code, { message: err.message })
         }
         console.log(data)
         invalidate("/products")

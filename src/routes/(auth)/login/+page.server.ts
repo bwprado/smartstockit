@@ -3,18 +3,14 @@ import { fail, redirect } from "@sveltejs/kit"
 import type { Actions } from "./$types"
 
 export const actions: Actions = {
-    default: async ({ request, locals: { supabase, getSession }, url }) => {
+    default: async ({ request, locals: { supabase }, url }) => {
         const provider = url.searchParams.get("provider") as Provider
 
         if (provider === "google") {
             const { data, error } = await supabase.auth.signInWithOAuth({
                 provider,
-                options: {
-                    redirectTo: `https://smartstockit.com/auth/callback/`,
-                },
             })
 
-            console.log(data)
             if (error instanceof AuthApiError) {
                 console.log(error)
                 return fail(error.status, { message: error.message })
