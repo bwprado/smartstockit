@@ -14,6 +14,7 @@ export const actions: Actions = {
                 },
             })
 
+            console.log(data)
             if (error instanceof AuthApiError) {
                 console.log(error)
                 return fail(error.status, { message: error.message })
@@ -35,21 +36,6 @@ export const actions: Actions = {
             }
         }
 
-        const session = await getSession()
-
-        if (session) {
-            const { data: _, error: userErr } = await supabase
-                .from("profiles")
-                .select()
-                .eq("id", data.user.id)
-                .single()
-
-            if (userErr) {
-                console.log(userErr)
-                return fail(500, { message: "Erro desconhecido." })
-            }
-
-            throw redirect(301, "/dashboard")
-        }
+        throw redirect(301, "/dashboard")
     },
 }
