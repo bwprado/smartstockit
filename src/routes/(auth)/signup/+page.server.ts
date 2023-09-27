@@ -2,7 +2,7 @@ import { redirect } from "@sveltejs/kit"
 import type { Actions } from "./$types"
 
 export const actions: Actions = {
-    email: async ({ request, locals: { supabase }, url }) => {
+    email: async ({ request, locals: { supabase } }) => {
         const data = await request.formData()
         const email = data.get("email") as string
         const password = data.get("password") as string
@@ -21,7 +21,7 @@ export const actions: Actions = {
         }
         throw redirect(303, `signup/verify?email=${email}`)
     },
-    google: async ({ locals: { supabase }, url }) => {
+    google: async ({ locals: { supabase } }) => {
         const { data, error: err } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
