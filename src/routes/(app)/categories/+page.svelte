@@ -10,6 +10,9 @@
     import { Trash } from "lucide-svelte"
     import { twMerge } from "tailwind-merge"
     import type { PageData } from "./$types"
+    import { getToastStore } from "@skeletonlabs/skeleton"
+
+    const toast = getToastStore()
 
     export let data: PageData
 
@@ -39,21 +42,60 @@
         console.log("Delete")
     }
     const handleSubmitCategory = async () => {
-        if (selectedCategory.name) {
+        if (selectedCategory.id) {
             try {
                 loading = true
-                await fetch(`/api/categories`, {
+                const res = await fetch(`/api/categories`, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(selectedCategory),
                 })
+
+                const updatedCategory = await res.json()
+
+                data.categories = data.categories.map((category) =>
+                    category.id === updatedCategory.id ? updatedCategory : category,
+                )
             } catch (error) {
                 console.log(error)
+
+                toast.trigger({
+                    message: "Ocorreu um erro ao editar a categoria",
+                    background: "bg-error-500",
+                })
             }
             loading = false
             showModal = false
+            return
+        }
+        try {
+            loading = true
+            const res = await fetch(`/api/categories`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(selectedCategory),
+            })
+
+            const category = await res.json()
+
+            data.categories = [...data.categories, category]
+
+            loading = false
+            showModal = false
+
+            toast.trigger({
+                message: "Categoria adicionada com sucesso",
+            })
+        } catch (error) {
+            console.log(error)
+            toast.trigger({
+                message: "Ocorreu um erro ao adicionar a categoria",
+                background: "bg-error-500",
+            })
         }
     }
 </script>
@@ -84,7 +126,11 @@
 <Modal
     bind:showModal
     confirmFunction={() => console.log("Save adition")}
-    headerText={selectedCategory.name ? "Editar Categoria" : "Adicionar Categoria"}>
+    headerText={selectedCategory.id ? "Editar Categoria" : "Adicionar Categoria"}
+    closeFunction={() => {
+        selectedCategory = initialValue
+        showModal = false
+    }}>
     <svelte:fragment slot="action">
         {#if selectedCategory}
             <form method="POST" action="?/deleteCategory">
@@ -100,7 +146,7 @@
         <Input label="Nome" name="name" bind:value={selectedCategory.name} />
         <div class="py-6 sm:py-0">
             <Button id="add_category" on:click={handleSubmitCategory} {loading}
-                >{selectedCategory.name ? "Editar" : "Adicionar"}</Button>
+                >{selectedCategory.id ? "Editar" : "Adicionar"}</Button>
         </div>
     </div>
     <svelte:fragment slot="footer">
