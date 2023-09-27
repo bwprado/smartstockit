@@ -91,8 +91,9 @@
         id="bottom">
         <form method="POST" action="?/email" class="flex flex-col gap-y-6 w-full">
             <h1 class="font-bold text-2xl">Criar uma Conta Gratuita</h1>
-            <p>Entre com seu Email</p>
+            <p>Entre com seu Email e Senha.</p>
             <Input id="email" name="email" type="text" placeholder="email@email.com" />
+            <Input id="password" name="password" type="password" placeholder="smartstock" />
             <Button type="submit" id="login">Criar Conta</Button>
         </form>
         <div
