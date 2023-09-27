@@ -24,7 +24,10 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
     }
 
     const fetchProducts = async () => {
-        const { data, error: err } = await supabase.from("products").select("id, name")
+        const { data, error: err } = await supabase
+            .from("products")
+            .select("id, name")
+            .eq("user", session?.user?.id)
 
         if (err) {
             console.error(err)
