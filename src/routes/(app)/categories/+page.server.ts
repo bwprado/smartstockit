@@ -1,4 +1,4 @@
-import { error, type Actions } from "@sveltejs/kit"
+import { error } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
@@ -15,22 +15,4 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
     return {
         categories,
     }
-}
-
-export const actions: Actions = {
-    editCategory: async ({ params, request: { body }, locals: { supabase } }) => {
-        const { data: category, error: err } = await supabase
-            .from("categories")
-            .update(body)
-            .match({ id: params.id })
-            .single()
-
-        if (err) {
-            throw error(+err.code, err.message)
-        }
-
-        return {
-            body: category,
-        }
-    },
 }
