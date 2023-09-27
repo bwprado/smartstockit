@@ -1,6 +1,6 @@
-import { error, redirect, type Actions, fail } from "@sveltejs/kit"
+import { redirect, type Actions } from "@sveltejs/kit"
+import type { Profile } from "../../../types/supabase"
 import type { PageServerLoad } from "./$types"
-import type { Profile, Unit } from "../../../types/supabase"
 
 interface User {
     email: string
@@ -26,23 +26,8 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
         return user as Profile
     }
 
-    const fetchUnits = async () => {
-        const { data: units, error: err } = await supabase
-            .from("units")
-            .select("*")
-            .eq("user", session.user.id)
-
-        if (err) {
-            console.log(err)
-            throw fail(404, { message: "Nenhuma unidade cadastrada" })
-        }
-
-        return units as Unit[]
-    }
-
     return {
         user: fetchUserProfile(),
-        units: fetchUnits(),
     }
 }
 
@@ -74,32 +59,5 @@ export const actions: Actions = {
         }
 
         return { status: 200, body: "Usuário criado com sucesso" }
-    },
-    addUnit: async ({ request, locals: { supabase, getSession } }) => {
-        const formData = await request.formData()
-        const name = formData.get("unit") as string
-        const acronym = formData.get("acronym") as string
-
-        const session = await getSession()
-        if (!session) {
-            throw redirect(303, "/login")
-        }
-
-        const { data, error: err } = await supabase
-            .from("units")
-            .insert({ name, acronym, user: session.user.id })
-            .eq("user", session.user.id)
-            .select("*")
-            .single()
-
-        if (err) {
-            console.log(err)
-            return {
-                status: 500,
-                body: "Alguma coisa deu errado na criação da unidade",
-            }
-        }
-
-        return { status: 200, body: data }
     },
 }
