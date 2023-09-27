@@ -1,4 +1,4 @@
-import { error, redirect, type Actions } from "@sveltejs/kit"
+import { error, redirect, type Actions, fail } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 import type { Profile, Unit } from "../../../types/supabase"
 
@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
 
         if (err) {
             console.log(err)
-            throw error(500, err.message)
+            throw fail(404, { message: "Não existe perfil ainda." })
         }
         return user as Profile
     }
@@ -34,7 +34,7 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
 
         if (err) {
             console.log(err)
-            throw error(500, err.message)
+            throw fail(404, { message: "Nenhuma unidade cadastrada" })
         }
 
         return units as Unit[]
@@ -88,6 +88,7 @@ export const actions: Actions = {
         const { data, error: err } = await supabase
             .from("units")
             .insert({ name, acronym, user: session.user.id })
+            .eq("user", session.user.id)
             .select("*")
             .single()
 
