@@ -144,10 +144,11 @@
                 label="Data de Vencimento"
                 name="expiration_date"
                 disabled={isFresh} />
+            <Button type="submit" class="mt-auto w-full" on:click={() => (loading = true)} {loading}
+                >Adicionar Entrada</Button>
         </form>
     </svelte:fragment>
     <svelte:fragment slot="footer">
-        <Button type="submit" class="mt-auto w-full" on:click={() => (loading = true)} {loading}
-            >Adicionar Entrada</Button>
+        <div></div>
     </svelte:fragment>
 </Modal>
