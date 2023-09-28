@@ -54,7 +54,7 @@
     <Button class="w-fit" on:click={() => (showModal = true)}>Retirar Produto</Button>
 </PageHeader>
 
-<EmptyWrapper title="Sem dados" message="Nenhuma saída registrada ainda." length={outputs.length}>
+<!-- <EmptyWrapper title="Sem dados" message="Nenhuma saída registrada ainda." length={outputs.length}>
     <section class="table-container rounded-lg" slot="content">
         <Table
             columns={[
@@ -82,7 +82,7 @@
             data={outputs}
             {handleRowClick} />
     </section>
-</EmptyWrapper>
+</EmptyWrapper> -->
 
 <Modal bind:showModal headerText={isEmpty(selectedOutput) ? "Retirar Produto" : "Alterar Retirada"}>
     <form slot="body" method="POST" class="flex flex-col gap-y-4 h-full">
