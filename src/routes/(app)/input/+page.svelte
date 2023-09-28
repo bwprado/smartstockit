@@ -39,14 +39,14 @@
     }
 
     if (form?.status) {
-        if (form?.status === 200) {
+        if (form?.status === 500) {
             toast.trigger({
                 message: form.body,
+                background: "bg-error-500",
             })
         } else {
             toast.trigger({
                 message: form.body,
-                background: "bg-error-500",
             })
         }
     }

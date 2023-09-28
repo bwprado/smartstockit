@@ -44,7 +44,6 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
 
 export const actions: Actions = {
     default: async ({ request, locals: { supabase, getSession } }) => {
-        console.log("default")
         const session = await getSession()
         const outputData = Object.fromEntries(await request.formData())
 
@@ -58,7 +57,7 @@ export const actions: Actions = {
 
         if (err) {
             console.log(err)
-            return { status: 500, body: "Erro ao fazer retirada do estoque" }
+            throw error(500, { message: `Erro ao inserir saída no estoque - ${err?.message}` })
         }
 
         return { status: 303, body: "Produto retirado com sucesso.", data }

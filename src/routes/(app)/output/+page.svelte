@@ -15,7 +15,7 @@
     export let data: PageServerData
     export let form: ActionData
 
-    let selectedInput: any = {}
+    let selectedOutput: any = {}
     let selectedProduct: any = {}
 
     const products = data?.products || []
@@ -31,20 +31,21 @@
     }))
 
     if (form?.status) {
-        if (form?.status === 200) {
+        if (form?.status === 500) {
             toast.trigger({
                 message: form.body,
+                background: "bg-red-500",
             })
         } else {
             toast.trigger({
                 message: form.body,
-                background: "bg-red-500",
             })
         }
     }
 
     const handleRowClick = (id: string) => {
-        selectedInput = data.outputs.find((output) => output.id === id)
+        selectedOutput = data.outputs.find((output) => output.id === id)
+        selectedProduct = products.find((product) => product.id === selectedOutput.product)
         showModal = true
     }
 </script>
@@ -83,11 +84,11 @@
     </section>
 </EmptyWrapper>
 
-<Modal bind:showModal headerText={isEmpty(selectedInput) ? "Retirar Produto" : "Alterar Retirada"}>
+<Modal bind:showModal headerText={isEmpty(selectedOutput) ? "Retirar Produto" : "Alterar Retirada"}>
     <form slot="body" method="POST" class="flex flex-col gap-y-4 h-full">
         <SelectSearch
             on:selection={(e) => {
-                selectedInput.product = e.detail.value
+                selectedOutput.product = e.detail.value
                 selectedProduct = products.find((product) => product.id === e.detail.value)
             }}
             name="product"
@@ -100,7 +101,7 @@
             id="amount"
             name="amount"
             type="btn-number"
-            value={selectedInput?.amount || ""} />
+            value={selectedOutput?.amount || ""} />
         <Button
             type="submit"
             id="retrieve_product"
