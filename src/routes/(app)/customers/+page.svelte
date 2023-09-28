@@ -7,45 +7,133 @@
     import PageHeader from "$lib/components/PageHeader.svelte"
     import SelectSearch from "$lib/components/SelectSearch.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-    import { getToastStore } from "@skeletonlabs/skeleton"
+    import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
     import { Trash } from "lucide-svelte"
+    import type { PageServerData } from "./$types"
+    import type { Customer } from "../../../types/supabase"
+    import { twMerge } from "tailwind-merge"
 
     const toast = getToastStore()
+    const modal = getModalStore()
 
-    let selectedCustomer: {
-        id?: string
-        name?: string
-        email?: string
-        phone?: string
-        address?: string
-    } = {
+    export let data: PageServerData
+
+    let selectedCustomer: any = {
         name: "",
         email: "",
         phone: "",
-        address: "",
+        address: JSON.stringify({}) as unknown as JSON,
     }
 
     $: showModal = false
+    $: loading = false
+
+    const handleRowClick = (id: string) => {
+        selectedCustomer = data.customers.find((s) => s.id === id)
+        showModal = true
+    }
 
     const handleDeleteClick = async () => {
-        try {
-            const res = await fetch(`?/deleteUser/${selectedCustomer.id}`, {
+        showModal = false
+        modal.trigger({
+            type: "confirm",
+            title: "Deletar Cliente",
+            body: "Tem certeza que deseja deletar este cliente?",
+            response: async (response) => {
+                if (response) {
+                    const res = await fetch("/api/customers", {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            id: selectedCustomer.id,
+                        }),
+                    })
+
+                    const customer = await res.json()
+
+                    if (res.status === 500) {
+                        toast.trigger({
+                            message: "Ocorreu um erro ao deletar o cliente.",
+                            hideDismiss: true,
+                        })
+
+                        return
+                    }
+
+                    data.customers = data.customers.filter((c) => c.id !== customer.id)
+
+                    toast.trigger({
+                        message: "Cliente deletado com sucesso.",
+                        hideDismiss: true,
+                    })
+                }
+            },
+        })
+    }
+
+    const handleSubmit = async () => {
+        loading = true
+
+        if (selectedCustomer.id) {
+            const res = await fetch(`/api/customers`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    ...selectedCustomer,
+                }),
+            })
+
+            if (res.status !== 200) {
+                toast.trigger({
+                    message: "Ocorreu um erro ao modificar o cliente, tente novamente mais tarde.",
+                })
+                return
+            }
+
+            const updatedCustomer: Customer = await res.json()
+
+            data.customers = data.customers.map((b) =>
+                b.id === updatedCustomer.id ? updatedCustomer : b,
+            )
+
+            toast.trigger({
+                message: "Cliente editado com sucesso.",
+            })
+        } else {
+            const res = await fetch(`/api/customers`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                body: JSON.stringify({
+                    ...selectedCustomer,
+                }),
             })
 
-            const customer = await res.json()
+            if (res.status === 500) {
+                toast.trigger({
+                    message: "Ocorreu um erro ao adicionar o cliente, tente novamente mais tarde.",
+                })
+                showModal = false
+                loading = false
+                return
+            }
 
-            console.log(customer)
-        } catch (error) {
-            console.log(error)
+            const newCustomer: Customer = await res.json()
+
+            data.customers = [...data.customers, newCustomer]
+
             toast.trigger({
-                message: "Ocorreu um erro ao deletar o cliente.",
-                hideDismiss: true,
+                message: "Cliente adicionado com sucesso.",
             })
         }
+
+        showModal = false
+        loading = false
     }
 </script>
 
@@ -76,34 +164,46 @@
     <Button
         class="max-w-max"
         on:click={() => {
+            selectedCustomer = {
+                name: "",
+                email: "",
+                phone: "",
+                address: JSON.stringify({}),
+            }
             showModal = true
         }}>Adicionar Cliente</Button>
 </PageHeader>
 <EmptyWrapper
     message="Você não possuí clientes cadastrados, para cadastrar, clique no botão acima."
-    title="Nenhum cliente cadastrado ainda.">
-    <Table
-        columns={[
-            { label: "Name", key: "name", type: "string" },
-            { label: "Email", key: "email", type: "string" },
-        ]} />
+    title="Nenhum cliente cadastrado ainda."
+    length={data.customers.length}>
+    <section class={twMerge("table-container", "rounded-lg")} slot="content">
+        <Table
+            columns={[
+                { label: "Name", key: "name", type: "string" },
+                { label: "Email", key: "email", type: "string" },
+                { label: "Phone", key: "phone", type: "string" },
+            ]}
+            data={data.customers}
+            {handleRowClick} />
+    </section>
 </EmptyWrapper>
 
-<Modal bind:showModal position="right" headerText="Adicionar Cliente">
+<Modal
+    bind:showModal
+    position="right"
+    headerText={selectedCustomer.id ? "Editar Cliente" : "Adicionar Cliente"}>
     <svelte:fragment slot="action">
         {#if selectedCustomer.id}
-            <form method="POST" action="?/deleteUser">
-                <IconButton on:click={handleDeleteClick} intent="secondary">
-                    <svelte:fragment slot="icon">
-                        <Trash />
-                    </svelte:fragment>
-                </IconButton>
-            </form>
+            <IconButton on:click={handleDeleteClick} intent="secondary">
+                <svelte:fragment slot="icon">
+                    <Trash />
+                </svelte:fragment>
+            </IconButton>
         {/if}
     </svelte:fragment>
     <div slot="body" class="grid grid-rows-[auto,max-content] w-full h-full gap-y-4">
-        <form method="POST" action="?/newCustomer" class="flex flex-col w-full gap-y-4">
-            {selectedCustomer?.name}
+        <div class="flex flex-col w-full gap-y-4">
             <Input
                 label="Nome"
                 name="name"
@@ -132,6 +232,12 @@
                 name="address"
                 options={[]}
                 placeholder="Digite o endereço para pesquisar." />
-        </form>
+        </div>
     </div>
+    <svelte:fragment slot="footer">
+        <div class="py-6 sm:py-0">
+            <Button id="add_customer" on:click={handleSubmit} {loading}
+                >{selectedCustomer.id ? "Editar" : "Adicionar"}</Button>
+        </div>
+    </svelte:fragment>
 </Modal>
