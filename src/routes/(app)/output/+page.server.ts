@@ -12,11 +12,11 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
         const { data: outputs, error: err } = await supabase
             .from("inventory")
             .select("*, products(name)")
-            .lt("amount", 0)
             .order("created_at", { ascending: false })
             .eq("user", session?.user?.id)
 
         if (err) {
+            console.log(err)
             throw error(500, "Erro ao buscar saídas do estoque")
         }
 
@@ -37,7 +37,7 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
     }
 
     return {
-        outputs: await fetchOutputs(),
+        outputs: [],
         products: await fetchProducts(),
     }
 }
