@@ -38,7 +38,7 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
 
     return {
         outputs: [],
-        products: await fetchProducts(),
+        products: [],
     }
 }
 
