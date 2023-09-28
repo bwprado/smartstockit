@@ -13,6 +13,7 @@ export const PUT: RequestHandler = async ({ locals: { supabase, getSession }, re
         .from("categories")
         .update({ name })
         .eq("id", id)
+        .eq("user", session.user?.id)
         .select()
 
     if (err) {

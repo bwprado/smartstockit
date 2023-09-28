@@ -13,6 +13,7 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
     const { data, error: err } = await supabase
         .from("suppliers")
         .insert({ name, user: session.user?.id })
+        .eq("user", session.user?.id)
         .select()
         .single()
 
