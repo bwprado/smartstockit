@@ -67,9 +67,9 @@
                     }),
                 })
 
-                const newBrand: Supplier = await res.json()
+                const newSupplier: Supplier = await res.json()
 
-                data.suppliers = [...data.suppliers, newBrand]
+                data.suppliers = [...data.suppliers, newSupplier]
 
                 toast.trigger({
                     message: "Fornecedor adicionado com sucesso.",
