@@ -71,6 +71,7 @@ export interface Inventory {
 export interface Customer {
     id: string
     created_at: string
+    email: string
     name: string
     address: JSON
     phone: string
