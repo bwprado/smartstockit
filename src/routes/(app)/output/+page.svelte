@@ -29,6 +29,23 @@
     }))
 
     const handleSubmit = async () => {
+        if (selectedOutput.id) {
+            showModal = false
+            toast.trigger({
+                message: "Não é possível alterar uma saída.",
+                background: "bg-error-500",
+            })
+        }
+
+        if (!selectedProduct.id) {
+            showModal = false
+            toast.trigger({
+                message: "Selecione um produto",
+                background: "bg-error-500",
+            })
+            return
+        }
+
         loading = true
         const res = await fetch("/api/output", {
             method: "POST",
