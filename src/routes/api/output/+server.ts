@@ -5,10 +5,8 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
     if (!session) {
         return json(401, { statusText: "Não autorizado", status: 401 })
     }
-
     const outputData = await request.json()
-
-    const negativeAmount = -Number(outputData.amount)
+    const negativeAmount = -outputData.amount
     const { data, error: err } = await supabase
         .from("inventory")
         .insert([{ ...outputData, amount: negativeAmount, user: session?.user?.id, price: 0 }])
