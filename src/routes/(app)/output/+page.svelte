@@ -37,7 +37,7 @@
 
     const handleSubmit = async () => {
         const validation = Output.safeParse(selectedOutput)
-
+console.log(selectedOutput)
         if (!validation.success) {
             showModal = false
             toast.trigger({
