@@ -16,6 +16,7 @@
     export let disabled: boolean = false
     export let selected: boolean = false
     export let message: string = ""
+    export let checked: boolean = false
 
     const inputStyle = cx([
         "w-5",
@@ -40,11 +41,12 @@
     <div class={twMerge("w-full flex gap-x-4 items-center", customClasses.wrapper)}>
         <input
             {selected}
-            {type}
+            type="checkbox"
             {required}
             {name}
             {id}
-            {value}
+            bind:value
+            bind:checked
             {disabled}
             class={twMerge(inputStyle, customClasses.input)}
             on:change />
