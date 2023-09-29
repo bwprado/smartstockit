@@ -182,6 +182,7 @@
     <svelte:fragment slot="body">
         <div class="flex flex-col gap-y-4 h-full">
             <SelectSearch
+                required
                 label="Produto"
                 options={searchableProducts}
                 on:selection={handleProductSelection}
@@ -189,6 +190,7 @@
                 id="product"
                 name="product" />
             <Input
+                required
                 name="amount"
                 id="amount"
                 type="btn-number"
