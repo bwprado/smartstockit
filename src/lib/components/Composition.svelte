@@ -4,7 +4,7 @@
     import Input from "./Input.svelte"
     import SelectSearch from "./SelectSearch.svelte"
 
-    import { isEqual } from "lodash"
+    import _ from "lodash"
     import { Minus } from "lucide-svelte"
     import { fade } from "svelte/transition"
     import { twMerge } from "tailwind-merge"
@@ -72,14 +72,14 @@
                                         wrapper: "w-full",
                                         input: "w-full rounded-none",
                                     }}
-                                    symbol={item.acronym}>
+                                    symbol={{ position: "right", text: item?.acronym || "" }}>
                                 </Input>
                             </td>
                             <td class="pl-2 right-0">
                                 <IconButton
                                     intent="secondary"
                                     on:click={() => {
-                                        composition = composition.filter((c) => !isEqual(c, item))
+                                        composition = composition.filter((c) => !_.isEqual(c, item))
                                     }}
                                     ><svelte:fragment slot="icon">
                                         <Minus size={15} />
