@@ -10,6 +10,7 @@
     import { getToastStore } from "@skeletonlabs/skeleton"
     import { isEmpty } from "lodash"
     import type { PageServerData } from "./$types"
+    import type { Inventory } from "../../../types/supabase"
 
     const toast = getToastStore()
 
@@ -28,6 +29,7 @@
     }))
 
     const handleSubmit = async () => {
+        loading = true
         const res = await fetch("/api/output", {
             method: "POST",
             headers: {
@@ -36,17 +38,24 @@
             body: JSON.stringify(selectedOutput),
         })
 
-        const output = await res.json()
-
-        data.outputs = [...output, data.outputs]
-
         if (res.ok) {
-            toast.trigger({
-                message: "Produto retirado com sucesso!",
-            })
+            const output: Inventory = await res.json()
+            data.outputs = [
+                ...data.outputs,
+                {
+                    ...output,
+                    productName: data.products.find((p) => p.id === output.product)?.name,
+                },
+            ]
+
+            loading = false
             showModal = false
             selectedOutput = {}
             selectedProduct = {}
+
+            toast.trigger({
+                message: "Produto retirado com sucesso!",
+            })
         } else {
             toast.trigger({
                 message: "Ocorreu um erro ao retirar o produto.",
@@ -62,7 +71,13 @@
 </script>
 
 <PageHeader title="Saídas">
-    <Button class="w-fit" on:click={() => (showModal = true)}>Retirar Produto</Button>
+    <Button
+        class="w-fit"
+        on:click={() => {
+            showModal = true
+            selectedOutput = {}
+            selectedProduct = {}
+        }}>Retirar Produto</Button>
 </PageHeader>
 
 <EmptyWrapper
@@ -115,7 +130,7 @@
             id="amount"
             name="amount"
             type="btn-number"
-            value={selectedOutput?.amount || ""} />
+            bind:value={selectedOutput.amount} />
     </div>
     <svelte:fragment slot="footer">
         <Button
