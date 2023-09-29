@@ -11,6 +11,7 @@
     import { isEmpty } from "lodash"
     import type { PageServerData } from "./$types"
     import type { Inventory } from "../../../types/supabase"
+    import { z } from "zod"
 
     const toast = getToastStore()
 
@@ -22,6 +23,12 @@
     $: showModal = false
     $: loading = false
 
+    const Output = z.object({
+        id: z.string().optional(),
+        product: z.string().nonempty({ message: "Selecione um produto." }),
+        amount: z.number().gte(1, { message: "A quantidade deve ser maior que 0." }),
+    })
+
     const searchableProducts = data.products.map((product) => ({
         value: product.id,
         label: product.name,
@@ -29,18 +36,12 @@
     }))
 
     const handleSubmit = async () => {
-        if (selectedOutput.id) {
-            showModal = false
-            toast.trigger({
-                message: "Não é possível alterar uma saída.",
-                background: "bg-error-500",
-            })
-        }
+        const validation = Output.safeParse(selectedOutput)
 
-        if (!selectedProduct.id) {
+        if (!validation.success) {
             showModal = false
             toast.trigger({
-                message: "Selecione um produto",
+                message: "Preencha todos os campos corretamente.",
                 background: "bg-error-500",
             })
             return
@@ -137,12 +138,14 @@
                 selectedOutput.product = e.detail.value
                 selectedProduct = data.products.find((product) => product.id === e.detail.value)
             }}
+            required
             name="product"
             id="product"
             label="Produto"
             options={searchableProducts}
             inputValue={selectedProduct.name || ""} />
         <Input
+            required
             label="Quantidade"
             id="amount"
             name="amount"
