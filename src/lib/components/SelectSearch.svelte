@@ -103,7 +103,9 @@
         </div>
         <input type="hidden" {name} {id} bind:value={selected.value} />
         {#if required || message}
-            <p class="text-xs text-surface-200 dark:text-surface-400">{message}</p>
+            <p class="text-[10px] text-surface-900 dark:text-surface-400">
+                {required ? (message ? `* ${message}` : "* obrigatório") : message}
+            </p>
         {/if}
     </div>
     <div

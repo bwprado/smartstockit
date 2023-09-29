@@ -13,6 +13,7 @@
     export let step: string = "0.01"
     export let id: string = "input"
     export let required: boolean = false
+    export let message: string = ""
     export let value: string = ""
     export let disabled: boolean = false
 
@@ -110,4 +111,9 @@
             <Plus class="text-primary-500" />
         </button>
     </div>
+    {#if required || message}
+        <p class="text-[10px] text-surface-900 dark:text-surface-400">
+            {required ? (message ? `* ${message}` : "* obrigatório") : message}
+        </p>
+    {/if}
 </div>

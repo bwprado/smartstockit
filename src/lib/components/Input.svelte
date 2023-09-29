@@ -138,7 +138,7 @@
             <slot name="action" />
         </div>
         {#if required || message}
-            <p class="text-xs text-surface-900 dark:text-surface-300">
+            <p class="text-[10px] text-surface-900 dark:text-surface-400">
                 {required ? (message ? `* ${message}` : "* obrigatório") : message}
             </p>
         {/if}
