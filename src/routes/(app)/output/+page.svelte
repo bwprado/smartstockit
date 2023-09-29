@@ -26,7 +26,7 @@
     const Output = z.object({
         id: z.string().optional(),
         product: z.string(),
-        amount: z.number().gte(1, { message: "A quantidade deve ser maior que 0." }),
+        amount: z.string()
     })
 
     const searchableProducts = data.products.map((product) => ({
