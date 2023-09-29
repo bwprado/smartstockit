@@ -8,7 +8,7 @@
     import Table from "$lib/components/Table/Table.svelte"
 
     import { getToastStore } from "@skeletonlabs/skeleton"
-    import { isEmpty } from "lodash"
+    import _ from "lodash"
     import type { PageServerData } from "./$types"
     import type { Inventory } from "../../../types/supabase"
     import { z } from "zod"
@@ -131,7 +131,7 @@
     </section>
 </EmptyWrapper>
 
-<Modal bind:showModal headerText={isEmpty(selectedOutput) ? "Retirar Produto" : "Alterar Retirada"}>
+<Modal bind:showModal headerText={_.isEmpty(selectedOutput) ? "Retirar Produto" : "Alterar Retirada"}>
     <div slot="body" class="flex flex-col gap-y-4 h-full">
         <SelectSearch
             on:selection={(e) => {
