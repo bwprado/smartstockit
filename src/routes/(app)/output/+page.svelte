@@ -6,46 +6,57 @@
     import PageHeader from "$lib/components/PageHeader.svelte"
     import SelectSearch from "$lib/components/SelectSearch.svelte"
     import Table from "$lib/components/Table/Table.svelte"
+
     import { getToastStore } from "@skeletonlabs/skeleton"
-    import type { ActionData, PageServerData } from "./$types"
     import { isEmpty } from "lodash"
+    import type { PageServerData } from "./$types"
 
     const toast = getToastStore()
 
     export let data: PageServerData
-    export let form: ActionData
 
     let selectedOutput: any = {}
     let selectedProduct: any = {}
 
-    const products = data?.products || []
-    const outputs = data?.outputs || []
-
     $: showModal = false
     $: loading = false
 
-    const searchableProducts = products.map((product) => ({
+    const searchableProducts = data.products.map((product) => ({
         value: product.id,
         label: product.name,
         keywords: product.name.split(" ").join(", ").toLocaleLowerCase(),
     }))
 
-    if (form?.status) {
-        if (form?.status === 500) {
+    const handleSubmit = async () => {
+        const res = await fetch("/api/output", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(selectedOutput),
+        })
+
+        const output = await res.json()
+
+        data.outputs = [...output, data.outputs]
+
+        if (res.ok) {
             toast.trigger({
-                message: form.body,
-                background: "bg-red-500",
+                message: "Produto retirado com sucesso!",
             })
+            showModal = false
+            selectedOutput = {}
+            selectedProduct = {}
         } else {
             toast.trigger({
-                message: form.body,
+                message: "Ocorreu um erro ao retirar o produto.",
             })
         }
     }
 
     const handleRowClick = (id: string) => {
         selectedOutput = data.outputs.find((output) => output.id === id)
-        selectedProduct = products.find((product) => product.id === selectedOutput.product)
+        selectedProduct = data.products.find((product) => product.id === selectedOutput.product)
         showModal = true
     }
 </script>
@@ -54,7 +65,10 @@
     <Button class="w-fit" on:click={() => (showModal = true)}>Retirar Produto</Button>
 </PageHeader>
 
-<!-- <EmptyWrapper title="Sem dados" message="Nenhuma saída registrada ainda." length={outputs.length}>
+<EmptyWrapper
+    title="Sem dados"
+    message="Nenhuma saída registrada ainda."
+    length={data.outputs.length}>
     <section class="table-container rounded-lg" slot="content">
         <Table
             columns={[
@@ -79,17 +93,17 @@
                     type: "date",
                 },
             ]}
-            data={outputs}
+            data={data.outputs}
             {handleRowClick} />
     </section>
-</EmptyWrapper> -->
+</EmptyWrapper>
 
 <Modal bind:showModal headerText={isEmpty(selectedOutput) ? "Retirar Produto" : "Alterar Retirada"}>
-    <form slot="body" method="POST" class="flex flex-col gap-y-4 h-full">
+    <div slot="body" class="flex flex-col gap-y-4 h-full">
         <SelectSearch
             on:selection={(e) => {
                 selectedOutput.product = e.detail.value
-                selectedProduct = products.find((product) => product.id === e.detail.value)
+                selectedProduct = data.products.find((product) => product.id === e.detail.value)
             }}
             name="product"
             id="product"
@@ -102,14 +116,13 @@
             name="amount"
             type="btn-number"
             value={selectedOutput?.amount || ""} />
+    </div>
+    <svelte:fragment slot="footer">
         <Button
             type="submit"
             id="retrieve_product"
             class="w-full mt-auto"
-            on:click={() => (loading = true)}
+            on:click={handleSubmit}
             {loading}>Retirar do Estoque</Button>
-    </form>
-    <svelte:fragment slot="footer">
-        <div />
     </svelte:fragment>
 </Modal>
