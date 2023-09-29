@@ -1,6 +1,6 @@
-import { redirect, type Actions, error } from "@sveltejs/kit"
+import { error, redirect, type Actions } from "@sveltejs/kit"
+import type { Inventory, Product } from "../../../types/supabase.js"
 import type { PageServerLoad } from "./$types.js"
-import type { Product } from "../../../types/supabase.js"
 
 export const load: PageServerLoad = async ({ locals: { getSession, supabase } }) => {
     const session = await getSession()
@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
             throw error(500, "Erro ao buscar saídas do estoque")
         }
 
-        return outputs.map((input) => ({ ...input, productName: input.products.name }))
+        return outputs.map((input) => ({ ...input, productName: input.products.name })) as Inventory[]
     }
 
     const fetchProducts = async () => {
