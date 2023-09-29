@@ -43,33 +43,3 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
     }
 }
 
-export const actions: Actions = {
-    default: async ({ request, locals: { supabase, getSession } }) => {
-        const session = await getSession()
-
-        if (!session) {
-            return { status: 401, body: "Você não está logado" }
-        }
-
-        const inputData = Object.fromEntries(await request.formData())
-
-        inputData?.fresh && delete inputData.fresh
-        const price = +inputData?.price
-        const amount = +inputData?.amount
-        const expiration_date =
-            inputData?.expiration_date === "" ? null : inputData?.expiration_date
-        console.log(expiration_date)
-        const { data, error: err } = await supabase
-            .from("inventory")
-            .insert([{ ...inputData, amount, price, expiration_date, user: session?.user.id }])
-            .select()
-            .single()
-
-        if (err) {
-            console.log(err)
-            return { status: 500, body: "Erro ao fazer entrada de inventório" }
-        }
-
-        return { status: 200, body: "Entrada de inventório feita com sucesso", data }
-    },
-}
