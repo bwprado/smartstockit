@@ -16,6 +16,7 @@
     export let step: string = "0.01"
     export let required: boolean = false
     export let value: any = ""
+    export let checked: boolean = false
     export let disabled: boolean = false
     export let placeholder: string = ""
     export let selected: boolean = false
@@ -91,7 +92,7 @@
 </script>
 
 {#if type === "checkbox"}
-    <Checkbox {selected} {disabled} {required} {name} {id} {value} {label} {message} />
+    <Checkbox {selected} {disabled} bind:checked {required} {name} {id} bind:value {label} {message} />
 {:else if type === "btn-number"}
     <InputNumber {disabled} {required} {name} {id} bind:value {label} {step} />
 {:else}
