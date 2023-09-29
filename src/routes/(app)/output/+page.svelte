@@ -25,7 +25,7 @@
 
     const Output = z.object({
         id: z.string().optional(),
-        product: z.string().nonempty({ message: "Selecione um produto." }),
+        product: z.string(),
         amount: z.number().gte(1, { message: "A quantidade deve ser maior que 0." }),
     })
 
