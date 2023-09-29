@@ -66,6 +66,7 @@ export interface Inventory {
     expiration_date: string
     price: number
     product: string
+    productName?: string
 }
 
 export interface Customer {
