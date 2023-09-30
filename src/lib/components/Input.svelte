@@ -19,6 +19,7 @@
     export let checked: boolean = false
     export let disabled: boolean = false
     export let placeholder: string = ""
+    export let invalid: boolean = false
     export let selected: boolean = false
     export let message: string = ""
     export let symbol: { text: string; position: "left" | "right" } = {
@@ -43,6 +44,8 @@
             "focus:outline-none",
             "ring-1",
             "ring-inset",
+            "data-[invalid=true]:outline-2",
+            "data-[invalid=true]:outline-secondary-500",
             "ring-surface-100",
             "dark:ring-1",
             "dark:ring-inset",
@@ -92,9 +95,18 @@
 </script>
 
 {#if type === "checkbox"}
-    <Checkbox {selected} {disabled} bind:checked {required} {name} {id} bind:value {label} {message} />
+    <Checkbox
+        {selected}
+        {disabled}
+        bind:checked
+        {required}
+        {name}
+        {id}
+        bind:value
+        {label}
+        {message} />
 {:else if type === "btn-number"}
-    <InputNumber {disabled} {required} {name} {id} bind:value {label} {step} />
+    <InputNumber {disabled} {invalid} {required} {name} {id} bind:value {label} {step} />
 {:else}
     <div class={twMerge("w-full flex flex-col gap-y-2", customClasses.wrapper)}>
         {#if label}
@@ -113,6 +125,7 @@
                     </div>
                 {/if}
                 <input
+                    data-invalid={invalid}
                     {step}
                     {disabled}
                     {required}
