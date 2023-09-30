@@ -74,7 +74,7 @@
 <div class="flex flex-col gap-y-10 w-full">
     <PageHeader title="Dashboard"></PageHeader>
     <!-- <Chart type="line" labels={Object.keys(groupedInput)} datasets={datasetBalance} /> -->
-    <div class="flex gap-x-4 w-1/2">
+    <div class="flex flex-row sm:flex-col gap-4 w-1/2">
         <div class="flex flex-col gap-y-4 items-center">
             <h1 class="text-2xl font-bold">Entrada</h1>
             <Chart type="bar" labels={Object.keys(groupedInput)} datasets={datasetInput} />
