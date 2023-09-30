@@ -1,6 +1,9 @@
 <script lang="ts">
-    import Chart from "chart.js/auto"
+    import Chart, { type ChartDataset } from "chart.js/auto"
     import { onMount } from "svelte"
+
+    export let labels: string[] = []
+    export let datasets: ChartDataset[] = []
 
     let ctx: HTMLCanvasElement
     let chart: Chart
