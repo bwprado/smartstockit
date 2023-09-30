@@ -4,26 +4,24 @@
 
     export let labels: string[] = []
     export let datasets: ChartDataset[] = []
+    export let type: "bar" | "line" | "pie" | "doughnut" = "bar"
 
     let ctx: HTMLCanvasElement
     let chart: Chart
 
     onMount(() => {
         chart = new Chart(ctx, {
-            type: "bar",
+            type,
             data: {
-                labels: ["Bolo de 1Kg", "Açucar Mascavo", "Trigo", "Cookies", "Purple", "Orange"],
-                datasets: [
-                    {
-                        label: "Entrada de produtos",
-                        data: [12, 19, 3, 5, 2, 3],
-                        borderWidth: 2,
-                        borderRadius: 8,
-                        backgroundColor: "rgb(212, 22, 60, 0.8)",
-                    },
-                ],
+                labels,
+                datasets,
             },
             options: {
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                },
                 responsive: true,
                 scales: {
                     y: {
@@ -35,6 +33,4 @@
     })
 </script>
 
-<div class="w-full sm:w-1/2">
-    <canvas id="myChart" width="400" height="400" bind:this={ctx}></canvas>
-</div>
+<canvas id="myChart" width="400" height="400" bind:this={ctx}></canvas>
