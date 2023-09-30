@@ -10,6 +10,7 @@
         input?: string
     } = {}
     export let name: string = "input"
+    export let invalid: boolean = false
     export let step: string = "0.01"
     export let id: string = "input"
     export let required: boolean = false
@@ -35,6 +36,7 @@
         "dark:placeholder:text-surface-400",
         "placeholder:text-surface-200",
         "focus:outline-none",
+
         "ring-1",
         "ring-inset",
         "ring-surface-100",
@@ -93,7 +95,9 @@
                 customClasses.label,
             )}>{label}</label>
     {/if}
-    <div class="grid grid-cols-[2fr,1fr,1fr]">
+    <div
+        class="grid grid-cols-[2fr,1fr,1fr] data-[invalid=true]:outline-2 data-[invalid=true]:outline-secondary-500"
+        data-invalid={invalid}>
         <input
             {step}
             {disabled}
