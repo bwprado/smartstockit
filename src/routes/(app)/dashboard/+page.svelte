@@ -5,7 +5,7 @@
 
     export let data: PageServerData
 
-    $: groupedInput = data.inventory.input.reduce(
+    let groupedInput: { amount: number; price: number }[] = data.inventory.input.reduce(
         (acc, item) => {
             if (acc[item.products.name]) {
                 acc[item.products.name] = {
@@ -22,7 +22,7 @@
         },
         {} as Record<string, typeof data.inventory>,
     )
-    $: groupedOutput = data.inventory.output.reduce(
+    let groupedOutput: { amount: number; price: number }[] = data.inventory.output.reduce(
         (acc, item) => {
             if (acc[item.products.name]) {
                 acc[item.products.name] = {
@@ -39,11 +39,49 @@
         },
         {} as Record<string, typeof data.inventory>,
     )
+
+    const datasetInput = [
+        {
+            data: Object.values(groupedInput).map((item) => item?.amount),
+            borderWidth: 2,
+            borderRadius: 8,
+            borderSkiped: false,
+            backgroundColor: "rgb(212, 22, 60, 0.8)",
+        },
+    ]
+
+    const datasetOutput = [
+        {
+            data: Object.values(groupedOutput).map((item) => item?.amount),
+            borderWidth: 2,
+            borderRadius: 8,
+            borderSkiped: false,
+            backgroundColor: "rgb(70, 133, 175)",
+        },
+    ]
+
+    const datasetBalance = [
+        {
+            label: "Saldo de produtos",
+            data: Object.values(groupedInput).map((item) => item?.amount),
+            borderWidth: 2,
+            borderRadius: 8,
+            backgroundColor: "rgb(212, 22, 60, 0.8)",
+        },
+    ]
 </script>
 
 <div class="flex flex-col gap-y-10 w-full">
     <PageHeader title="Dashboard"></PageHeader>
-    <!-- <Chart labels={Object.keys(groupedInput)} datasets={Object} /> -->
-    {JSON.stringify(groupedInput)}
-    {JSON.stringify(groupedOutput)}
+    <!-- <Chart type="line" labels={Object.keys(groupedInput)} datasets={datasetBalance} /> -->
+    <div class="flex gap-x-4 w-1/2">
+        <div class="flex flex-col gap-y-4 items-center">
+            <h1 class="text-2xl font-bold">Entrada</h1>
+            <Chart type="bar" labels={Object.keys(groupedInput)} datasets={datasetInput} />
+        </div>
+        <div class="flex flex-col gap-y-4 items-center">
+            <h1 class="text-2xl font-bold">Saída</h1>
+            <Chart type="bar" labels={Object.keys(groupedOutput)} datasets={datasetOutput} />
+        </div>
+    </div>
 </div>
