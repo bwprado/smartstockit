@@ -12,6 +12,7 @@
     import type { PageServerData } from "./$types"
     import type { Customer } from "../../../types/supabase"
     import { twMerge } from "tailwind-merge"
+    import { string, z } from "zod"
 
     const toast = getToastStore()
     const modal = getModalStore()
@@ -24,6 +25,13 @@
         phone: "",
         address: JSON.stringify({}) as unknown as JSON,
     }
+
+    const CustomerValidation = z.object({
+        name: z.string(),
+        phone: z.coerce.number(),
+        email: z.string().email().optional(),
+        address: z.string().optional(),
+    })
 
     $: showModal = false
     $: loading = false
@@ -74,6 +82,17 @@
     }
 
     const handleSubmit = async () => {
+        const validation = CustomerValidation.safeParse(selectedCustomer)
+
+        if (!validation.success) {
+            showModal = false
+            toast.trigger({
+                message: "Preencha todos os dados.",
+                background: "bg-error-500",
+            })
+            return
+        }
+
         loading = true
 
         if (selectedCustomer.id) {
