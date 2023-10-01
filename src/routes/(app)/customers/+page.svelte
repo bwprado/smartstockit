@@ -7,17 +7,21 @@
     import PageHeader from "$lib/components/PageHeader.svelte"
     import SelectSearch from "$lib/components/SelectSearch.svelte"
     import Table from "$lib/components/Table/Table.svelte"
+    
+    import { enhance } from "$app/forms"
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
+    import type { SubmitFunction } from "@sveltejs/kit"
     import { Trash } from "lucide-svelte"
-    import type { PageServerData } from "./$types"
-    import type { Customer } from "../../../types/supabase"
     import { twMerge } from "tailwind-merge"
-    import { string, z } from "zod"
+    import { z } from "zod"
+    import type { Customer } from "../../../types/supabase"
+    import type { ActionData, PageServerData } from "./$types"
 
     const toast = getToastStore()
     const modal = getModalStore()
 
     export let data: PageServerData
+    export let form: ActionData
 
     let selectedCustomer: any = {
         name: "",
@@ -154,6 +158,28 @@
         showModal = false
         loading = false
     }
+
+    const handleFormSubmit: SubmitFunction = ({}) => {
+        loading = true
+
+        return async ({ update }) => {
+            await update()
+            loading = false
+            showModal = false
+        }
+    }
+
+    if (form?.success) {
+        toast.trigger({
+            message: "Cliente adicionado com sucesso.",
+        })
+    }
+
+    if (form?.noSession || form?.nameMissing) {
+        toast.trigger({
+            message: form?.message,
+        })
+    }
 </script>
 
 <!-- <svelte:head>
@@ -222,7 +248,7 @@
         {/if}
     </svelte:fragment>
     <div slot="body" class="grid grid-rows-[auto,max-content] w-full h-full gap-y-4">
-        <div class="flex flex-col w-full gap-y-4">
+        <form method="POST" class="flex flex-col w-full gap-y-4" use:enhance={handleFormSubmit}>
             <Input
                 label="Nome"
                 name="name"
@@ -251,12 +277,13 @@
                 name="address"
                 options={[]}
                 placeholder="Digite o endereço para pesquisar." />
-        </div>
+            <div class="py-6 sm:py-0 mt-auto">
+                <Button id="add_customer" type="submit" {loading}
+                    >{selectedCustomer.id ? "Editar" : "Adicionar"}</Button>
+            </div>
+        </form>
     </div>
     <svelte:fragment slot="footer">
-        <div class="py-6 sm:py-0">
-            <Button id="add_customer" on:click={handleSubmit} {loading}
-                >{selectedCustomer.id ? "Editar" : "Adicionar"}</Button>
-        </div>
+        <div></div>
     </svelte:fragment>
 </Modal>
