@@ -34,6 +34,7 @@
             body: "Você tem certeza que deseja remover esta unidade? Esta ação não poderá ser desfeita.",
             response: async (response) => {
                 if (response) {
+                    loading = true
                     try {
                         const res = await fetch(`/api/units?id=${unitId}`, {
                             method: "DELETE",
@@ -54,15 +55,24 @@
                             message: "Erro ao remover unidade",
                         })
                     }
+                    loading = false
                 }
             },
         })
     }
 
     const handleSubmit = async () => {
-        loading = true
+        if (!selectedUnit.name || !selectedUnit.acronym) {
+            showModal = false
+            toast.trigger({
+                message: `${selectedUnit.name ? "Acrônimo" : "Nome"} é obrigatório.`,
+                background: "bg-error-500",
+            })
+            return
+        }
         try {
             if (selectedUnit.id) {
+                loading = true
                 const res = await fetch(`/api/units`, {
                     method: "PUT",
                     headers: {
@@ -108,8 +118,13 @@
                 message: "Ocorreu um erro ao adicionar a unidade, tente novamente mais tarde.",
             })
         }
-        showModal = false
         loading = false
+        showModal = false
+    }
+
+    const handleRowClick = (id: Unit["id"]) => {
+        selectedUnit = data.units.find((u) => u.id === id)
+        showModal = true
     }
 </script>
 
@@ -130,7 +145,8 @@
         { label: "Nome da Unidade", key: "name", type: "string" },
         { label: "Acrônimo", key: "acronym", type: "string" },
     ]}
-    data={data.units} />
+    data={data.units}
+    {handleRowClick} />
 
 <Modal
     bind:showModal
@@ -148,6 +164,7 @@
 
     <div slot="body" class="flex flex-col gap-y-4">
         <Input
+            required
             label="Nome da Unidade"
             placeholder="Ex: Quilograma"
             bind:value={selectedUnit.name}
@@ -155,6 +172,7 @@
             name="name"
             type="text" />
         <Input
+            required
             label="Acrônimo"
             placeholder="Ex: kg"
             bind:value={selectedUnit.acronym}
