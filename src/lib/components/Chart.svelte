@@ -33,4 +33,11 @@
     })
 </script>
 
-<canvas id="myChart" width="400" height="400" bind:this={ctx}></canvas>
+{#if labels.length === 0}
+    <div>
+        <p class="text-center text-gray-500">No data to display</p>
+    </div>
+{:else}
+    <canvas id="myChart" width="400" height="400" bind:this={ctx}></canvas>
+{/if}
+
