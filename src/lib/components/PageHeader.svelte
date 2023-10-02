@@ -6,7 +6,12 @@
     export let title: string = ""
 </script>
 
-<section class={twMerge("flex flex-row justify-between items-center gap-4", className)}>
-    <h1 class="text-lg sm:text-xl font-bold whitespace-nowrap">{title}</h1>
-    <slot title="action" />
+<section class={twMerge("flex flex-col justify-between items-center gap-4", className)}>
+    <div class="flex flex-row justify-between items-center gap-4 w-full">
+        <h1 class="text-lg sm:text-xl font-bold whitespace-nowrap">{title}</h1>
+        <slot name="action" />
+    </div>
+    {#if $$slots.search}
+        <slot name="search" />
+    {/if}
 </section>
