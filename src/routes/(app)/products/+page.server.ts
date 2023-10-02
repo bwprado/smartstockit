@@ -1,7 +1,6 @@
-import { error, type Actions, fail } from "@sveltejs/kit"
+import { fail, type Actions } from "@sveltejs/kit"
 import type { Brand, Category, Product, Supplier, Unit } from "../../../types/supabase.js"
 import type { PageServerLoad } from "./$types.js"
-import { invalidate } from "$app/navigation"
 
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
     const session = await getSession()
@@ -74,8 +73,9 @@ export const actions: Actions = {
             console.error(err.message)
             throw fail(+err.code, { message: err.message })
         }
-        console.log(data)
-        invalidate("/products")
+        return {
+            products: data as Product[],
+        }
     },
     editProduct: async ({ request, locals: { supabase } }) => {
         const formData = Object.fromEntries(await request.formData())
@@ -88,8 +88,26 @@ export const actions: Actions = {
             .select()
 
         if (err) {
-            return { status: +err.code, body: "Erro ao editar o produto." }
+            return { error: true, body: "Erro ao editar o produto." }
         }
-        return { status: 200, body: "Produto editado com sucesso!" }
+        return { success: true, body: "Produto editado com sucesso!" }
+    },
+    search: async ({ request, locals: { supabase, getSession } }) => {
+        const session = await getSession()
+        if (!session) {
+            return fail(401, { error: true, body: "Faça login para continuar." })
+        }
+
+        const { search } = Object.fromEntries(await request.formData())
+        const { data, error: err } = await supabase
+            .from("products")
+            .select()
+            .ilike("name", `%${search}%`)
+            .eq("user", session.user.id)
+        if (err) {
+            console.error(err.message)
+            return fail(500, { error: false, body: err.message })
+        }
+        return { success: true, body: data }
     },
 }
