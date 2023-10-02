@@ -14,7 +14,7 @@
     import { invalidate } from "$app/navigation"
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
     import { Html5Qrcode } from "html5-qrcode"
-    import { Plus, QrCode, Trash } from "lucide-svelte"
+    import { Plus, QrCode, Search, Trash } from "lucide-svelte"
     import { onMount } from "svelte"
     import { twMerge } from "tailwind-merge"
     import type { ActionData, PageServerData } from "./$types"
@@ -64,6 +64,8 @@
         label: supplier.name,
         value: supplier.id,
     }))
+    $: searchLoading = false
+    $: search = ""
 
     let html5Qrcode: Html5Qrcode
     onMount(() => {
@@ -87,12 +89,6 @@
             composition: product?.composition || [],
         }
         showModal = true
-    }
-
-    if (form?.status) {
-        toast.trigger({
-            message: form.body,
-        })
     }
 
     const handleDeleteClick = () => {
@@ -327,17 +323,55 @@
             prop = ""
         }
     }
+
+    const handleSearch = async (e: MouseEvent) => {
+        searchLoading = true
+        const res = await fetch(`/api/products/search?for=${search}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+
+        if (res.ok) {
+            const searchProducts = await res.json()
+            data.products = searchProducts
+        }
+        searchLoading = false
+    }
 </script>
 
 <div id="barcode-reader" width="600px"></div>
 <div class="flex flex-col gap-y-10 w-full h-full">
     <PageHeader title="Produtos">
         <Button
+            slot="action"
             class="max-w-max"
             on:click={() => {
                 selectedProduct = initialValue
                 showModal = true
             }}>Adicionar Produto</Button>
+        <div slot="search" class="w-full h-full">
+            <Input
+                customClasses={{
+                    wrapper: "w-full h-full",
+                }}
+                placeholder="Pesquisar..."
+                type="text"
+                name="search"
+                bind:value={search}
+                id="search">
+                <Button
+                    slot="action"
+                    intent="secondary"
+                    class="w-fit h-full"
+                    type="button"
+                    loading={searchLoading}
+                    on:click={handleSearch}>
+                    <Search />
+                </Button>
+            </Input>
+        </div>
     </PageHeader>
     <EmptyWrapper
         message="Nenhum Produto adicionado ainda, para adicionar um produto basta clicar no botão acima."
@@ -369,13 +403,11 @@
     headerText={selectedProduct.id ? "Editar Produto" : "Adicionar Produto"}>
     <svelte:fragment slot="action">
         {#if selectedProduct.id}
-            <form method="POST" action="?/deleteUser">
-                <IconButton on:click={handleDeleteClick} intent="secondary">
-                    <svelte:fragment slot="icon">
-                        <Trash />
-                    </svelte:fragment>
-                </IconButton>
-            </form>
+            <IconButton on:click={handleDeleteClick} intent="secondary">
+                <svelte:fragment slot="icon">
+                    <Trash />
+                </svelte:fragment>
+            </IconButton>
         {/if}
     </svelte:fragment>
     <div slot="body" class="grid grid-rows-[auto,max-content] w-full h-full gap-y-4">
