@@ -26,7 +26,7 @@
         [
             "dark:bg-surface-800",
             "backdrop:bg-[rgba(0,0,0,0.4)]",
-            "bg-white",
+            "bg-surface-200",
             "sm:rounded-s-md",
             "shadow-md",
             "p-6",
