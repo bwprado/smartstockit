@@ -18,7 +18,7 @@
     <svelte:fragment slot="panel">
         {#if tabSet === 0}
             <h1 class="text-xl font-bold whitespace-nowrap pt-6">Perfil da Empresa</h1>
-            <div class="grid grid-cols-2 grid-flow-row gap-4">
+            <div class="grid grid-cols-flow sm:grid-cols-2 grid-flow-row gap-4">
                 <Input
                     id="name"
                     name="name"
