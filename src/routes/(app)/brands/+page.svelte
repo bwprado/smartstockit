@@ -1,17 +1,16 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte"
     import EmptyWrapper from "$lib/components/EmptyWrapper.svelte"
+    import IconButton from "$lib/components/IconButton.svelte"
+    import Input from "$lib/components/Input.svelte"
+    import Modal from "$lib/components/Modal.svelte"
     import PageHeader from "$lib/components/PageHeader.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-    import { twMerge } from "tailwind-merge"
-    import type { PageServerData } from "./$types"
-    import Modal from "$lib/components/Modal.svelte"
-    import IconButton from "$lib/components/IconButton.svelte"
-    import { Trash } from "lucide-svelte"
-    import Input from "$lib/components/Input.svelte"
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
-    import de from "date-fns/locale/de"
+    import { Plus, Trash } from "lucide-svelte"
+    import { twMerge } from "tailwind-merge"
     import type { Brand } from "../../../types/supabase"
+    import type { PageServerData } from "./$types"
 
     const toast = getToastStore()
     const modal = getModalStore()
@@ -120,8 +119,9 @@
     }
 </script>
 
-<PageHeader title="Marcas">
+<PageHeader title="Marcas" class="pb-4">
     <Button
+        slot="action"
         class="max-w-max"
         on:click={() => {
             selectedBrand = {
@@ -129,7 +129,7 @@
                 id: "",
             }
             showModal = true
-        }}>Adicionar Marca</Button>
+        }}><Plus />Marca</Button>
 </PageHeader>
 <EmptyWrapper
     length={data.brands.length}
@@ -168,6 +168,7 @@
 
     <div slot="body">
         <Input
+            required
             label="Nome da Marca"
             placeholder="Ex: Bombril"
             bind:value={selectedBrand.name}
