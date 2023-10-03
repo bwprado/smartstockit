@@ -16,7 +16,7 @@
         [
             "rounded-lg",
             "sm:h-10",
-            "h-8",
+            "h-9",
             "font-bold",
             "sm:py-2",
             "py-1",
