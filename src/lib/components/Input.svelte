@@ -22,10 +22,6 @@
     export let invalid: boolean = false
     export let selected: boolean = false
     export let message: string = ""
-    export let symbol: { text: string; position: "left" | "right" } = {
-        text: "",
-        position: "right",
-    }
 
     const inputStyle = cva(
         [
@@ -70,7 +66,7 @@
                 symbolPosition: {
                     left: "rounded-s-none",
                     right: "rounded-e-none",
-                    false: "",
+                    none: "",
                 },
             },
         },
@@ -82,18 +78,6 @@
                 ? +(e.target as HTMLInputElement).value
                 : (e.target as HTMLInputElement).value
     }
-
-    const symbolStyle = cva(
-        ["bg-surface-600", "h-10", "text-xs", "text-surface-300", "flex", "items-center", "p-2"],
-        {
-            variants: {
-                position: {
-                    left: "rounded-l-md",
-                    right: "rounded-r-md",
-                },
-            },
-        },
-    )
 </script>
 
 {#if type === "checkbox"}
@@ -121,11 +105,7 @@
         {/if}
         <div class="flex gap-x-4 items-center justify-between">
             <div class="flex items-center h-full w-full">
-                {#if symbol.position === "left" && symbol.text}
-                    <div class={symbolStyle({ position: symbol.position })}>
-                        {symbol.text}
-                    </div>
-                {/if}
+                <slot name="symbolLeft" />
                 <input
                     data-invalid={invalid}
                     {step}
@@ -137,18 +117,11 @@
                     {placeholder}
                     {value}
                     aria-placeholder={placeholder}
-                    class={twMerge(
-                        inputStyle({ symbolPosition: symbol.text ? symbol.position : false }),
-                        customClasses.input,
-                    )}
+                    class={twMerge(inputStyle({}), customClasses.input)}
                     on:keydown
                     on:keypress
                     on:input={handleInput} />
-                {#if symbol.text && symbol.position === "right"}
-                    <div class={symbolStyle({ position: symbol.position })}>
-                        {symbol.text}
-                    </div>
-                {/if}
+                <slot name="symbolRight" />
             </div>
             <slot name="action" />
         </div>
