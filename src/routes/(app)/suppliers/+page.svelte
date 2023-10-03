@@ -3,15 +3,16 @@
     import EmptyWrapper from "$lib/components/EmptyWrapper.svelte"
     import IconButton from "$lib/components/IconButton.svelte"
     import Input from "$lib/components/Input.svelte"
+    import InputMasked from "$lib/components/InputMasked.svelte"
     import Modal from "$lib/components/Modal.svelte"
     import PageHeader from "$lib/components/PageHeader.svelte"
     import Table from "$lib/components/Table/Table.svelte"
+
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
-    import { Trash } from "lucide-svelte"
+    import { Plus, Trash } from "lucide-svelte"
     import { twMerge } from "tailwind-merge"
     import type { Supplier } from "../../../types/supabase"
     import type { PageServerData } from "./$types"
-    import InputMasked from "$lib/components/InputMasked.svelte"
 
     const toast = getToastStore()
     const modal = getModalStore()
@@ -124,8 +125,9 @@
     }
 </script>
 
-<PageHeader title="Fornecedores">
+<PageHeader title="Fornecedores" class="pb-4">
     <Button
+        slot="action"
         class="max-w-max"
         on:click={() => {
             selectedSupplier = {
@@ -135,7 +137,7 @@
                 phone: "",
             }
             showModal = true
-        }}>Adicionar Fornecedor</Button>
+        }}><Plus />Fornecedor</Button>
 </PageHeader>
 <EmptyWrapper
     length={data.suppliers.length}
