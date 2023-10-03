@@ -2,20 +2,24 @@ import { fail, type Actions } from "@sveltejs/kit"
 import type { Brand, Category, Product, Supplier, Unit } from "../../../types/supabase.js"
 import type { PageServerLoad } from "./$types.js"
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase, getSession }, depends }) => {
     const session = await getSession()
-    const { data: products, error: errProducts } = await supabase
-        .from("products")
-        .select(
-            "*, units (id, name, acronym), brands (id, name), categories (id, name), suppliers (id, name)",
-        )
-        .eq("user", session?.user?.id)
 
-    if (errProducts) {
-        console.error(errProducts.message)
-        throw fail(+errProducts.code, { message: errProducts.message })
+    const fetchProducts = async () => {
+        depends("products")
+        const { data: products, error: errProducts } = await supabase
+            .from("products")
+            .select(
+                "*, units (id, name, acronym), brands (id, name), categories (id, name), suppliers (id, name)",
+            )
+            .eq("user", session?.user?.id)
+
+        if (errProducts) {
+            console.error(errProducts.message)
+            return []
+        }
+        return products as Product[]
     }
-
     const { data: categories, error: errCategories } = await supabase
         .from("categories")
         .select()
@@ -57,7 +61,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
     }
 
     return {
-        products: products as Product[],
+        products: await fetchProducts(),
         categories: categories as Category[],
         brands: brands as Brand[],
         suppliers: suppliers as Supplier[],
