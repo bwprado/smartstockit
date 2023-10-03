@@ -21,13 +21,13 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
 
         if (err) {
             console.log(err)
-            return {}
+            return {} as Partial<Profile>
         }
         return user as Profile
     }
 
     return {
-        user: fetchUserProfile(),
+        user: await fetchUserProfile(),
     }
 }
 
