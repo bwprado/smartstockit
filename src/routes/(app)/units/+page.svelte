@@ -5,12 +5,11 @@
     import Modal from "$lib/components/Modal.svelte"
     import PageHeader from "$lib/components/PageHeader.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-    import { Trash } from "lucide-svelte"
-    import type { PageServerData } from "./$types"
+    
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
-    import type { ActionResult } from "@sveltejs/kit"
-    import { applyAction, deserialize } from "$app/forms"
+    import { Plus, Trash } from "lucide-svelte"
     import type { Unit } from "../../../types/supabase"
+    import type { PageServerData } from "./$types"
 
     const toast = getToastStore()
     const modal = getModalStore()
@@ -128,8 +127,9 @@
     }
 </script>
 
-<PageHeader title="Unidades de Medida">
+<PageHeader title="Unidades de Medida" class="pb-4">
     <Button
+        slot="action"
         class="max-w-max"
         on:click={() => {
             selectedUnit = {
@@ -138,7 +138,7 @@
                 acronym: "",
             }
             showModal = true
-        }}>Adicionar Medida</Button>
+        }}><Plus />Medida</Button>
 </PageHeader>
 <Table
     columns={[
