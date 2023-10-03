@@ -7,10 +7,10 @@
     import PageHeader from "$lib/components/PageHeader.svelte"
     import Table from "$lib/components/Table/Table.svelte"
 
-    import { Trash } from "lucide-svelte"
+    import { getToastStore } from "@skeletonlabs/skeleton"
+    import { Plus, Trash } from "lucide-svelte"
     import { twMerge } from "tailwind-merge"
     import type { PageData } from "./$types"
-    import { getToastStore } from "@skeletonlabs/skeleton"
 
     const toast = getToastStore()
 
@@ -100,13 +100,14 @@
     }
 </script>
 
-<PageHeader title="Categorias">
+<PageHeader title="Categorias" class="pb-4">
     <Button
+        slot="action"
         class="max-w-max"
         on:click={() => {
             selectedCategory = initialValue
             showModal = true
-        }}>Adicionar Categoria</Button>
+        }}><Plus /> Categoria</Button>
 </PageHeader>
 <EmptyWrapper
     message="Nenhuma Categoria adicionada ainda, para adicionar uma categoria basta clicar no botão acima."
