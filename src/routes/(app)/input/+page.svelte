@@ -1,16 +1,17 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte"
     import EmptyWrapper from "$lib/components/EmptyWrapper.svelte"
+    import IconButton from "$lib/components/IconButton.svelte"
     import Input from "$lib/components/Input.svelte"
     import Modal from "$lib/components/Modal.svelte"
     import PageHeader from "$lib/components/PageHeader.svelte"
     import SelectSearch from "$lib/components/SelectSearch.svelte"
+    import Symbol from "$lib/components/Symbol.svelte"
     import Table from "$lib/components/Table/Table.svelte"
 
-    import IconButton from "$lib/components/IconButton.svelte"
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
     import { format, parseISO } from "date-fns"
-    import { Trash } from "lucide-svelte"
+    import { Plus, Trash } from "lucide-svelte"
     import type { PageServerData } from "./$types"
 
     const toast = getToastStore()
@@ -134,14 +135,15 @@
     }
 </script>
 
-<PageHeader title="Entradas">
+<PageHeader title="Entradas" class="pb-4">
     <Button
+        slot="action"
         class="w-fit"
         on:click={() => {
             showModal = true
             selectedInput = {}
             selectedProduct = {}
-        }}>Adicionar Entrada</Button>
+        }}><Plus />Entrada</Button>
 </PageHeader>
 
 <EmptyWrapper
@@ -197,13 +199,17 @@
                 label="Quantidade"
                 bind:value={selectedInput.amount} />
             <Input
+                customClasses={{
+                    input: "rounded-s-none",
+                }}
                 name="price"
                 id="price"
                 type="number"
                 step="0.01"
                 label="Preço"
-                bind:value={selectedInput.price}
-                symbol={{ position: "left", text: "R$" }} />
+                bind:value={selectedInput.price}>
+                <Symbol slot="symbolLeft" text="R$" />
+            </Input>
             <Input
                 type="checkbox"
                 name="fresh"
