@@ -9,9 +9,10 @@
 
     import { getToastStore } from "@skeletonlabs/skeleton"
     import _ from "lodash"
-    import type { PageServerData } from "./$types"
-    import type { Inventory } from "../../../types/supabase"
+    import { Minus } from "lucide-svelte"
     import { z } from "zod"
+    import type { Inventory } from "../../../types/supabase"
+    import type { PageServerData } from "./$types"
 
     const toast = getToastStore()
 
@@ -26,7 +27,7 @@
     const Output = z.object({
         id: z.string().optional(),
         product: z.string(),
-        amount: z.string()
+        amount: z.string(),
     })
 
     const searchableProducts = data.products.map((product) => ({
@@ -37,7 +38,6 @@
 
     const handleSubmit = async () => {
         const validation = Output.safeParse(selectedOutput)
-console.log(selectedOutput)
         if (!validation.success) {
             showModal = false
             toast.trigger({
@@ -88,14 +88,15 @@ console.log(selectedOutput)
     }
 </script>
 
-<PageHeader title="Saídas">
+<PageHeader title="Saídas" class="pb-4">
     <Button
+        slot="action"
         class="w-fit"
         on:click={() => {
             showModal = true
             selectedOutput = {}
             selectedProduct = {}
-        }}>Retirar Produto</Button>
+        }}><Minus />Produto</Button>
 </PageHeader>
 
 <EmptyWrapper
@@ -131,7 +132,9 @@ console.log(selectedOutput)
     </section>
 </EmptyWrapper>
 
-<Modal bind:showModal headerText={_.isEmpty(selectedOutput) ? "Retirar Produto" : "Alterar Retirada"}>
+<Modal
+    bind:showModal
+    headerText={_.isEmpty(selectedOutput) ? "Retirar Produto" : "Alterar Retirada"}>
     <div slot="body" class="flex flex-col gap-y-4 h-full">
         <SelectSearch
             on:selection={(e) => {
