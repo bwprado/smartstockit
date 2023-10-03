@@ -12,9 +12,10 @@
     import Table from "$lib/components/Table/Table.svelte"
 
     import { invalidate } from "$app/navigation"
+    import Symbol from "$lib/components/Symbol.svelte"
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
     import { Html5Qrcode } from "html5-qrcode"
-    import { Plus, QrCode, Search, Trash } from "lucide-svelte"
+    import { Plus, QrCode, Search, Trash, X } from "lucide-svelte"
     import { onMount } from "svelte"
     import { twMerge } from "tailwind-merge"
     import type { ActionData, PageServerData } from "./$types"
@@ -324,7 +325,7 @@
         }
     }
 
-    const handleSearch = async (e: MouseEvent) => {
+    const handleSearch = async () => {
         searchLoading = true
         const res = await fetch(`/api/products/search?for=${search}`, {
             method: "GET",
@@ -339,6 +340,13 @@
         }
         searchLoading = false
     }
+
+    const handleClearSearch = async () => {
+        searchLoading = true
+        search = ""
+        await invalidate("products")
+        searchLoading = false
+    }
 </script>
 
 <div id="barcode-reader" width="600px"></div>
@@ -350,17 +358,29 @@
             on:click={() => {
                 selectedProduct = initialValue
                 showModal = true
-            }}>Adicionar Produto</Button>
+            }}><Plus />Adicionar Produto</Button>
         <div slot="search" class="w-full h-full">
             <Input
                 customClasses={{
-                    wrapper: "w-full h-full",
+                    wrapper: "w-full h-full relative",
+                    input: "rounded-e-none",
                 }}
                 placeholder="Pesquisar..."
                 type="text"
                 name="search"
+                on:keypress={(e) => {
+                    if (e.key === "Enter") {
+                        handleSearch()
+                    }
+                }}
                 bind:value={search}
                 id="search">
+                <button
+                    slot="symbolRight"
+                    class="dark:bg-surface-700 p-2 rounded-e-lg dark:hover:bg-surface-600 transition-colors duration-200 ease-in-out bg-surface-100 hover:bg-surface-300"
+                    on:click={handleClearSearch}>
+                    <X />
+                </button>
                 <Button
                     slot="action"
                     intent="secondary"
@@ -441,21 +461,31 @@
             </Input>
             <div class="w-full flex gap-x-4">
                 <Input
+                    customClasses={{
+                        wrapper: "w-full flex gap-x-4",
+                        input: "rounded-s-none",
+                    }}
                     label="Preço de Venda"
                     name="price"
                     type="number"
                     id="price"
                     placeholder="10,00"
-                    symbol={{ text: "R$", position: "left" }}
-                    bind:value={selectedProduct.price} />
+                    bind:value={selectedProduct.price}>
+                    <Symbol slot="symbolLeft" text="R$" />
+                </Input>
                 <Input
+                    customClasses={{
+                        wrapper: "w-full flex gap-x-4",
+                        input: "rounded-s-none",
+                    }}
                     label="Preço de Custo"
                     name="cost"
                     type="number"
-                    symbol={{ text: "R$", position: "left" }}
                     id="cost"
                     placeholder="8,00"
-                    bind:value={selectedProduct.cost} />
+                    bind:value={selectedProduct.cost}>
+                    <Symbol slot="symbolLeft" text="R$" />
+                </Input>
             </div>
             <SelectSearch
                 on:selection={(e) => {
