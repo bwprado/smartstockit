@@ -99,7 +99,7 @@
             <label
                 for={name}
                 class={twMerge(
-                    "block text-sm leading-6 text-gray-900 font-bold dark:text-gray-200",
+                    "block text-xs leading-6 text-gray-900 font-bold dark:text-gray-200",
                     customClasses.label,
                 )}>{label}</label>
         {/if}
