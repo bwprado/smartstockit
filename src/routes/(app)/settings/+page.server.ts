@@ -60,4 +60,34 @@ export const actions: Actions = {
 
         return { status: 200, body: "Usuário criado com sucesso" }
     },
+    edit: async ({ request, locals: { supabase, getSession } }) => {
+        const session = await getSession()
+        if (!session) {
+            return {
+                status: 401,
+                body: "Você não está logado",
+            }
+        }
+        const formData = Object.fromEntries(await request.formData()) as unknown as User &
+            Partial<Profile>
+
+        const { data, error } = await supabase
+            .from("profiles")
+            .update({ ...formData, user: session.user.id })
+            .eq("user", session.user.id)
+            .eq("id", formData.id)
+            .select()
+            .single()
+
+        if (error) {
+            console.log(error)
+
+            return {
+                status: 500,
+                body: "Alguma coisa deu errado na edição do usuário",
+            }
+        }
+
+        return { status: 200, body: "Usuário editado com sucesso", data }
+    },
 }
