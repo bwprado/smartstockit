@@ -6,7 +6,7 @@
     export let type: import("svelte/elements").HTMLButtonAttributes["type"] = "button"
     export let id: string = ""
     export let href: HTMLAnchorElement["href"] = ""
-    export let intent: "primary" | "secondary" | "danger" = "primary"
+    export let intent: "primary" | "secondary" | "terciary" | "danger" = "primary"
     export let loading: boolean = false
     export let disabled: boolean = false
     let className: string = ""
@@ -15,12 +15,10 @@
     const btnStyle = cva(
         [
             "rounded-lg",
-            "sm:h-10",
-            "h-9",
             "font-bold",
-            "sm:py-2",
-            "py-1",
+            "sm:py-3",
             "sm:px-4",
+            "py-2",
             "px-2",
             "outline-none",
             "text-sm",
@@ -54,6 +52,12 @@
                         "hover:bg-primary-500",
                         "hover:text-white",
                         "hover:dark:text-primary-500",
+                    ],
+                    terciary: [
+                        "dark:bg-surface-800",
+                        "dark:text-white",
+                        "dark:hover:bg-white",
+                        "dark:hover:text-primary-500",
                     ],
                     danger: ["bg-red-500", "text-gray-100", "hover:bg-red-700"],
                 },
