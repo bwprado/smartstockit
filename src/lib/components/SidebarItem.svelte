@@ -12,18 +12,18 @@
         [
             "py-2",
             "px-4",
+            "gap-x-4",
             "hover:bg-primary-500",
+            "hover:text-primary-50",
             "rounded-lg",
             "flex",
             "items-center",
             "justify-between",
-            "gap-x-4",
-            "hover:text-primary-50",
         ],
         {
             variants: {
                 active: {
-                    true: ["font-bold", "bg-primary-500"],
+                    true: ["font-bold", "bg-primary-500", "text-white"],
                     false: "font-medium",
                 },
             },
@@ -47,10 +47,14 @@
     <a href={$$slots.subitem ? undefined : link} class="w-full">
         <li class={linkStyle({ active: $page.url.pathname === link || expanded })}>
             <div class="flex gap-x-6">
-                <div class="w-fit text-surface-900 dark:text-white">
+                <div
+                    class="w-fit text-surface-900 dark:text-white data-[active=true]:text-white"
+                    data-active={$page.url.pathname === link}>
                     <slot name="icon" />
                 </div>
-                <span class="text-surface-900 dark:text-white">{label}</span>
+                <span
+                    class="text-surface-900 dark:text-white data-[active=true]:text-white"
+                    data-active={$page.url.pathname === link}>{label}</span>
             </div>
             {#if $$slots.subitem}
                 <ChevronDown size={20} class={chevronStyle({ open: expanded })} />
