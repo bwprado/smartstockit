@@ -16,7 +16,7 @@
     <ul>
         <li>
             <a href={session ? "/dashboard" : "/login"}>
-                <Button id="login" intent="secondary">{session ? "Dashboard" : "Login"}</Button>
+                <Button id="login" intent="terciary">{session ? "Dashboard" : "Login"}</Button>
             </a>
         </li>
     </ul>
@@ -29,7 +29,7 @@
         <p class="text-xl">
             Bem-vindo ao nosso aplicativo de estoque, a solução perfeita para o seu negócio.
         </p>
-        <Button class="text-lg p-8" href="/signup">Crie uma conta gratuita</Button>
+        <Button class="text-lg p-4" href="/signup">Crie uma conta gratuita</Button>
     </div>
 
     <div class="mx-auto flex flex-col items-center justify-center h-screen snap-center">
