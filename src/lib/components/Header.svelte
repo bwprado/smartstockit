@@ -1,10 +1,11 @@
 <script lang="ts">
     import { page } from "$app/stores"
-    import type { PopupSettings } from "@skeletonlabs/skeleton"
     import { Avatar, LightSwitch, modeCurrent, popup, setModeCurrent } from "@skeletonlabs/skeleton"
-    import type { Session } from "@supabase/supabase-js"
     import { Menu } from "lucide-svelte"
+    import type { PopupSettings } from "@skeletonlabs/skeleton"
+    import type { Session } from "@supabase/supabase-js"
     import type { Profile } from "../../types/supabase"
+
     import Button from "./Button.svelte"
     import Footer from "./Footer.svelte"
     import IconButton from "./IconButton.svelte"
@@ -63,7 +64,9 @@
                                     border="border-4 border-surface-300-600-token hover:!border-primary-500"
                                     width="w-12"
                                     cursor="cursor-pointer" />
-                                <p class="font-bold">{profile?.name || "Sem Nome"}</p>
+                                <p class="font-bold dark:text-white text-surface-900">
+                                    {profile?.name || "Sem Nome"}
+                                </p>
                             </div>
                             <a
                                 class="btn variant-soft w-full"
