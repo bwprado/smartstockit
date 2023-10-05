@@ -359,10 +359,10 @@
                 selectedProduct = initialValue
                 showModal = true
             }}><Plus />Adicionar Produto</Button>
-        <div slot="search" class="w-full h-full">
+        <div slot="search" class="w-full h-fit">
             <Input
                 customClasses={{
-                    wrapper: "w-full h-full relative",
+                    wrapper: "w-full h-fit relative",
                     input: "rounded-e-none",
                 }}
                 placeholder="Pesquisar..."
@@ -384,7 +384,7 @@
                 <Button
                     slot="action"
                     intent="secondary"
-                    class="w-fit h-full"
+                    class="w-fit h-"
                     type="button"
                     loading={searchLoading}
                     on:click={handleSearch}>
