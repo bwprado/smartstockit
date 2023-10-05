@@ -96,7 +96,7 @@
             showModal = true
             selectedOutput = {}
             selectedProduct = {}
-        }}><Minus />Produto</Button>
+        }}>Retirar Produto</Button>
 </PageHeader>
 
 <EmptyWrapper
@@ -148,6 +148,7 @@
             options={searchableProducts}
             inputValue={selectedProduct.name || ""} />
         <Input
+            message="Insira quantos produtos foram retirados."
             required
             label="Quantidade"
             id="amount"
@@ -161,6 +162,6 @@
             id="retrieve_product"
             class="w-full mt-auto"
             on:click={handleSubmit}
-            {loading}>Retirar do Estoque</Button>
+            {loading}>Retirar Produto</Button>
     </svelte:fragment>
 </Modal>
