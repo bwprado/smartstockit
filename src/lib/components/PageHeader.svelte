@@ -8,7 +8,10 @@
 
 <section class={twMerge("flex flex-col justify-between items-center gap-4", className)}>
     <div class="flex flex-row justify-between items-center gap-4 w-full">
-        <h1 class="text-lg sm:text-xl font-bold whitespace-nowrap">{title}</h1>
+        <div class="flex flex-col gap-2">
+            <h1 class="text-lg sm:text-xl font-bold whitespace-nowrap">{title}</h1>
+            <slot name="message" />
+        </div>
         <slot name="action" />
     </div>
     {#if $$slots.search}
