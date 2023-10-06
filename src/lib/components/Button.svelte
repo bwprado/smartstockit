@@ -16,7 +16,7 @@
         [
             "rounded-lg",
             "font-bold",
-            "sm:py-3",
+            "h-full",
             "sm:px-4",
             "py-2",
             "px-2",
