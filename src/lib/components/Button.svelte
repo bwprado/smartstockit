@@ -45,13 +45,14 @@
         {
             variants: {
                 intent: {
-                    primary: ["bg-primary-500", "text-primary-50", "hover:bg-primary-700"],
+                    primary: ["bg-primary-500", "text-primary-50", "hover:bg-primary-800"],
                     secondary: [
                         "bg-white",
                         "text-primary-500",
                         "hover:bg-primary-500",
                         "hover:text-white",
                         "hover:dark:text-primary-500",
+                        "hover:dark:bg-surface-100",
                     ],
                     terciary: [
                         "dark:bg-surface-800",
