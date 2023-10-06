@@ -18,13 +18,12 @@
     import { Plus, QrCode, Search, Trash, X } from "lucide-svelte"
     import { onMount } from "svelte"
     import { twMerge } from "tailwind-merge"
-    import type { ActionData, PageServerData } from "./$types"
+    import type { PageServerData } from "./$types"
 
     const toast = getToastStore()
     const modal = getModalStore()
 
     export let data: PageServerData
-    export let form: ActionData
 
     let initialValue: any = {
         composition: [],
@@ -67,10 +66,11 @@
     }))
     $: searchLoading = false
     $: search = ""
+    $: searched = false
 
     let html5Qrcode: Html5Qrcode
     onMount(() => {
-        html5Qrcode = new Html5Qrcode("barcode-reader")
+        html5Qrcode = new Html5Qrcode("reader")
     })
 
     const handleRowClick = (id: string) => {
@@ -126,64 +126,6 @@
                 }
             },
         })
-    }
-
-    const handleReadBarcode = async (e: MouseEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
-
-        const test = await Html5Qrcode.getCameras()
-        console.log(test)
-
-        html5Qrcode.start(
-            { facingMode: "environment" },
-            {
-                fps: 10,
-                qrbox: { width: 250, height: 250 },
-            },
-            onScanSuccess,
-            onScanFailure,
-        )
-    }
-
-    const onScanSuccess = (decodedText: string, decodedResult: any) => {
-        html5Qrcode.stop()
-        console.log(decodedText)
-    }
-
-    const onScanFailure = (error: any) => {
-        html5Qrcode.stop()
-        console.log(error)
-    }
-
-    const handleAddProductClick = async () => {
-        try {
-            loading = true
-            const res = await fetch(`/api/products/add`, {
-                method: "POST",
-                body: JSON.stringify(selectedProduct),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-
-            const product = (await res.json()) || {}
-            data.products = [...data.products, product]
-
-            showModal = false
-            loading = false
-            toast.trigger({
-                message: "Produto criado com sucesso.",
-                classes: "z-50",
-            })
-        } catch (error) {
-            console.log(error)
-            toast.trigger({
-                message: "Erro ao criar produto, entre em contato com o suporte.",
-                classes: "z-50",
-            })
-            return
-        }
     }
 
     const handleEditProduct = async () => {
@@ -337,19 +279,80 @@
         if (res.ok) {
             const searchProducts = await res.json()
             data.products = searchProducts
+            searched = true
         }
         searchLoading = false
     }
 
     const handleClearSearch = async () => {
+        if (!search || !searched) return
+
         searchLoading = true
+        searched = false
         search = ""
         await invalidate("products")
         searchLoading = false
     }
+
+    const handleReadBarcode = async (e: MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        const cameras = await Html5Qrcode.getCameras()
+
+        html5Qrcode.start(
+            cameras[0].id,
+            {
+                fps: 10,
+                qrbox: 250,
+            },
+            onScanSuccess,
+            onScanFailure,
+        )
+    }
+
+    const onScanSuccess = (decodedText: string, decodedResult: any) => {
+        html5Qrcode.stop()
+        console.log(decodedText)
+    }
+
+    const onScanFailure = (error: any) => {
+        html5Qrcode.stop()
+        console.log(error)
+    }
+
+    const handleAddProductClick = async () => {
+        try {
+            loading = true
+            const res = await fetch(`/api/products/add`, {
+                method: "POST",
+                body: JSON.stringify(selectedProduct),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+
+            const product = (await res.json()) || {}
+            data.products = [...data.products, product]
+
+            showModal = false
+            loading = false
+            toast.trigger({
+                message: "Produto criado com sucesso.",
+                classes: "z-50",
+            })
+        } catch (error) {
+            console.log(error)
+            toast.trigger({
+                message: "Erro ao criar produto, entre em contato com o suporte.",
+                classes: "z-50",
+            })
+            return
+        }
+    }
 </script>
 
-<div id="barcode-reader" width="600px"></div>
+<div id="reader" style="width:500px"></div>
 <div class="flex flex-col gap-y-10 w-full h-full">
     <PageHeader title="Produtos">
         <Button
