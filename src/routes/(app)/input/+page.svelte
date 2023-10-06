@@ -143,7 +143,7 @@
             showModal = true
             selectedInput = {}
             selectedProduct = {}
-        }}><Plus />Entrada</Button>
+        }}>Adicionar Entrada</Button>
 </PageHeader>
 
 <EmptyWrapper
