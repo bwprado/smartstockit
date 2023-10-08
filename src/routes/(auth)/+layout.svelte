@@ -1,5 +1,5 @@
 <script>
-    import { Toast, initializeStores } from "@skeletonlabs/skeleton"
+    import { Modal, Toast, initializeStores } from "@skeletonlabs/skeleton"
     import { page } from "$app/stores"
     import "../../app.css"
     import Footer from "$lib/components/Footer.svelte"
@@ -7,6 +7,7 @@
     initializeStores()
 </script>
 
+<Modal />
 <Toast />
 <svelte:head>
     <title>Smart Stock It - {$page.url.pathname === "/login" ? "Login" : "Criar Conta"}</title>
