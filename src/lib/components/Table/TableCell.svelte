@@ -4,6 +4,6 @@
     export let customClass: string = ""
 </script>
 
-<td class={twMerge("table-cell", customClass, "!px-4")}>
+<td class={twMerge("table-cell", customClass, "!px-4 align-top")}>
     <slot />
 </td>
