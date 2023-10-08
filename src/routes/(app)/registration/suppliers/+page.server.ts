@@ -1,9 +1,9 @@
-import type { PageServerLoad } from "./$types"
+import type { PageServerLoad } from "../../../$types"
 
 export const load: PageServerLoad = async ({ locals: { supabase, getSession } }) => {
     const session = await getSession()
-    const { data: units, error: err } = await supabase
-        .from("units")
+    const { data: suppliers, error: err } = await supabase
+        .from("suppliers")
         .select("*")
         .eq("user", session?.user.id)
 
@@ -12,6 +12,6 @@ export const load: PageServerLoad = async ({ locals: { supabase, getSession } })
     }
 
     return {
-        units,
+        suppliers,
     }
 }

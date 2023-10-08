@@ -1,5 +1,5 @@
 import { error, redirect, type Actions } from "@sveltejs/kit"
-import type { Inventory, Product } from "../../../types/supabase.js"
+import type { Inventory, Product } from "../../../../types/supabase.js"
 import type { PageServerLoad } from "./$types.js"
 
 export const load: PageServerLoad = async ({ locals: { getSession, supabase } }) => {

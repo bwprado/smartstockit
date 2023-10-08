@@ -1,4 +1,4 @@
-import { redirect, type Actions, error } from "@sveltejs/kit"
+import { error, redirect } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
 
 export const load: PageServerLoad = async ({ locals: { getSession, supabase } }) => {
@@ -43,3 +43,4 @@ export const load: PageServerLoad = async ({ locals: { getSession, supabase } })
     }
 }
 
+    

@@ -1,5 +1,5 @@
 import { fail, type Actions } from "@sveltejs/kit"
-import type { Brand, Category, Product, Supplier, Unit } from "../../../types/supabase.js"
+import type { Brand, Category, Product, Supplier, Unit } from "../../../../types/supabase.js"
 import type { PageServerLoad } from "./$types.js"
 
 export const load: PageServerLoad = async ({ locals: { supabase, getSession }, depends }) => {

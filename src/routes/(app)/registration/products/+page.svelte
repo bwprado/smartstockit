@@ -101,28 +101,29 @@
             body: "Tem certeza que deseja deletar este produto?",
             response: async (response) => {
                 if (response) {
-                    try {
-                        const res = await fetch(`/api/products/delete?id=${deleteProductId}`, {
-                            method: "DELETE",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                        })
-                        const removedProduct = (await res.json()) || {}
-                        console.log(removedProduct)
-                        data.products = data.products.filter(
-                            (product) => product.id !== removedProduct.id,
-                        )
-                        toast.trigger({
-                            message: "Produto deletado com sucesso",
-                        })
-                    } catch (error) {
-                        console.log(error)
+                    const res = await fetch(`/api/products/delete?id=${deleteProductId}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    })
 
+                    if (res?.status !== 200) {
                         toast.trigger({
                             message: "Erro ao deletar produto, entre em contato com o suporte.",
+                            background: "bg-error-500",
                         })
+                        return
                     }
+
+                    const removedProduct = (await res.json()) || {}
+
+                    data.products = data.products.filter(
+                        (product) => product.id !== removedProduct.id,
+                    )
+                    toast.trigger({
+                        message: "Produto deletado com sucesso",
+                    })
                 }
             },
         })
@@ -322,33 +323,33 @@
     }
 
     const handleAddProductClick = async () => {
-        try {
-            loading = true
-            const res = await fetch(`/api/products/add`, {
-                method: "POST",
-                body: JSON.stringify(selectedProduct),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
+        loading = true
+        const res = await fetch(`/api/products/add`, {
+            method: "POST",
+            body: JSON.stringify(selectedProduct),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
 
-            const product = (await res.json()) || {}
-            data.products = [...data.products, product]
+        const { product, error } = (await res.json()) || {}
 
-            showModal = false
-            loading = false
+        if (error) {
             toast.trigger({
-                message: "Produto criado com sucesso.",
-                classes: "z-50",
-            })
-        } catch (error) {
-            console.log(error)
-            toast.trigger({
-                message: "Erro ao criar produto, entre em contato com o suporte.",
-                classes: "z-50",
+                message: error,
+                background: "bg-error-500",
             })
             return
         }
+
+        data.products = [...data.products, product]
+
+        toast.trigger({
+            message: "Produto criado com sucesso.",
+        })
+        selectedProduct = initialValue
+        showModal = false
+        loading = false
     }
 </script>
 
@@ -361,7 +362,7 @@
             on:click={() => {
                 selectedProduct = initialValue
                 showModal = true
-            }}><Plus />Adicionar Produto</Button>
+            }}>Criar Produto</Button>
         <div slot="search" class="w-full h-fit">
             <Input
                 customClasses={{

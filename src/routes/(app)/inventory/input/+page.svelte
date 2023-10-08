@@ -143,7 +143,7 @@
             showModal = true
             selectedInput = {}
             selectedProduct = {}
-        }}>Adicionar Entrada</Button>
+        }}>Adicionar Produto</Button>
 </PageHeader>
 
 <EmptyWrapper
@@ -227,6 +227,6 @@
     </svelte:fragment>
     <svelte:fragment slot="footer">
         <Button type="submit" class="mt-auto w-full" on:click={handleSubmit} {loading}
-            >Adicionar Entrada</Button>
+            >Adicionar Produto</Button>
     </svelte:fragment>
 </Modal>
