@@ -15,6 +15,8 @@
         <slot name="action" />
     </div>
     {#if $$slots.search}
-        <slot name="search" />
+        <div class="py-2 w-full">
+            <slot name="search" />
+        </div>
     {/if}
 </section>
