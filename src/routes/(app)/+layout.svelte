@@ -38,8 +38,8 @@
         {/if}
     </svelte:fragment>
 
-    <div class="px-4 lg:px-8 xl:px-20 h-full flex flex-col gap-y-2">
-        <Breadcrumbs />
+    <div class="px-4 lg:px-8 xl:px-20 h-full flex flex-col gap-y-2 py-6">
+        <!-- <Breadcrumbs /> -->
         <slot />
     </div>
     <svelte:fragment slot="pageFooter">
