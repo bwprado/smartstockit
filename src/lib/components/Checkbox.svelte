@@ -34,6 +34,7 @@
         "dark:bg-gray-600",
         "dark:border-gray-500",
         "dark:accent-primary-500",
+        "accent-primary-500",
     ])
 </script>
 
