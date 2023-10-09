@@ -23,7 +23,7 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
             brand: body.brand?.value || null,
             category: body.category?.value || null,
             supplier: body.supplier?.value || null,
-            type: body.type?.value || "raw",
+            type: body.type || "raw",
             min: +body.min,
             max: +body.max,
             balance: 0,
@@ -49,17 +49,14 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
         )
         .single()
 
-    const returnedProduct = data.map((product: Product) => ({
-        ...product,
-        units: product.unit.acronym,
-    }))
+    const { unit, ...returndProduct } = data as Product
 
     if (err) {
         return json({ error: err }, { status: 500 })
     }
 
     return json(
-        { product: returnedProduct },
+        { product: { ...returndProduct, units: unit } },
         {
             status: 202,
             statusText: "Produto adicionado com sucesso",
