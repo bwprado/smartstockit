@@ -341,7 +341,6 @@
             })
             return
         }
-
         data.products = [...data.products, product]
 
         toast.trigger({
@@ -471,6 +470,7 @@
                     }}
                     label="Preço de Venda"
                     name="price"
+                    disabled={selectedProduct.type === "raw"}
                     type="number"
                     id="price"
                     placeholder="10,00"
