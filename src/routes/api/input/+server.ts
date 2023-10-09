@@ -23,7 +23,7 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
         ...product.composition.map((item: any) => ({
             product: item.value,
             price: item?.price || 0,
-            amount: -item.amount,
+            amount: -item.amount * +input.amount,
             user: session?.user?.id,
         })),
     ]
