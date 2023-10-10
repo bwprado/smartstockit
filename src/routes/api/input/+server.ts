@@ -5,7 +5,7 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
     if (!session) {
         return json(401, { statusText: "Não autorizado, por favor refaça o login.", status: 401 })
     }
-    const { fresh, ...input } = await request.json()
+    const { fresh, productionMode, ...input } = await request.json()
 
     const { data: product, error: errProduct } = await supabase
         .from("products")
@@ -18,8 +18,7 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
         throw error(500, { message: `Erro ao buscar produto - ${errProduct?.message}` })
     }
 
-    const insert = [
-        { ...input, amount: +input.amount, user: session?.user?.id, price: +input.price || 0 },
+    const rawComposition = [
         ...product.composition.map((item: any) => ({
             product: item.value,
             price: item?.price || 0,
@@ -27,6 +26,13 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
             user: session?.user?.id,
         })),
     ]
+
+    const insert = [
+        { ...input, amount: +input.amount, user: session?.user?.id, price: +input.price || 0 },
+    ]
+    if (productionMode) {
+        insert.push(...rawComposition)
+    }
 
     const { data, error: err } = await supabase
         .from("inventory")
