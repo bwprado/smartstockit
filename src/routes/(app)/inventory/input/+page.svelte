@@ -11,7 +11,7 @@
 
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
     import { format, parseISO } from "date-fns"
-    import { Plus, Trash } from "lucide-svelte"
+    import { Trash } from "lucide-svelte"
     import type { PageServerData } from "./$types"
 
     const toast = getToastStore()
@@ -19,6 +19,7 @@
 
     let selectedProduct: any = {}
     let selectedInput: any = {}
+    let productionMode: boolean = false
 
     export let data: PageServerData
 
@@ -57,6 +58,7 @@
                 ...selectedInput,
                 product: selectedProduct.id,
                 fresh: !!selectedInput?.fresh,
+                productionMode,
             }),
         })
 
@@ -136,14 +138,34 @@
 </script>
 
 <PageHeader title="Entradas" class="pb-4">
-    <Button
-        slot="action"
-        class="w-fit"
-        on:click={() => {
-            showModal = true
-            selectedInput = {}
-            selectedProduct = {}
-        }}>Adicionar Produto</Button>
+    <div slot="action" class="flex gap-4">
+        <Button
+            class="w-fit"
+            on:click={() => {
+                showModal = true
+                selectedInput = {}
+                selectedProduct = {}
+            }}>Adicionar Produto</Button>
+        <Button
+            class="w-fit"
+            intent="secondary"
+            on:click={() => {
+                modal.trigger({
+                    type: "confirm",
+                    title: "Produzir Produtos",
+                    body: "No modo 'Produzir', você pode produzir produtos a partir de insumos do seu estoque, onde os mesmo serão automaticamente retirados do estoque e os produtos serão adicionados.",
+                    buttonTextConfirm: "Produzir",
+                    buttonTextCancel: "Cancelar",
+                    response: async (r) => {
+                        if (!r) return
+                        productionMode = true
+                        showModal = true
+                        selectedInput = {}
+                        selectedProduct = {}
+                    },
+                })
+            }}>Produzir</Button>
+    </div>
 </PageHeader>
 
 <EmptyWrapper
@@ -166,7 +188,11 @@
 
 <Modal
     bind:showModal
-    headerText={selectedInput.id ? "Alterar Entrada de Produto" : "Entrada de Produtos"}
+    headerText={selectedInput.id
+        ? "Alterar Entrada de Produto"
+        : productionMode
+        ? "Produção de Produto"
+        : "Entrada de Produtos"}
     on:close={() => {
         selectedInput = {}
         selectedProduct = {}
@@ -227,6 +253,6 @@
     </svelte:fragment>
     <svelte:fragment slot="footer">
         <Button type="submit" class="mt-auto w-full" on:click={handleSubmit} {loading}
-            >Adicionar Produto</Button>
+            >{productionMode ? "Produzir" : "Adicionar"} Produto</Button>
     </svelte:fragment>
 </Modal>
