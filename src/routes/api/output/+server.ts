@@ -21,3 +21,26 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
 
     return json(data, { status: 201, statusText: "Saída registrada com sucesso." })
 }
+
+export const DELETE: RequestHandler = async ({ locals: { supabase, getSession }, request }) => {
+    const session = await getSession()
+    if (!session) {
+        return json(401, { statusText: "Não autorizado", status: 401 })
+    }
+
+    const outputData = await request.json()
+
+    const { data, error: err } = await supabase
+        .from("inventory")
+        .delete()
+        .eq("id", outputData.id)
+        .eq("user", session?.user?.id)
+        .single()
+
+    if (err) {
+        console.log(err)
+        throw error(500, { message: `Erro ao deletar saída no estoque - ${err?.message}` })
+    }
+
+    return json(data, { status: 201, statusText: "Saída deletada com sucesso." })
+}
