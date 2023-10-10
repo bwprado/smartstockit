@@ -90,4 +90,34 @@ export const actions: Actions = {
 
         return { status: 200, body: "Usuário editado com sucesso", data }
     },
+    allowNegative: async ({ request, locals: { supabase, getSession } }) => {
+        const session = await getSession()
+        if (!session) {
+            return {
+                status: 401,
+                body: "Você não está logado",
+            }
+        }
+        const formData = await request.formData()
+        const allow_stock_negative = formData.get("allow_stock_negative") === 'true' ? true : false
+
+        const { data, error } = await supabase
+            .from("profiles")
+            .update({ allow_stock_negative })
+            .eq("user", session.user.id)
+            .eq("id", session.user.id)
+            .select()
+            .single()
+
+        if (error) {
+            console.log(error)
+
+            return {
+                status: 500,
+                body: "Alguma coisa deu errado na edição do usuário",
+            }
+        }
+
+        return { status: 200, body: "Usuário editado com sucesso", data }
+    },
 }
