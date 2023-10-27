@@ -1,8 +1,9 @@
-<script>
-    import { Modal, Toast, initializeStores } from "@skeletonlabs/skeleton"
+<script lang="ts">
     import { page } from "$app/stores"
-    import "../../app.css"
+    import { Modal, Toast, initializeStores } from "@skeletonlabs/skeleton"
+    
     import Footer from "$lib/components/Footer.svelte"
+    import "../../app.css"
 
     initializeStores()
 </script>
