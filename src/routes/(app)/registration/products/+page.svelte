@@ -13,7 +13,7 @@
 
     import { invalidate } from "$app/navigation"
     import Symbol from "$lib/components/Symbol.svelte"
-    import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
+    import { getModalStore, getToastStore, type ModalSettings } from "@skeletonlabs/skeleton"
     import { Html5Qrcode } from "html5-qrcode"
     import { Plus, QrCode, Search, Trash, X } from "lucide-svelte"
     import { onMount } from "svelte"
@@ -374,11 +374,14 @@
     }
 
     const handleAddUnit = async () => {
-        showModal = false
-        modal.trigger({
+        const modalUnitSettings: ModalSettings = {
             type: "prompt",
             title: "Adicionar Unidade",
             body: "Digite o nome da unidade que deseja adicionar.",
+            value: "Kilograma",
+            valueAttr: { type: "text", required: true, minlenght: 3 },
+            buttonTextCancel: "Cancelar",
+            buttonTextSubmit: "Adicionar",
             response: async (response) => {
                 if (response) {
                     try {
@@ -399,6 +402,7 @@
                         unitsOptions = [...unitsOptions, { name: unit.name, id: unit.id }]
                         selectedProduct.unit.id = unit.id
                         selectedProduct.unit.name = unit.name
+                        showModal = true
                     } catch (error) {
                         console.log(error)
                         toast.trigger({
@@ -410,7 +414,9 @@
                     showModal = true
                 }
             },
-        })
+        }
+        showModal = false
+        modal.trigger(modalUnitSettings)
     }
 </script>
 
