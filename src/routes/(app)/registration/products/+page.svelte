@@ -18,8 +18,8 @@
     import { Plus, QrCode, Search, Trash, X } from "lucide-svelte"
     import { onMount } from "svelte"
     import { twMerge } from "tailwind-merge"
-    import type { PageServerData } from "./$types"
     import { z } from "zod"
+    import type { PageServerData } from "./$types"
 
     const addProductSchema = z.object({
         name: z.string().min(1, "Nome do produto não pode ser vazio."),
@@ -372,6 +372,46 @@
             }
         }
     }
+
+    const handleAddUnit = async () => {
+        showModal = false
+        modal.trigger({
+            type: "prompt",
+            title: "Adicionar Unidade",
+            body: "Digite o nome da unidade que deseja adicionar.",
+            response: async (response) => {
+                if (response) {
+                    try {
+                        const res = await fetch(`/api/units`, {
+                            method: "POST",
+                            body: JSON.stringify({ name: response }),
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        })
+                        const unit = (await res.json()) || {}
+                        toast.trigger({
+                            message: "Unidade criada com sucesso.",
+                        })
+
+                        invalidate("/registration/products")
+
+                        unitsOptions = [...unitsOptions, { name: unit.name, id: unit.id }]
+                        selectedProduct.unit.id = unit.id
+                        selectedProduct.unit.name = unit.name
+                    } catch (error) {
+                        console.log(error)
+                        toast.trigger({
+                            message: "Erro ao criar unidade, entre em contato com o suporte.",
+                            background: "bg-error-500",
+                        })
+                    }
+                } else {
+                    showModal = true
+                }
+            },
+        })
+    }
 </script>
 
 <div id="reader" style="width:500px"></div>
@@ -600,12 +640,48 @@
                     type="btn-number"
                     bind:value={selectedProduct.max} />
             </div>
+            <!-- <SelectSearch
+                on:selection={(e) => {
+                    selectedProduct.unit.value = e.detail.value
+                    selectedProduct.unit.label = e.detail.label
+                }}
+                on:input={(e) => handleSelectSearchInput(e, selectedProduct.unit.label)}
+                label="Unidade"
+                options={unitsOptions.map((unit) => ({
+                    label: unit.name,
+                    value: unit.id,
+                }))}
+                id="unit"
+                name="unit"
+                bind:inputValue={selectedProduct.unit.label}
+                placeholder="Unidade do Produto">
+                <Button
+                    slot="action"
+                    on:click={handleAddUnit}
+                    type="submit"
+                    intent="secondary"
+                    class="w-fit"
+                    loading={false}
+                    disabled={selectedProduct.unit.label === "" ||
+                        selectedProduct.unit.value !== ""}>
+                    <Plus size={25} />
+                </Button>
+            </SelectSearch> -->
             <Select
                 label="Unidade"
                 name="unit"
                 bind:value={selectedProduct.unit.id}
                 options={unitsOptions}
-                id="unit" />
+                id="unit">
+                <Button
+                    slot="action"
+                    on:click={handleAddUnit}
+                    type="submit"
+                    intent="secondary"
+                    class="w-fit">
+                    <Plus size={25} />
+                </Button>
+            </Select>
             {#if selectedProduct}
                 <input name="id" id="id" value={selectedProduct.id} type="hidden" />
             {/if}
