@@ -19,7 +19,6 @@
     import { onMount } from "svelte"
     import { twMerge } from "tailwind-merge"
     import type { PageServerData } from "./$types"
-    import { ZodError, z } from "zod"
 
     const toast = getToastStore()
     const modal = getModalStore()
@@ -74,17 +73,6 @@
         html5Qrcode = new Html5Qrcode("reader")
     })
 
-    const schema = z.object({
-        name: z.string().min(1, "O nome do produto é obrigatório."),
-        balance: z.number().optional(),
-        unit: z.object({
-            name: z
-                .string()
-                .min(1, "A unidade é obrigatória, se não houver uma, por favor cadastrá-la."),
-            id: z.string().min(1, "O id da unidade é obrigatório."),
-        }),
-    })
-
     const handleRowClick = (id: string) => {
         const product = data.products.find((product) => product.id === id)
         selectedProduct = {
@@ -113,27 +101,29 @@
             body: "Tem certeza que deseja deletar este produto?",
             response: async (response) => {
                 if (response) {
-                    try {
-                        const res = await fetch(`/api/products/delete?id=${deleteProductId}`, {
-                            method: "DELETE",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                        })
-                        const removedProduct = (await res.json()) || {}
-                        console.log(removedProduct)
-                        data.products = data.products.filter(
-                            (product) => product.id !== removedProduct.id,
-                        )
-                        toast.trigger({
-                            message: "Produto deletado com sucesso",
-                        })
-                    } catch (error) {
-                        console.log(error)
+                    const res = await fetch(`/api/products/delete?id=${deleteProductId}`, {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    })
+
+                    if (res?.status !== 200) {
                         toast.trigger({
                             message: "Erro ao deletar produto, entre em contato com o suporte.",
+                            background: "bg-error-500",
                         })
+                        return
                     }
+
+                    const removedProduct = (await res.json()) || {}
+
+                    data.products = data.products.filter(
+                        (product) => product.id !== removedProduct.id,
+                    )
+                    toast.trigger({
+                        message: "Produto deletado com sucesso",
+                    })
                 }
             },
         })
@@ -333,40 +323,32 @@
     }
 
     const handleAddProductClick = async () => {
-        try {
-            // schema.parse(selectedProduct)
-            loading = true
-            const res = await fetch(`/api/products/add`, {
-                method: "POST",
-                body: JSON.stringify(selectedProduct),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
+        loading = true
+        const res = await fetch(`/api/products/add`, {
+            method: "POST",
+            body: JSON.stringify(selectedProduct),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
 
-            const product = (await res.json()) || {}
-            data.products = [...data.products, product]
+        const { product, error } = (await res.json()) || {}
 
-            showModal = false
-            loading = false
+        if (error) {
             toast.trigger({
-                message: "Produto criado com sucesso.",
-            })
-        } catch (error: ZodError | any) {
-            showModal = false
-            if (error instanceof ZodError) {
-                toast.trigger({
-                    message: error?.issues.map((issue) => issue.message).join("\n"),
-                    background: "bg-error-500",
-                })
-                return
-            }
-            toast.trigger({
-                message: error?.message || "Erro ao criar produto, entre em contato com o suporte.",
+                message: error,
                 background: "bg-error-500",
             })
             return
         }
+        data.products = [...data.products, product]
+
+        toast.trigger({
+            message: "Produto criado com sucesso.",
+        })
+        selectedProduct = initialValue
+        showModal = false
+        loading = false
     }
 </script>
 
@@ -379,7 +361,7 @@
             on:click={() => {
                 selectedProduct = initialValue
                 showModal = true
-            }}><Plus />Adicionar Produto</Button>
+            }}>Criar Produto</Button>
         <div slot="search" class="w-full h-fit">
             <Input
                 customClasses={{
@@ -488,6 +470,7 @@
                     }}
                     label="Preço de Venda"
                     name="price"
+                    disabled={selectedProduct.type === "raw"}
                     type="number"
                     id="price"
                     placeholder="10,00"
@@ -595,33 +578,6 @@
                     type="btn-number"
                     bind:value={selectedProduct.max} />
             </div>
-            <!-- <SelectSearch
-                on:selection={(e) => {
-                    selectedProduct.unit.label = e.detail.label
-                    selectedProduct.unit.value = e.detail.value
-                }}
-                on:input={(e) => handleSelectSearchInput(e, selectedProduct.supplier.label)}
-                label="Unidade"
-                name="unit"
-                options={unitsOptions.map((unit) => ({
-                    label: unit.name,
-                    value: unit.id,
-                }))}
-                id="unit"
-                placeholder="Unidade"
-                bind:inputValue={selectedProduct.unit.label}>
-                <Button
-                    slot="action"
-                    on:click={handleAddUnit}
-                    type="submit"
-                    intent="secondary"
-                    class="w-fit"
-                    loading={loadingUnit}
-                    disabled={selectedProduct.unit.label === "" ||
-                        selectedProduct.unit.value !== ""}>
-                    <Plus size={25} />
-                </Button>
-            </SelectSearch> -->
             <Select
                 label="Unidade"
                 name="unit"

@@ -48,6 +48,7 @@ export interface Profile {
     company_code: number
     image: string
     phone: number
+    allow_stock_negative: boolean
 }
 
 export interface Unit {

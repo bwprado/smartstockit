@@ -1,20 +1,20 @@
 import { json, type RequestHandler } from "@sveltejs/kit"
 import _ from "lodash"
+import type { Product } from "../../../../types/supabase"
 
 export const POST: RequestHandler = async ({ locals: { supabase, getSession }, request }) => {
     const session = await getSession()
 
     if (!session) {
-        console.log("Unauthorized session, please login.")
         return json(
-            { error: "Unauthorized session, please login." },
+            { error: "Sessão não autorizada, por favor faça o login." },
             {
                 status: 401,
             },
         )
     }
 
-    const body = JSON.parse(await request.text())
+    const body = await request.json()
 
     const product = _.omitBy(
         {
@@ -23,7 +23,7 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
             brand: body.brand?.value || null,
             category: body.category?.value || null,
             supplier: body.supplier?.value || null,
-            type: body.type?.value || "raw",
+            type: body.type || "raw",
             min: +body.min,
             max: +body.max,
             balance: 0,
@@ -31,19 +31,35 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
             cost: +body.cost,
             barcode: body.barcode,
             user: session.user.id,
+            composition: body?.composition || [],
         },
         _.isNil,
     )
 
-    const { data, error } = await supabase.from("products").insert(product).select().single()
+    const { data, error: err } = await supabase
+        .from("products")
+        .insert(product)
+        .select(
+            `*,
+            suppliers!inner(name),
+            brands!inner(name),
+            categories!inner(name),
+            unit!inner(acronym)
+            `,
+        )
+        .single()
 
-    if (error) {
-        console.log(error)
-        return json({ error }, { status: 500 })
+    const { unit, ...returndProduct } = data as Product
+
+    if (err) {
+        return json({ error: err }, { status: 500 })
     }
 
-    return json(data, {
-        status: 202,
-        statusText: "Produto adicionado com sucesso",
-    })
+    return json(
+        { product: { ...returndProduct, units: unit } },
+        {
+            status: 202,
+            statusText: "Produto adicionado com sucesso",
+        },
+    )
 }

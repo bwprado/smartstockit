@@ -4,13 +4,19 @@ export const DELETE: RequestHandler = async ({ locals: { supabase, getSession },
     const session = await getSession()
 
     if (!session) {
-        return json({ message: "Usuário não autenticado" }, { status: 401 })
+        return json(
+            { message: "Usuário não autenticado" },
+            { status: 401, statusText: "Usuário não autenticado" },
+        )
     }
 
     const id = url.searchParams.get("id")
 
     if (!id) {
-        return json({ message: "ID não informado" }, { status: 400 })
+        return json(
+            { message: "ID não informado" },
+            { status: 400, statusText: "ID não informado" },
+        )
     }
 
     const { data: product, error } = await supabase
@@ -22,7 +28,7 @@ export const DELETE: RequestHandler = async ({ locals: { supabase, getSession },
         .single()
 
     if (error) {
-        return json(error, { status: 500 })
+        return json(error, { status: 500, statusText: error.message })
     }
 
     return json(product, { status: 200, statusText: "Produto removido com sucesso." })

@@ -30,7 +30,7 @@
                     checked={i === 0}
                     {name}
                     class={twMerge(
-                        "radio dark:checked:accent-primary-500 dark:accent-surface-700 accent-white",
+                        "radio dark:checked:accent-primary-500 dark:accent-surface-700 accent-primary-500",
                         className,
                     )}
                     type="radio"

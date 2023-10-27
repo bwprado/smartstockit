@@ -8,11 +8,10 @@
         label?: string
         input?: string
     } = {}
-    export let type: HTMLInputElement["type"] = "checkbox"
     export let name: string = "input"
     export let id: string = "input"
     export let required: boolean = false
-    export let value: string = ""
+    export let value: any = undefined
     export let disabled: boolean = false
     export let selected: boolean = false
     export let message: string = ""
@@ -34,6 +33,7 @@
         "dark:bg-gray-600",
         "dark:border-gray-500",
         "dark:accent-primary-500",
+        "accent-primary-500",
     ])
 </script>
 

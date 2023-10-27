@@ -8,6 +8,7 @@
     import { Minus } from "lucide-svelte"
     import { fade } from "svelte/transition"
     import { twMerge } from "tailwind-merge"
+    import Symbol from "./Symbol.svelte"
 
     export let label: string = ""
     export let name: string = "input"
@@ -69,10 +70,10 @@
                                     name={item.label + "amount" + index}
                                     id={item.label + "amount" + index}
                                     customClasses={{
-                                        wrapper: "w-full",
+                                        wrapper: "w-full h-full",
                                         input: "w-full rounded-none",
-                                    }}
-                                    symbol={{ position: "right", text: item?.acronym || "" }}>
+                                    }}>
+                                    <Symbol class="rounded-e-md rounded-s-none h-10" slot="symbolRight" text={composition[index]?.acronym || ""} />
                                 </Input>
                             </td>
                             <td class="pl-2 right-0">

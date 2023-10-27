@@ -6,15 +6,17 @@
     import PageHeader from "$lib/components/PageHeader.svelte"
     import SelectSearch from "$lib/components/SelectSearch.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-
-    import { getToastStore } from "@skeletonlabs/skeleton"
+    import IconButton from "$lib/components/IconButton.svelte"
     import _ from "lodash"
-    import { Minus } from "lucide-svelte"
+
+    import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
+    import { Trash } from "lucide-svelte"
     import { z } from "zod"
-    import type { Inventory } from "../../../types/supabase"
     import type { PageServerData } from "./$types"
+    import type { Inventory } from "../../../../types/supabase"
 
     const toast = getToastStore()
+    const modal = getModalStore()
 
     export let data: PageServerData
 
@@ -86,6 +88,37 @@
         selectedProduct = data.products.find((product) => product.id === selectedOutput.product)
         showModal = true
     }
+
+    const handleDeleteClick = async () => {
+        showModal = false
+        modal.trigger({
+            type: "confirm",
+            title: "Tem certeza que deseja excluir essa saída?",
+            body: "Essa ação não pode ser desfeita.",
+            buttonTextConfirm: "Excluir",
+            response: async (r) => {
+                if (r) {
+                    const res = await fetch(`/api/output`, {
+                        method: "DELETE",
+                        body: JSON.stringify(selectedOutput),
+                    })
+                    if (res.ok) {
+                        data.outputs = data.outputs.filter(
+                            (output) => output.id !== selectedOutput.id,
+                        )
+                        toast.trigger({
+                            message: "Saída excluída com sucesso!",
+                        })
+                    } else {
+                        toast.trigger({
+                            message: "Ocorreu um erro ao excluir a saída.",
+                            background: "bg-error-500",
+                        })
+                    }
+                }
+            },
+        })
+    }
 </script>
 
 <PageHeader title="Saídas" class="pb-4">
@@ -135,6 +168,15 @@
 <Modal
     bind:showModal
     headerText={_.isEmpty(selectedOutput) ? "Retirar Produto" : "Alterar Retirada"}>
+    <svelte:fragment slot="action">
+        {#if selectedOutput.id}
+            <IconButton on:click={handleDeleteClick} intent="secondary">
+                <svelte:fragment slot="icon">
+                    <Trash />
+                </svelte:fragment>
+            </IconButton>
+        {/if}
+    </svelte:fragment>
     <div slot="body" class="flex flex-col gap-y-4 h-full">
         <SelectSearch
             on:selection={(e) => {

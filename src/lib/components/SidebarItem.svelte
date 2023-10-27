@@ -45,7 +45,7 @@
 
 <button on:click={$$slots.subitem ? () => (expanded = !expanded) : () => {}}>
     <a href={$$slots.subitem ? undefined : link} class="w-full">
-        <li class={linkStyle({ active: $page.url.pathname === link || expanded })}>
+        <li class={linkStyle({ active: $page.url.pathname === link })}>
             <div class="flex gap-x-6">
                 <div
                     class="w-fit text-surface-900 dark:text-white data-[active=true]:text-white"

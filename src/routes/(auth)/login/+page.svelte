@@ -2,16 +2,19 @@
     import { enhance } from "$app/forms"
     import Button from "$lib/components/Button.svelte"
     import Input from "$lib/components/Input.svelte"
-    import { ProgressRadial } from "@skeletonlabs/skeleton"
+    import { ProgressRadial, getModalStore } from "@skeletonlabs/skeleton"
     import type { SubmitFunction } from "@sveltejs/kit"
 
-    $: loading = false
+    const modal = getModalStore()
 
     const handleSubmit: SubmitFunction = async () => {
-        loading = true
+        modal.trigger({
+            type: "alert",
+            title: "Carregando",
+            body: "Carregando SmartStockIt, por favor aguarde...",
+        })
         return async ({ update }) => {
             await update()
-            loading = false
         }
     }
 </script>
@@ -40,18 +43,14 @@
                 type="submit"
                 formaction="?provider=google"
                 class="flex items-center justify-center bg-surface-900 rounded-lg border border-scale-500 hover:bg-secondary-500/10 transition w-full h-10">
-                {#if loading}
-                    <ProgressRadial width="w-5" fill="text-white" stroke={100} />
-                {:else}
-                    <div
-                        class="relative flex items-center justify-center shrink-0 h-10 w-10 rounded-lg group overflow-hidden transition">
-                        <img
-                            class="w-5"
-                            src="https://supabase.com/docs/img/icons/google-icon.svg"
-                            alt="Google Icon" />
-                    </div>
-                    <h5 class="text-base text-scale-1200 px-4">Google</h5>
-                {/if}
+                <div
+                    class="relative flex items-center justify-center shrink-0 h-10 w-10 rounded-lg group overflow-hidden transition">
+                    <img
+                        class="w-5"
+                        src="https://supabase.com/docs/img/icons/google-icon.svg"
+                        alt="Google Icon" />
+                </div>
+                <h5 class="text-base text-scale-1200 px-4">Google</h5>
             </button>
         </form>
     </div>

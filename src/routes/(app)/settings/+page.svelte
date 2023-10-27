@@ -6,6 +6,7 @@
     import Button from "$lib/components/Button.svelte"
     import { enhance } from "$app/forms"
     import type { SubmitFunction } from "@sveltejs/kit"
+    import Checkbox from "$lib/components/Checkbox.svelte"
 
     const toast = getToastStore()
 
@@ -14,6 +15,8 @@
 
     $: loading = false
     let tabSet: number = 0
+
+    let allowNegative: boolean = data?.user?.allow_stock_negative || false
 
     const handleSubmit: SubmitFunction = async ({}) => {
         loading = true
@@ -40,10 +43,15 @@
     }
 </script>
 
-<TabGroup>
+<TabGroup rounded="rounded-t-md">
     <Tab bind:group={tabSet} name="users" value={0}>
         <div class="text-sm flex flex-col items-center justify-center gap-y-2">
             <span>Perfil</span>
+        </div>
+    </Tab>
+    <Tab bind:group={tabSet} name="users" value={1}>
+        <div class="text-sm flex flex-col items-center justify-center gap-y-2">
+            <span>Opções</span>
         </div>
     </Tab>
     <svelte:fragment slot="panel">
@@ -84,7 +92,16 @@
                 <Button type="submit" {loading} class="sm:w-1/3 sm:self-end mt-auto">Salvar</Button>
             </form>
         {:else if tabSet === 1}
-            <div>In development</div>
+            <form method="post" action="?/allowNegative" class="flex flex-col gap-4">
+                <p>Para você permitir que o estoque possua saldo negativo, marque esta opção.</p>
+                <Checkbox
+                    id="allow_stock_negative"
+                    name="allow_stock_negative"
+                    label="Permitir saldo negativo"
+                    bind:value={allowNegative}
+                    bind:checked={allowNegative} />
+                <Button type="submit" {loading} class="sm:w-1/3 sm:self-end mt-auto">Salvar</Button>
+            </form>
         {:else if tabSet === 2}
             (tab panel 3 contents)
         {/if}
