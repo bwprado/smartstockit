@@ -5,11 +5,12 @@
     import Modal from "$lib/components/Modal.svelte"
     import PageHeader from "$lib/components/PageHeader.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-    
+
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
     import { Plus, Trash } from "lucide-svelte"
-    import type { Unit } from "../../../types/supabase"
+    import type { Unit } from "../../../../types/supabase"
     import type { PageServerData } from "./$types"
+    import EmptyWrapper from "$lib/components/EmptyWrapper.svelte"
 
     const toast = getToastStore()
     const modal = getModalStore()
@@ -140,13 +141,18 @@
             showModal = true
         }}><Plus />Medida</Button>
 </PageHeader>
-<Table
-    columns={[
-        { label: "Nome da Unidade", key: "name", type: "string" },
-        { label: "Acrônimo", key: "acronym", type: "string" },
-    ]}
-    data={data.units}
-    {handleRowClick} />
+<EmptyWrapper
+    length={data.units.length}
+    message="Você ainda não cadastrou nenhuma unidade de medida de produtos."
+    title="Não há unidades de medida">
+    <Table
+        columns={[
+            { label: "Nome da Unidade", key: "name", type: "string" },
+            { label: "Acrônimo", key: "acronym", type: "string" },
+        ]}
+        data={data.units}
+        {handleRowClick} />
+</EmptyWrapper>
 
 <Modal
     bind:showModal
