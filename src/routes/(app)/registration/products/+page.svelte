@@ -19,6 +19,15 @@
     import { onMount } from "svelte"
     import { twMerge } from "tailwind-merge"
     import type { PageServerData } from "./$types"
+    import { z } from "zod"
+
+    const addProductSchema = z.object({
+        name: z.string().min(1, "Nome do produto não pode ser vazio."),
+        unit: z.object({
+            name: z.string().min(1, "Unidade do produto não pode ser vazio."),
+            id: z.string().min(1, "Unidade do produto não pode ser vazio."),
+        }),
+    })
 
     const toast = getToastStore()
     const modal = getModalStore()
@@ -323,32 +332,45 @@
     }
 
     const handleAddProductClick = async () => {
-        loading = true
-        const res = await fetch(`/api/products/add`, {
-            method: "POST",
-            body: JSON.stringify(selectedProduct),
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-
-        const { product, error } = (await res.json()) || {}
-
-        if (error) {
-            toast.trigger({
-                message: error,
-                background: "bg-error-500",
+        try {
+            await addProductSchema.parseAsync(selectedProduct)
+            loading = true
+            const res = await fetch(`/api/products/add`, {
+                method: "POST",
+                body: JSON.stringify(selectedProduct),
+                headers: {
+                    "Content-Type": "application/json",
+                },
             })
-            return
-        }
-        data.products = [...data.products, product]
 
-        toast.trigger({
-            message: "Produto criado com sucesso.",
-        })
-        selectedProduct = initialValue
-        showModal = false
-        loading = false
+            const { product, error } = (await res.json()) || {}
+
+            if (error) {
+                toast.trigger({
+                    message: error,
+                    background: "bg-error-500",
+                })
+                return
+            }
+            data.products = [...data.products, product]
+
+            toast.trigger({
+                message: "Produto criado com sucesso.",
+            })
+            selectedProduct = initialValue
+            showModal = false
+            loading = false
+        } catch (error) {
+            showModal = false
+            console.log(error)
+            if (error instanceof z.ZodError) {
+                toast.trigger({
+                    message: error.issues.map((issue) => issue.message).join("\n"),
+                    background: "bg-error-500",
+                })
+                return
+            }
+        }
     }
 </script>
 
