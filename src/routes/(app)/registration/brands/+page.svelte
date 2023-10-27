@@ -9,7 +9,7 @@
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
     import { Plus, Trash } from "lucide-svelte"
     import { twMerge } from "tailwind-merge"
-    import type { Brand } from "../../../types/supabase"
+    import type { Brand } from "../../../../types/supabase"
     import type { PageServerData } from "./$types"
 
     const toast = getToastStore()
