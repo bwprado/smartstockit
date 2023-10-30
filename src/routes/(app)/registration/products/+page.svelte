@@ -20,7 +20,6 @@
     import { twMerge } from "tailwind-merge"
     import { z } from "zod"
     import type { PageServerData } from "./$types"
-    import type { ChangeEventHandler } from "svelte/elements"
 
     const addProductSchema = z.object({
         name: z.string().min(1, "Nome do produto não pode ser vazio."),
@@ -168,107 +167,152 @@
     }
 
     const handleAddCategory = async (e: MouseEvent) => {
-        if (selectedProduct.category.label === "") {
-            return
+        const modalCattegorySettings: ModalSettings = {
+            type: "prompt",
+            title: "Adicionar Fornecedor",
+            body: "Digite o nome da fornecedor que deseja adicionar.",
+            valueAttr: { type: "text", required: true, minlenght: 3 },
+            buttonTextCancel: "Cancelar",
+            buttonTextSubmit: "Adicionar",
+            response: async (response) => {
+                if (response && response.length > 3) {
+                    try {
+                        loadingCategory = true
+                        const res = await fetch(`/api/categories`, {
+                            method: "POST",
+                            body: JSON.stringify({ name: response }),
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        })
+                        const category = (await res.json()) || {}
+                        toast.trigger({
+                            message: "Categoria criada com sucesso.",
+                        })
+
+                        invalidate("/products")
+
+                        data.categories = [...data.categories, category]
+
+                        categoriesOptions = [
+                            ...categoriesOptions,
+                            { label: category.name, value: category.id },
+                        ]
+                        selectedProduct.category.value = category.id
+                        selectedProduct.category.label = category.name
+
+                        showModal = true
+                    } catch (error) {
+                        console.log(error)
+
+                        toast.trigger({
+                            message: "Erro ao criar categoria, entre em contato com o suporte.",
+                        })
+                    }
+                } else {
+                    showModal = true
+                }
+            },
         }
-        try {
-            loadingCategory = true
-            const res = await fetch(`/api/categories`, {
-                method: "POST",
-                body: JSON.stringify({ name: selectedProduct.category.label }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-            const { data: category } = (await res.json()) || {}
-            toast.trigger({
-                message: "Categoria criada com sucesso.",
-            })
-
-            invalidate("/products")
-            categoriesOptions = [...categoriesOptions, { label: category.name, value: category.id }]
-            selectedProduct.category.value = category.id
-            selectedProduct.category.label = category.name
-
-            loadingCategory = false
-        } catch (error) {
-            console.log(error)
-
-            toast.trigger({
-                message: "Erro ao criar categoria, entre em contato com o suporte.",
-            })
-        }
+        showModal = false
+        modal.trigger(modalCattegorySettings)
     }
 
     const handleAddBrand = async (e: MouseEvent) => {
-        if (selectedProduct.brand.label === "") {
-            return
+        const modalBrandSettings: ModalSettings = {
+            type: "prompt",
+            title: "Adicionar Marca",
+            body: "Digite o nome da marca que deseja adicionar.",
+            valueAttr: { type: "text", required: true, minlenght: 3 },
+            buttonTextCancel: "Cancelar",
+            buttonTextSubmit: "Adicionar",
+            response: async (response) => {
+                if (response && response.length > 3) {
+                    try {
+                        const res = await fetch(`/api/brands`, {
+                            method: "POST",
+                            body: JSON.stringify({ name: response }),
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        })
+                        const brand = (await res.json()) || {}
+                        toast.trigger({
+                            message: "Marca criada com sucesso.",
+                            classes: "z-50",
+                        })
+
+                        invalidate("/products")
+
+                        data.brands = [...data.brands, brand]
+                        brandsOptions = [...brandsOptions, { label: brand.name, value: brand.id }]
+                        selectedProduct.brand.value = brand.id
+                        selectedProduct.brand.label = brand.name
+                        showModal = true
+                    } catch (error) {
+                        console.log(error)
+                        toast.trigger({
+                            message: "Erro ao criar marca, entre em contato com o suporte.",
+                            classes: "z-50",
+                        })
+                    }
+                } else {
+                    showModal = true
+                }
+            },
         }
-        try {
-            loadingBrand = true
-            const res = await fetch(`/api/brands`, {
-                method: "POST",
-                body: JSON.stringify({ name: selectedProduct.brand.label }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-            const brand = (await res.json()) || {}
-
-            toast.trigger({
-                message: "Marca criada com sucesso.",
-                classes: "z-50",
-            })
-
-            invalidate("/products")
-
-            brandsOptions = [...brandsOptions, { label: brand.name, value: brand.id }]
-            selectedProduct.brand.value = brand.id
-            selectedProduct.brand.label = brand.name
-
-            loadingBrand = false
-        } catch (error) {
-            console.log(error)
-            toast.trigger({
-                message: "Erro ao criar marca, entre em contato com o suporte.",
-                classes: "z-50",
-            })
-        }
+        showModal = false
+        modal.trigger(modalBrandSettings)
     }
 
     const handleAddSupplier = async (e: MouseEvent) => {
-        if (selectedProduct.supplier.label === "") {
-            return
+        const modalSupplierSettings: ModalSettings = {
+            type: "prompt",
+            title: "Adicionar Fornecedor",
+            body: "Digite o nome da fornecedor que deseja adicionar.",
+            valueAttr: { type: "text", required: true, minlenght: 3 },
+            buttonTextCancel: "Cancelar",
+            buttonTextSubmit: "Adicionar",
+            response: async (response) => {
+                if (response && response.length > 3) {
+                    try {
+                        const res = await fetch(`/api/suppliers`, {
+                            method: "POST",
+                            body: JSON.stringify({ name: response }),
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        })
+                        const { data: supplier } = (await res.json()) || {}
+
+                        toast.trigger({
+                            message: "Fornecedor criado com sucesso.",
+                            classes: "z-50",
+                        })
+
+                        invalidate("/products")
+
+                        data.suppliers = [...data.suppliers, supplier]
+                        suppliersOptions = [
+                            ...suppliersOptions,
+                            { label: supplier.name, value: supplier.id },
+                        ]
+                        selectedProduct.supplier.value = supplier.id
+                        selectedProduct.supplier.label = supplier.name
+                        showModal = true
+                    } catch (error) {
+                        console.log(error)
+                        toast.trigger({
+                            message: "Erro ao criar fornecedor, entre em contato com o suporte.",
+                        })
+                    }
+                } else {
+                    showModal = true
+                }
+            },
         }
-        try {
-            loadingSupplier = true
-            const res = await fetch(`/api/suppliers`, {
-                method: "POST",
-                body: JSON.stringify({ name: selectedProduct.supplier.label }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-            const { data: supplier } = (await res.json()) || {}
-
-            toast.trigger({
-                message: "Fornecedor criado com sucesso.",
-                classes: "z-50",
-            })
-
-            invalidate("/products")
-
-            suppliersOptions = [...suppliersOptions, { label: supplier.name, value: supplier.id }]
-            selectedProduct.supplier.value = supplier.id
-            selectedProduct.supplier.label = supplier.name
-
-            loadingSupplier = false
-        } catch (error) {
-            console.log(error)
-            toast.trigger({
-                message: "Erro ao criar fornecedor, entre em contato com o suporte.",
-            })
-        }
+        showModal = false
+        modal.trigger(modalSupplierSettings)
     }
 
     const handleSelectSearchInput = (e: Event, prop: string) => {
@@ -357,9 +401,13 @@
                 {
                     ...product,
                     units: data.units.find(({ id }) => id === product.units) || {},
+                    brands: data.brands.find(({ id }) => id === product.brand) || {},
+                    categories: data.categories.find(({ id }) => id === product.category) || {},
+                    suppliers: data.suppliers.find(({ id }) => id === product.supplier) || {},
                 },
             ]
-            
+            console.log(data.products)
+
             toast.trigger({
                 message: "Produto criado com sucesso.",
             })
@@ -406,7 +454,6 @@
                         })
 
                         invalidate("/registration/products")
-                        console.log(unit)
                         data.units = [...data.units, unit]
                         unitsOptions = [...unitsOptions, unit]
                         selectedProduct.unit.id = unit.id
@@ -576,6 +623,11 @@
             </div>
             <SelectSearch
                 on:selection={(e) => {
+                    if (e.detail.value === "") {
+                        selectedProduct.brand.value = ""
+                        selectedProduct.brand.label = ""
+                        return
+                    }
                     selectedProduct.brand.value = e.detail.value
                     selectedProduct.brand.label = e.detail.label
                 }}
@@ -592,10 +644,7 @@
                     on:click={handleAddBrand}
                     type="submit"
                     intent="secondary"
-                    class="w-fit"
-                    loading={loadingBrand}
-                    disabled={selectedProduct?.brand?.label === "" ||
-                        selectedProduct?.brand?.value !== ""}>
+                    class="w-fit">
                     <Plus size={25} />
                 </Button>
             </SelectSearch>
@@ -616,10 +665,7 @@
                     on:click={handleAddSupplier}
                     type="submit"
                     intent="secondary"
-                    class="w-fit"
-                    loading={loadingSupplier}
-                    disabled={selectedProduct.supplier.label === "" ||
-                        selectedProduct.supplier.value !== ""}>
+                    class="w-fit">
                     <Plus size={25} />
                 </Button>
             </SelectSearch>
@@ -640,10 +686,7 @@
                     on:click={handleAddCategory}
                     type="submit"
                     intent="secondary"
-                    class="w-fit"
-                    loading={loadingCategory}
-                    disabled={selectedProduct.category.label === "" ||
-                        selectedProduct.category.value !== ""}>
+                    class="w-fit">
                     <Plus size={25} />
                 </Button>
             </SelectSearch>
