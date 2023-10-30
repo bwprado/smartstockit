@@ -20,12 +20,12 @@
     import { twMerge } from "tailwind-merge"
     import { z } from "zod"
     import type { PageServerData } from "./$types"
+    import type { ChangeEventHandler } from "svelte/elements"
 
     const addProductSchema = z.object({
         name: z.string().min(1, "Nome do produto não pode ser vazio."),
         unit: z.object({
             name: z.string().min(1, "Unidade do produto não pode ser vazio."),
-            id: z.string().min(1, "Unidade do produto não pode ser vazio."),
         }),
     })
 
@@ -352,7 +352,13 @@
                 })
                 return
             }
-            data.products = [...data.products, product]
+            data.products = [
+                ...data.products,
+                {
+                    ...product,
+                    unit: data.units.find(({ id }) => id === product.unit)?.acronym || "",
+                },
+            ]
 
             toast.trigger({
                 message: "Produto criado com sucesso.",
@@ -378,16 +384,18 @@
             type: "prompt",
             title: "Adicionar Unidade",
             body: "Digite o nome da unidade que deseja adicionar.",
-            value: "Kilograma",
             valueAttr: { type: "text", required: true, minlenght: 3 },
             buttonTextCancel: "Cancelar",
             buttonTextSubmit: "Adicionar",
             response: async (response) => {
-                if (response) {
+                if (response && response.length > 3) {
                     try {
                         const res = await fetch(`/api/units`, {
                             method: "POST",
-                            body: JSON.stringify({ name: response }),
+                            body: JSON.stringify({
+                                name: response,
+                                acronym: response.substring(0, 3).toLowerCase(),
+                            }),
                             headers: {
                                 "Content-Type": "application/json",
                             },
@@ -417,6 +425,12 @@
         }
         showModal = false
         modal.trigger(modalUnitSettings)
+    }
+
+    const handleUnitSelect = (e: Event) => {
+        const value = (e.target as HTMLSelectElement).value
+        selectedProduct.unit.id = value
+        selectedProduct.unit.name = data.units.find(({ id }) => id === value)?.name || ""
     }
 </script>
 
@@ -676,7 +690,7 @@
             <Select
                 label="Unidade"
                 name="unit"
-                bind:value={selectedProduct.unit.id}
+                on:change={handleUnitSelect}
                 options={unitsOptions}
                 id="unit">
                 <Button
