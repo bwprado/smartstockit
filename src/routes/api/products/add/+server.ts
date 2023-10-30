@@ -36,22 +36,12 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
         _.isNil,
     )
 
-    const { data, error: err } = await supabase
-        .from("products")
-        .insert(product)
-        .select(
-            `*,
-            suppliers!inner(name),
-            brands!inner(name),
-            categories!inner(name),
-            unit!inner(acronym)
-            `,
-        )
-        .single()
+    const { data, error: err } = await supabase.from("products").insert(product).select().single()
 
-    const { unit, ...returndProduct } = data as Product
+    const { unit, ...returndProduct } = (data as Product) || {}
 
     if (err) {
+        console.log(err)
         return json({ error: err }, { status: 500 })
     }
 
