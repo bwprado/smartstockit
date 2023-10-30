@@ -356,10 +356,10 @@
                 ...data.products,
                 {
                     ...product,
-                    unit: data.units.find(({ id }) => id === product.unit)?.acronym || "",
+                    units: data.units.find(({ id }) => id === product.units) || {},
                 },
             ]
-
+            
             toast.trigger({
                 message: "Produto criado com sucesso.",
             })
@@ -406,8 +406,9 @@
                         })
 
                         invalidate("/registration/products")
-
-                        unitsOptions = [...unitsOptions, { name: unit.name, id: unit.id }]
+                        console.log(unit)
+                        data.units = [...data.units, unit]
+                        unitsOptions = [...unitsOptions, unit]
                         selectedProduct.unit.id = unit.id
                         selectedProduct.unit.name = unit.name
                         showModal = true
@@ -692,6 +693,7 @@
                 name="unit"
                 on:change={handleUnitSelect}
                 options={unitsOptions}
+                value={selectedProduct.unit.id}
                 id="unit">
                 <Button
                     slot="action"
