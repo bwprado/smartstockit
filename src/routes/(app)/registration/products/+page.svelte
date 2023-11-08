@@ -690,6 +690,14 @@
                     <Plus size={25} />
                 </Button>
             </SelectSearch>
+            <div class="flex w-1/2">
+                <Input
+                    label="Quantidade Inicial"
+                    name="balance"
+                    id="balance"
+                    type="btn-number"
+                    bind:value={selectedProduct.balance} />
+            </div>
             <div class="grid grid-cols-2 gap-x-4">
                 <Input
                     label="Quantidade Mínima"
