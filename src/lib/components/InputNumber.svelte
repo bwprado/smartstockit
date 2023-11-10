@@ -74,6 +74,7 @@
             "border-r",
             "dark:border-surface-500",
             "dark:ring-surface-500",
+            "select-none",
         ],
         {
             variants: {
