@@ -47,8 +47,10 @@
                 intent: {
                     primary: ["bg-primary-500", "text-primary-50", "hover:bg-primary-800"],
                     secondary: [
-                        "bg-white",
-                        "text-primary-500",
+                        "bg-surface-700",
+                        "border",
+                        "border-surface-500",
+                        "text-surface-200",
                         "hover:bg-primary-500",
                         "hover:text-white",
                         "hover:dark:text-primary-500",
