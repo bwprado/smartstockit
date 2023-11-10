@@ -5,20 +5,24 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
     if (!session) {
         return json(401, { statusText: "Não autorizado", status: 401 })
     }
-    const outputData = await request.json()
-    const negativeAmount = -outputData.amount
+    const outputData: { label: string; id: string; amount: number }[] = await request.json()
+    const negativeAmountData = outputData.map(({ amount, id }) => ({
+        product: id,
+        amount: amount * -1,
+        user: session?.user?.id,
+        price: 0,
+    }))
     const { data, error: err } = await supabase
         .from("inventory")
-        .insert([{ ...outputData, amount: negativeAmount, user: session?.user?.id, price: 0 }])
+        .insert(negativeAmountData)
         .eq("user", session?.user?.id)
         .select()
-        .single()
 
     if (err) {
         console.log(err)
         throw error(500, { message: `Erro ao inserir saída no estoque - ${err?.message}` })
     }
-
+    console.log(data)
     return json(data, { status: 201, statusText: "Saída registrada com sucesso." })
 }
 
