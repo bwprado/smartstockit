@@ -1,14 +1,21 @@
 <script lang="ts">
     import { page } from "$app/stores"
-    import { Modal, Toast, initializeStores } from "@skeletonlabs/skeleton"
-    
+    import { Modal, Toast, initializeStores, type ModalComponent } from "@skeletonlabs/skeleton"
+
     import Footer from "$lib/components/Footer.svelte"
     import "../../app.css"
+    import ModalLoading from "$lib/components/ModalLoading.svelte"
 
     initializeStores()
+
+    const modalRegistry: Record<string, ModalComponent> = {
+        modalComponentLoading: {
+            ref: ModalLoading,
+        },
+    }
 </script>
 
-<Modal />
+<Modal components={modalRegistry} />
 <Toast />
 <svelte:head>
     <title>Smart Stock It - {$page.url.pathname === "/login" ? "Login" : "Criar Conta"}</title>
