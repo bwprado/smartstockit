@@ -1,19 +1,19 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte"
     import EmptyWrapper from "$lib/components/EmptyWrapper.svelte"
+    import IconButton from "$lib/components/IconButton.svelte"
     import Input from "$lib/components/Input.svelte"
     import Modal from "$lib/components/Modal.svelte"
     import PageHeader from "$lib/components/PageHeader.svelte"
     import SelectSearch from "$lib/components/SelectSearch.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-    import IconButton from "$lib/components/IconButton.svelte"
     import _ from "lodash"
 
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
-    import { Trash } from "lucide-svelte"
+    import { ArrowDown, Trash } from "lucide-svelte"
     import { z } from "zod"
-    import type { PageServerData } from "./$types"
     import type { Inventory } from "../../../../types/supabase"
+    import type { PageServerData } from "./$types"
 
     const toast = getToastStore()
     const modal = getModalStore()
@@ -22,15 +22,10 @@
 
     let selectedOutput: any = {}
     let selectedProduct: any = {}
+    let selectedOutputProducts: { label: string; id: string; amount: number }[] = []
 
-    $: showModal = false
+    $: showModal = true
     $: loading = false
-
-    const Output = z.object({
-        id: z.string().optional(),
-        product: z.string(),
-        amount: z.string(),
-    })
 
     const searchableProducts = data.products.map((product) => ({
         value: product.id,
@@ -39,11 +34,10 @@
     }))
 
     const handleSubmit = async () => {
-        const validation = Output.safeParse(selectedOutput)
-        if (!validation.success) {
+        if (selectedOutputProducts.length === 0) {
             showModal = false
             toast.trigger({
-                message: "Preencha todos os campos corretamente.",
+                message: "Adicione os produtos que deseja fazer retirada.",
                 background: "bg-error-500",
             })
             return
@@ -55,17 +49,18 @@
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(selectedOutput),
+            body: JSON.stringify(selectedOutputProducts),
         })
 
         if (res.ok) {
-            const output: Inventory = await res.json()
+            const outputs: Inventory[] = await res.json()
             data.outputs = [
                 ...data.outputs,
-                {
+                ...outputs.map((output) => ({
                     ...output,
-                    productName: data.products.find((p) => p.id === output.product)?.name,
-                },
+                    productName: data.products.find((product) => product.id === output.product)
+                        ?.name,
+                })),
             ]
 
             loading = false
@@ -119,6 +114,19 @@
             },
         })
     }
+
+    const handleAddProductToOutuput = () => {
+        selectedOutputProducts = [
+            ...selectedOutputProducts,
+            {
+                label: selectedProduct?.name,
+                id: selectedProduct?.id,
+                amount: selectedOutput.amount,
+            },
+        ]
+        selectedOutput = { amount: "0" }
+        selectedProduct = {}
+    }
 </script>
 
 <PageHeader title="Saídas" class="pb-4">
@@ -129,6 +137,7 @@
             showModal = true
             selectedOutput = {}
             selectedProduct = {}
+            selectedOutputProducts = []
         }}>Retirar Produto</Button>
 </PageHeader>
 
@@ -165,9 +174,7 @@
     </section>
 </EmptyWrapper>
 
-<Modal
-    bind:showModal
-    headerText={_.isEmpty(selectedOutput) ? "Retirar Produto" : "Alterar Retirada"}>
+<Modal bind:showModal headerText={selectedOutput?.id ? "Alterar Retiradas" : "Retirar Produtos"}>
     <svelte:fragment slot="action">
         {#if selectedOutput.id}
             <IconButton on:click={handleDeleteClick} intent="secondary">
@@ -178,6 +185,10 @@
         {/if}
     </svelte:fragment>
     <div slot="body" class="flex flex-col gap-y-4 h-full">
+        <p class="text-xs text-surface-300">
+            Selecione o produto que deseja adicionar à uma retirada, juntamente com a quantidade que
+            desejas e clique em <strong>Adicionar à Retirada</strong>. Você pode adicionar quantos produtos quiser.
+        </p>
         <SelectSearch
             on:selection={(e) => {
                 selectedOutput.product = e.detail.value
@@ -197,6 +208,41 @@
             name="amount"
             type="btn-number"
             bind:value={selectedOutput.amount} />
+        <Button
+            class="h-10"
+            type="button"
+            intent="secondary"
+            on:click={handleAddProductToOutuput}
+            disabled={_.isEmpty(selectedOutput)}>
+            <ArrowDown />
+            Adicionar à Retirada
+        </Button>
+        <EmptyWrapper
+            title="Nenhum produto adicionado"
+            message="Nenhum produto adicionado para realização da retirada."
+            length={selectedOutputProducts.length}>
+            <section class="table-container rounded-lg" slot="content">
+                <Table
+                    columns={[
+                        {
+                            label: "Produto",
+                            key: "label",
+                            type: "string",
+                        },
+                        {
+                            label: "Quantidade",
+                            key: "amount",
+                            type: "number",
+                        },
+                        {
+                            label: "Edit",
+                            key: "",
+                            type: "edit",
+                        },
+                    ]}
+                    data={selectedOutputProducts} />
+            </section>
+        </EmptyWrapper>
     </div>
     <svelte:fragment slot="footer">
         <Button
