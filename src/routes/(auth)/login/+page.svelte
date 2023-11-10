@@ -2,16 +2,15 @@
     import { enhance } from "$app/forms"
     import Button from "$lib/components/Button.svelte"
     import Input from "$lib/components/Input.svelte"
-    import { ProgressRadial, getModalStore } from "@skeletonlabs/skeleton"
+    import { getModalStore } from "@skeletonlabs/skeleton"
     import type { SubmitFunction } from "@sveltejs/kit"
 
     const modal = getModalStore()
 
     const handleSubmit: SubmitFunction = async () => {
         modal.trigger({
-            type: "alert",
-            title: "Carregando",
-            body: "Carregando SmartStockIt, por favor aguarde...",
+            type: "component",
+            component: "modalComponentLoading",
         })
         return async ({ update }) => {
             await update()
