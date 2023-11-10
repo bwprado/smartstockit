@@ -108,10 +108,16 @@
             type="number"
             inputmode="numeric"
             class={twMerge(inputStyle, customClasses.input)} />
-        <button type="button" class={buttonStyle({ type: "minus" })} on:click={() => _value--}>
+        <button
+            type="button"
+            class={buttonStyle({ type: "minus" })}
+            on:click={() => (value = value ? (+value - 1).toString() : "0")}>
             <Minus class="text-primary-500" />
         </button>
-        <button type="button" class={buttonStyle({ type: "plus" })} on:click={() => _value++}>
+        <button
+            type="button"
+            class={buttonStyle({ type: "plus" })}
+            on:click={() => (value = value ? (+value + 1).toString() : "0")}>
             <Plus class="text-primary-500" />
         </button>
     </div>
