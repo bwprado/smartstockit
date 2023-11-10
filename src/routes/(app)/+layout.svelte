@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from "$app/stores"
     import { arrow, autoUpdate, computePosition, flip, offset, shift } from "@floating-ui/dom"
-    import { AppShell, Modal, Toast, initializeStores, storePopup } from "@skeletonlabs/skeleton"
+    import { AppShell, Modal, Toast, initializeStores, storePopup, type ModalComponent } from "@skeletonlabs/skeleton"
     import "../../app.css"
     import type { LayoutData } from "./$types"
 
@@ -10,6 +10,7 @@
     import Header from "$lib/components/Header.svelte"
     import MenuItems from "$lib/components/MenuItems.svelte"
     import Sidebar from "$lib/components/Sidebar.svelte"
+    import ModalLoading from "$lib/components/ModalLoading.svelte"
 
     storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow })
 
@@ -18,10 +19,16 @@
     export let data: LayoutData
 
     const { session, profile } = data
+
+    const modalRegistry: Record<string, ModalComponent> = {
+        modalComponentLoading: {
+            ref: ModalLoading
+        }
+    }
 </script>
 
 <Toast />
-<Modal />
+<Modal components={modalRegistry} />
 
 <AppShell>
     <svelte:fragment slot="header">
