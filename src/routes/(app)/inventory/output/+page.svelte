@@ -187,7 +187,8 @@
     <div slot="body" class="flex flex-col gap-y-4 h-full">
         <p class="text-xs text-surface-300">
             Selecione o produto que deseja adicionar à uma retirada, juntamente com a quantidade que
-            desejas e clique em <strong>Adicionar à Retirada</strong>. Você pode adicionar quantos produtos quiser.
+            desejas e clique em <strong>Adicionar à Retirada</strong>. Você pode adicionar quantos
+            produtos quiser.
         </p>
         <SelectSearch
             on:selection={(e) => {
@@ -213,7 +214,7 @@
             type="button"
             intent="secondary"
             on:click={handleAddProductToOutuput}
-            disabled={_.isEmpty(selectedOutput)}>
+            disabled={selectedOutput.id || +selectedOutput.amount <= 0}>
             <ArrowDown />
             Adicionar à Retirada
         </Button>
