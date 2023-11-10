@@ -86,7 +86,7 @@
     }
 </script>
 
-<table class="w-full text-left table rounded-md text-sm">
+<table class="w-full text-left table rounded-md text-sm dark:text-white">
     <thead class="whitespace-nowrap">
         <tr>
             {#each columns as column, i}
