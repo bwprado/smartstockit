@@ -104,7 +104,8 @@
                 for={name}
                 class={twMerge(
                     "block text-xs leading-6 text-gray-900 font-bold dark:text-gray-200",
-                    customClasses.label, `${disabled ? "dark:text-surface-400 text-surface-300" : ""}`,
+                    customClasses.label,
+                    `${disabled ? "dark:text-surface-400 text-surface-300" : ""}`,
                 )}>{label}</label>
         {/if}
         <div class="flex gap-x-4 items-center justify-between">
