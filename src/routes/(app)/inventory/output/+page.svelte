@@ -7,12 +7,10 @@
     import PageHeader from "$lib/components/PageHeader.svelte"
     import SelectSearch from "$lib/components/SelectSearch.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-    import _ from "lodash"
 
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
-    import { ArrowDown, Trash } from "lucide-svelte"
-    import { z } from "zod"
-    import type { Inventory } from "../../../../types/supabase"
+    import { ArrowDown, Trash, Edit } from "lucide-svelte"
+    import type { Inventory, Product } from "../../../../types/supabase"
     import type { PageServerData } from "./$types"
 
     const toast = getToastStore()
@@ -24,7 +22,7 @@
     let selectedProduct: any = {}
     let selectedOutputProducts: { label: string; id: string; amount: number }[] = []
 
-    $: showModal = true
+    $: showModal = false
     $: loading = false
 
     const searchableProducts = data.products.map((product) => ({
@@ -78,14 +76,52 @@
         }
     }
 
-    const handleRowClick = (id: string) => {
-        selectedOutput = data.outputs.find((output) => output.id === id)
-        selectedProduct = data.products.find((product) => product.id === selectedOutput.product)
-        showModal = true
+    const handleSaveClick = async (outputData: any) => {
+        const res = await fetch(`/api/output`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(outputData),
+        })
+
+        if (res.ok) {
+            const updatedOutput: Inventory = await res.json()
+            const updatedIndex = data.outputs.findIndex((o) => o.id === updatedOutput.id)
+            data.outputs[updatedIndex] = {
+                ...data.outputs[updatedIndex],
+                amount: updatedOutput.amount,
+            }
+
+            toast.trigger({
+                message: "Saída atualizada com sucesso!",
+            })
+        } else {
+            toast.trigger({
+                message: "Ocorreu um erro ao atualizar a saída.",
+            })
+        }
     }
 
-    const handleDeleteClick = async () => {
-        showModal = false
+    const handleRowClick = (id: string) => {
+        const clickedProduct = data.outputs.find((output) => output.id === id)
+        modal.trigger({
+            type: "component",
+            component: "modalEditOutput",
+            meta: {
+                product: clickedProduct,
+                removeFunction: () => handleDeleteClick(clickedProduct?.id || ""),
+                closeFunction: () => modal.close(),
+            },
+            response: (r) => r && handleSaveClick(r),
+        })
+    }
+
+    const handleDeleteClick = async (id: string) => {
+        if (!id) return
+
+        modal.close()
+
         modal.trigger({
             type: "confirm",
             title: "Tem certeza que deseja excluir essa saída?",
@@ -95,12 +131,10 @@
                 if (r) {
                     const res = await fetch(`/api/output`, {
                         method: "DELETE",
-                        body: JSON.stringify(selectedOutput),
+                        body: JSON.stringify(id),
                     })
                     if (res.ok) {
-                        data.outputs = data.outputs.filter(
-                            (output) => output.id !== selectedOutput.id,
-                        )
+                        data.outputs = data.outputs.filter((output) => output.id !== id)
                         toast.trigger({
                             message: "Saída excluída com sucesso!",
                         })
@@ -170,20 +204,12 @@
                 },
             ]}
             data={data.outputs}
-            {handleRowClick} />
+            {handleRowClick}>
+        </Table>
     </section>
 </EmptyWrapper>
 
-<Modal bind:showModal headerText={selectedOutput?.id ? "Alterar Retiradas" : "Retirar Produtos"}>
-    <svelte:fragment slot="action">
-        {#if selectedOutput.id}
-            <IconButton on:click={handleDeleteClick} intent="secondary">
-                <svelte:fragment slot="icon">
-                    <Trash />
-                </svelte:fragment>
-            </IconButton>
-        {/if}
-    </svelte:fragment>
+<Modal bind:showModal headerText="Retirar Produtos">
     <div slot="body" class="flex flex-col gap-y-4 h-full">
         <p class="text-xs text-surface-300">
             Selecione o produto que deseja adicionar à uma retirada, juntamente com a quantidade que
@@ -236,12 +262,18 @@
                             type: "number",
                         },
                         {
-                            label: "Edit",
-                            key: "",
+                            label: "",
+                            key: "edit",
                             type: "edit",
                         },
                     ]}
-                    data={selectedOutputProducts} />
+                    data={selectedOutputProducts}>
+                    <svelte:fragment slot="action">
+                        <IconButton>
+                            <Trash />
+                        </IconButton>
+                    </svelte:fragment>
+                </Table>
             </section>
         </EmptyWrapper>
     </div>
