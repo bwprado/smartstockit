@@ -18,9 +18,7 @@
     export let value: string = ""
     export let disabled: boolean = false
 
-    let _value = 0
-
-    $: value = _value.toString()
+    $: value
 
     const inputStyle = cx([
         "block",
@@ -36,7 +34,6 @@
         "dark:placeholder:text-surface-400",
         "placeholder:text-surface-200",
         "focus:outline-none",
-
         "ring-1",
         "ring-inset",
         "ring-surface-100",
@@ -112,13 +109,19 @@
         <button
             type="button"
             class={buttonStyle({ type: "minus" })}
-            on:click={() => (value = value ? (+value - 1).toString() : "0")}>
+            on:click={() => {
+                console.log(value)
+                value = value ? (+value - 1).toString() : "0"
+            }}>
             <Minus class="text-primary-500" />
         </button>
         <button
             type="button"
             class={buttonStyle({ type: "plus" })}
-            on:click={() => (value = value ? (+value + 1).toString() : "0")}>
+            on:click={() => {
+                console.log(value)
+                value = value ? (+value + 1).toString() : "0"
+            }}>
             <Plus class="text-primary-500" />
         </button>
     </div>
