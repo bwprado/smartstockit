@@ -27,24 +27,57 @@ export const POST: RequestHandler = async ({ locals: { supabase, getSession }, r
 }
 
 export const DELETE: RequestHandler = async ({ locals: { supabase, getSession }, request }) => {
-    const session = await getSession()
-    if (!session) {
-        return json(401, { statusText: "Não autorizado", status: 401 })
-    }
+    try {
+        const session = await getSession()
+        if (!session) {
+            return json(401, { statusText: "Não autorizado", status: 401 })
+        }
 
-    const outputData = await request.json()
+        const id = await request.json()
 
-    const { data, error: err } = await supabase
-        .from("inventory")
-        .delete()
-        .eq("id", outputData.id)
-        .eq("user", session?.user?.id)
-        .single()
+        const { data, error: err } = await supabase
+            .from("inventory")
+            .delete()
+            .eq("id", id)
+            .eq("user", session?.user?.id)
+            .single()
 
-    if (err) {
+        if (err) {
+            console.log(err)
+            throw error(500, { message: `Erro ao deletar saída no estoque - ${err?.message}` })
+        }
+        return json(data, { status: 201, statusText: "Saída deletada com sucesso." })
+    } catch (err) {
         console.log(err)
-        throw error(500, { message: `Erro ao deletar saída no estoque - ${err?.message}` })
+        throw error(500, { message: `Erro ao deletar saída no estoque - ${err}` })
     }
+}
 
-    return json(data, { status: 201, statusText: "Saída deletada com sucesso." })
+export const PUT: RequestHandler = async ({ locals: { supabase, getSession }, request }) => {
+    try {
+        const session = await getSession()
+        if (!session) {
+            return json(401, { statusText: "Não autorizado", status: 401 })
+        }
+
+        const { id, amount } = await request.json()
+
+        const { data, error: err } = await supabase
+            .from("inventory")
+            .update({ amount })
+            .eq("id", id)
+            .eq("user", session?.user?.id)
+            .select()
+            .single()
+
+        if (err) {
+            console.log(err)
+            throw error(500, { message: `Erro ao deletar saída no estoque - ${err?.message}` })
+        }
+        
+        return json(data, { status: 201, statusText: "Saída atualizada com sucesso." })
+    } catch (err) {
+        console.log(err)
+        throw error(500, { message: `Erro ao atualizar saída no estoque - ${err}` })
+    }
 }
