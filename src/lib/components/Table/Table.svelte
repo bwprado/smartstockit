@@ -31,6 +31,9 @@
             if (value === null || value === undefined || value === "") return "-"
             return format(parseISO(value), "dd/MM/yy 'às' HH:mm:ss")
         }
+        if (type === "edit") {
+            return value ? "Sim" : "Não"
+        }
         return "-"
     }
 
@@ -127,6 +130,11 @@
                         </TableCell>
                     {/if}
                 {/each}
+                {#if $$slots.action}
+                    <TableCell customClass="w-max">
+                        <slot name="action" />
+                    </TableCell>
+                {/if}
             </TableRow>
         {/each}
     </tbody>
