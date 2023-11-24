@@ -1,10 +1,13 @@
 <script lang="ts">
+    import Box from "$lib/components/Box.svelte"
     import Chart from "$lib/components/Chart.svelte"
     import EmptyWrapper from "$lib/components/EmptyWrapper.svelte"
     import PageHeader from "$lib/components/PageHeader.svelte"
+    import Table from "$lib/components/Table/Table.svelte"
+    
+    import { page } from "$app/stores"
     import { twMerge } from "tailwind-merge"
     import type { PageServerData } from "./$types"
-    import Table from "$lib/components/Table/Table.svelte"
 
     export let data: PageServerData
 
@@ -103,26 +106,28 @@
     const handleRowClick = (row: any) => {
         console.log(row)
     }
-</script>
 
-<div class="flex flex-col gap-y-10 w-full">
+</script>
+<svelte:head>
+    <title>SmartStockIt | Dashboard</title>
+</svelte:head>
+
+<div class="flex w-full flex-col gap-y-10">
     <PageHeader title="Dashboard">
-        <p slot="message" class="text-xs dark:text-surface-300 text-surface-600">
+        <p slot="message" class="text-xs text-surface-600 dark:text-surface-300">
             Aqui você pode conferir algumas informações sobre seu estoque. Gráficos de maiores
             entradas e saídas e o resumo do estoque.
         </p>
     </PageHeader>
 
     <!-- <Chart type="line" labels={Object.keys(groupedInput)} datasets={datasetBalance} /> -->
-    <div class="flex flex-col sm:flex-row gap-10">
-        <div class="flex flex-col gap-y-4">
-            <h1 class="text-xl font-bold">Entrada</h1>
+    <div class="flex flex-col gap-10 sm:flex-row">
+        <Box title="Entrada">
             <Chart type="bar" labels={Object.keys(groupedInput)} datasets={datasetInput} />
-        </div>
-        <div class="flex flex-col gap-y-4">
-            <h1 class="text-xl font-bold">Saída</h1>
+        </Box>
+        <Box title="Saída">
             <Chart type="bar" labels={Object.keys(groupedOutput)} datasets={datasetOutput} />
-        </div>
+        </Box>
     </div>
     <h1 class="text-xl font-bold">Inventário</h1>
     <EmptyWrapper
