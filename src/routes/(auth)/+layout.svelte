@@ -18,7 +18,7 @@
 <Modal components={modalRegistry} />
 <Toast />
 <svelte:head>
-    <title>Smart Stock It - {$page.url.pathname === "/login" ? "Login" : "Criar Conta"}</title>
+    <title>Smart Stock It | {$page.url.pathname === "/login" ? "Login" : "Criar Conta"}</title>
 </svelte:head>
 <div class="flex h-screen w-auto items-center justify-center lg:h-[calc(100vh-44px)]">
     <slot />
