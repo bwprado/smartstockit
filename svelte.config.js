@@ -10,6 +10,7 @@ const config = {
         }),
         alias: {
             "@components": "$lib/components",
+            "@images": "$lib/images",
         },
     },
 }
