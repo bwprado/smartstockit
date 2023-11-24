@@ -40,9 +40,11 @@
 <Toast />
 <Modal components={modalRegistry} />
 
+<svelte:head>
+    <title>{`SmartStockIt | Sistema avançado de gerenciamento de Estoque`}</title>
+</svelte:head>
 <AppShell>
     <svelte:fragment slot="header">
-        <title>Smart Stock It{` - ${$page.url.pathname}`}</title>
         {#if profile && session}
             <Header {session} {profile} />
         {/if}
@@ -55,7 +57,7 @@
         {/if}
     </svelte:fragment>
 
-    <div class="px-4 lg:px-8 xl:px-20 h-full flex flex-col gap-y-2 py-6">
+    <div class="flex h-full flex-col gap-y-2 px-4 py-6 lg:px-8 xl:px-20">
         <!-- <Breadcrumbs /> -->
         <slot />
     </div>
