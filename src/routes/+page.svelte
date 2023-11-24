@@ -1,9 +1,9 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte"
     import iPhone from "$lib/images/iphone15pro.png"
-    import { clamp } from "lodash"
     import "../app.css"
 
+    import { clamp } from "lodash"
     import type { PageData } from "./$types"
 
     export let data: PageData
@@ -11,6 +11,7 @@
 
     let y: number
     let header: HTMLHeadElement
+    let more: HTMLDivElement
 
     $: opacity = clamp(y, 0, 100)
 </script>
@@ -23,7 +24,7 @@
 
 <header
     bind:this={header}
-    class="fixed flex h-[100px] w-full items-center justify-between px-4 py-8 text-gray-200 transition-all"
+    class="fixed flex h-[100px] w-full items-center justify-between px-4 py-8 text-gray-200 transition-all sm:px-8"
     style={`backdrop-filter: blur(${opacity / 20}px)`}>
     <div class="backdrop-blur-sm">
         <a href="/" class="text-xl font-bold">
@@ -42,7 +43,7 @@
     </ul>
 </header>
 
-<main class="flex snap-y snap-mandatory flex-col items-center gap-y-10 overflow-auto sm:gap-y-20">
+<main class="flex snap-y snap-mandatory flex-col items-center overflow-auto">
     <section
         class="flex h-screen w-full snap-center flex-col items-center justify-center gap-y-8 bg-cover text-white"
         style="background-image: url('/src/lib/images/shutterstock_2203155427.jpg'); background-position: center {y /
@@ -53,7 +54,10 @@
                 Bem-vindo ao nosso aplicativo de estoque, a solução perfeita para o seu negócio.
             </p>
             <div class="grid w-full grid-cols-2 gap-8">
-                <Button class="w-full p-2 text-sm sm:text-lg" intent="secondary">Saber mais</Button>
+                <Button
+                    class="w-full p-2 text-sm sm:text-lg"
+                    intent="secondary"
+                    on:click={() => more.scrollIntoView({ behavior: "smooth" })}>Saber mais</Button>
                 <Button class="w-full p-2 text-sm sm:text-lg" href="/signup"
                     >Crie uma conta gratuita</Button>
             </div>
@@ -62,12 +66,13 @@
 
     <div
         id="more"
-        class="mx-auto flex h-auto snap-center flex-col items-center justify-center sm:h-[calc(100vh-100px)]">
+        bind:this={more}
+        class="hero-gradient mx-auto flex h-auto snap-center flex-col items-center justify-center sm:h-screen">
         <div class="box-border flex h-full w-full flex-col gap-4 sm:flex-row sm:items-center">
-            <img src={iPhone} alt="iPhone App" class="order-2 h-[80%] px-20 sm:order-1" />
+            <img src={iPhone} alt="iPhone App" class="order-2 h-[80%] px-4 sm:order-1 sm:px-20" />
             <div
                 class="mt-[100px] flex h-[calc(100vh-100px)] flex-col gap-8 rounded-lg p-4 sm:mt-0 sm:h-auto sm:p-8">
-                <p class="text-primary-400-500-token text-xs font-bold">Controle</p>
+                <p class="text-primary-400-500-token text-sm font-bold">Controle</p>
                 <div>
                     <h2 class="text-2xl font-bold sm:text-3xl">
                         Recursos incríveis do nosso aplicativo de estoque
@@ -77,22 +82,30 @@
                         muito mais.
                     </p>
                 </div>
-                <div class="grid grid-cols-2 gap-x-4 gap-y-3 sm:gap-x-10">
-                    <h3 class="text-md font-semibold sm:text-lg">Cadastro de Produtos Completo</h3>
-                    <h3 class="text-md font-semibold sm:text-lg">Vários tipos de Produtos</h3>
-                    <p class="text-sm text-surface-400">
-                        Cadastre seus produtos com todas as informações necessárias para um controle
-                        eficiente e preciso. Crie categorias, unidades de medida, marcas e muito
-                        mais.
-                    </p>
-                    <p class="text-sm text-surface-400">
-                        Produtos simples, compostos, kits, matérias-primas, embalagens, insumos e
-                        muito mais.
-                    </p>
-                    <Button intent="secondary" class="text-md mt-6 h-10 p-2 sm:w-fit" href="/signup"
-                        >Saiba mais</Button>
-                    <Button class="text-md mt-6 h-10 p-2 sm:w-fit" href="/signup"
-                        >Crie uma conta</Button>
+                <div class="grid grid-rows-2 gap-x-4 gap-y-10 sm:grid-cols-2 sm:gap-x-10">
+                    <div class="grid w-full grid-rows-3 items-center gap-4">
+                        <h3 class="text-md font-semibold sm:text-lg">
+                            Cadastro de Produtos Completo
+                        </h3>
+                        <p class="text-sm text-surface-400">
+                            Cadastre seus produtos com todas as informações necessárias para um
+                            controle eficiente e preciso. Crie categorias, unidades de medida,
+                            marcas e muito mais.
+                        </p>
+                        <Button
+                            intent="secondary"
+                            class="text-md h-10 w-full p-2 sm:w-fit"
+                            href="/signup">Saiba mais</Button>
+                    </div>
+                    <div class="grid w-full grid-rows-3 items-center gap-4">
+                        <h3 class="text-md font-semibold sm:text-lg">Vários tipos de Produtos</h3>
+                        <p class="text-sm text-surface-400">
+                            Produtos simples, compostos, kits, matérias-primas, embalagens, insumos
+                            e muito mais.
+                        </p>
+                        <Button class="text-md h-10 w-full p-2 sm:w-fit" href="/signup"
+                            >Crie uma conta</Button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,12 +126,12 @@
         </div> -->
     </div>
 
-    <div
-        class="mx-auto flex h-screen snap-center flex-col items-center justify-center p-4 sm:p-8 text-white">
+    <section
+        class="mx-auto flex h-screen w-full snap-center flex-col items-center justify-center bg-gradient-to-b from-surface-900 to-primary-500/10 px-4 text-white sm:px-8">
         <h2 class="mb-6 text-2xl font-bold sm:text-3xl">Não perca mais tempo, comece hoje!</h2>
         <p class="mb-8 text-lg sm:text-2xl">
             Registre-se agora e experimente todos os benefícios do nosso aplicativo de estoque.
         </p>
         <Button href="/signup" class="p-4 text-xl font-bold">Crie uma conta gratuita</Button>
-    </div>
+    </section>
 </main>
