@@ -20,7 +20,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         if (err) {
             console.log(err)
             if (err instanceof AuthApiError && err.status === 400) {
-                throw redirect(303, "/login")
+                // throw redirect(303, "/login")
             }
             throw fail(500, {
                 message: "Ocorreu um erro ao tentar obter a sessão do usuário.",
