@@ -66,6 +66,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         const { error } = await event.locals.supabase.auth.signOut()
         if (error) throw new Error(error.message)
     }
+
     if (!unprotectedRoutes.includes(event.url.pathname)) {
         const session = await event.locals.getSession()
 
