@@ -3,6 +3,8 @@
     import Footer from "$lib/components/Footer.svelte"
     import IconButton from "$lib/components/IconButton.svelte"
     import Input from "$lib/components/Input.svelte"
+    import Backgound from "$lib/images/shutterstock_2203155427.jpg"
+
     import { ArrowBigDown } from "lucide-svelte"
     import { getToastStore } from "@skeletonlabs/skeleton"
     import type { ActionData } from "./$types"
@@ -32,88 +34,88 @@
         "dark:border-gray-500",
         "w-full",
         "sm:m-10",
-        "h-auto",
-        "sm:h-[800px]",
         "overflow-hidden",
         "items-center",
         "justify-center",
         "sm:gap-y-10",
         "snap-mandatory",
         "snap-y",
+        "h-screen",
         "bg-blend-multiply",
     ])
 </script>
 
 <div class={divWrapper}>
-    <div class="h-screen sm:h-full snap-start relative">
+    <div class="relative snap-start">
         <div
-            class="absolute inset-0 bg-cover -z-10 bg-center"
-            style="background-image: url(https://vhjquurwdlkrfmaxfygm.supabase.co/storage/v1/object/public/images/pexels-winson-2701434.jpg?t=2023-09-06T00%3A55%3A13.176Z);" />
-        <div
-            class="bg-gradient-to-r from-surface-900 to-surface-900/20 h-full sm:p-8 grid grid-rows-[max-content,auto,max-content] justify-between snap-start items-center">
-            <header class="p-6 text-white w-full">
+            style="background-image: url({Backgound});"
+            class="grid h-full snap-start grid-rows-[max-content,auto,max-content] items-center justify-between bg-gradient-to-r from-surface-900/50 to-surface-900/20 bg-cover sm:p-8">
+            <header class="w-full p-6 text-white">
                 <h1 class="text-4xl font-bold">Smart Stock It</h1>
                 <p class="text-sm text-surface-200">
                     Sua Solução Gratuita de Gerenciamento de Estoque
                 </p>
             </header>
-            <main class="container mx-auto mt-8 p-4">
-                <section class="bg-surface-800 rounded-xl shadow p-6">
-                    <h2 class="text-xl font-semibold mb-4">Painel Intuitivo</h2>
-                    <p class="text-gray-500">
+            <main class="container mx-auto mt-4 p-4">
+                <section class="rounded-xl p-6 shadow">
+                    <h2 class="mb-4 text-lg font-semibold">Painel Intuitivo</h2>
+                    <p class="text-sm text-gray-300">
                         Mantenha o controle do seu estoque com nosso painel fácil de usar, que
                         fornece uma visão rápida de métricas e tendências-chave.
                     </p>
                 </section>
-                <section class="bg-surface-800 rounded-xl shadow p-6 mt-4">
-                    <h2 class="text-xl font-semibold mb-4">Rastreamento de Produtos</h2>
-                    <p class="text-gray-500">
+                <section class="mt-4 rounded-xl p-6 shadow">
+                    <h2 class="mb-4 text-lg font-semibold">Rastreamento de Produtos</h2>
+                    <p class="text-sm text-gray-300">
                         Adicione, edite e categorize seus produtos sem esforço. Fique de olho nos
                         níveis de estoque e receba notificações de estoque baixo.
                     </p>
                 </section>
             </main>
-            <div class="flex flex-col items-center justify-center sm:hidden py-10 sm:py-0">
+            <div class="flex flex-col items-center justify-center gap-4 py-10 sm:hidden sm:py-0">
                 <p>Clique para criar sua conta</p>
                 <IconButton
-                    class="h-10 rounded-full"
+                    class="aspect-square h-10 rounded-full"
+                    intent="secondary"
                     on:click={() => {
                         bottom.scrollIntoView({ behavior: "smooth" })
                     }}>
-                    <ArrowBigDown class="text-white animate-bounce" />
+                    <svelte:fragment slot="icon">
+                        <ArrowBigDown class="animate-bounce text-white" />
+                    </svelte:fragment>
                 </IconButton>
             </div>
         </div>
     </div>
     <div
         bind:this={bottom}
-        class="w-full py-8 px-[15%] sm:h-full h-screen snap-start flex flex-col gap-y-4 items-center justify-center hero-gradient"
+        class="hero-gradient flex h-screen w-full snap-start flex-col items-center justify-center gap-y-4 px-[15%] py-8 sm:h-full"
         id="bottom">
-        <form method="POST" action="?/email" class="flex flex-col gap-y-6 w-full">
-            <h1 class="font-bold text-2xl">Criar uma Conta Gratuita</h1>
+        <form method="POST" action="?/email" class="flex w-full flex-col gap-y-6">
+            <h1 class="text-2xl font-bold">Criar uma Conta Gratuita</h1>
             <p>Entre com seu Email e Senha.</p>
             <Input id="email" name="email" type="text" placeholder="email@email.com" />
             <Input id="password" name="password" type="password" placeholder="smartstock" />
             <Button type="submit" id="login">Criar Conta</Button>
         </form>
         <div
-            class="grid grid-cols-[1fr,max-content,1fr] items-center justify-center w-full gap-x-4">
+            class="grid w-full grid-cols-[1fr,max-content,1fr] items-center justify-center gap-x-4">
             <div class="border-b-[1px] border-tertiary-400" />
-            <p class="uppercase text-xs text-tertiary-400">ou continue com</p>
+            <p class="text-xs uppercase text-tertiary-400">ou continue com</p>
             <div class="border-b-[1px] border-tertiary-400" />
         </div>
         <form action="?/google" class="w-full" method="post">
             <button
                 type="submit"
-                class="flex items-center justify-center bg-surface-900 rounded-lg border border-surface-400 hover:bg-secondary-500/10 transition w-full h-10">
+                class="flex h-10 w-full items-center justify-center rounded-lg border border-surface-400 bg-surface-900 transition hover:bg-secondary-500/10">
                 <div
-                    class="relative flex items-center justify-center shrink-0 h-10 w-10 rounded-lg group overflow-hidden transition">
+                    class="group relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg transition">
                     <img
                         class="w-5"
                         src="https://supabase.com/docs/img/icons/google-icon.svg"
                         alt="Google Icon" />
                 </div>
-                <h5 class="text-base text-surface-200 px-4">Google</h5>
+                <h5 class="px-4 text-base text-surface-200">Google</h5>
             </button>
         </form>
     </div>
