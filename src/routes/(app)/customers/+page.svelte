@@ -7,7 +7,7 @@
     import PageHeader from "$lib/components/PageHeader.svelte"
     import SelectSearch from "$lib/components/SelectSearch.svelte"
     import Table from "$lib/components/Table/Table.svelte"
-    
+
     import { enhance } from "$app/forms"
     import { getModalStore, getToastStore } from "@skeletonlabs/skeleton"
     import type { SubmitFunction } from "@sveltejs/kit"
@@ -207,7 +207,9 @@
 </svelte:head> -->
 <PageHeader title="Clientes">
     <Button
-        class="max-w-max"
+        slot="action"
+        class="w-fit"
+        intent="primary"
         on:click={() => {
             selectedCustomer = {
                 name: "",
@@ -247,8 +249,8 @@
             </IconButton>
         {/if}
     </svelte:fragment>
-    <div slot="body" class="grid grid-rows-[auto,max-content] w-full h-full gap-y-4">
-        <form method="POST" class="flex flex-col w-full gap-y-4" use:enhance={handleFormSubmit}>
+    <div slot="body" class="grid h-full w-full grid-rows-[auto,max-content] gap-y-4">
+        <form method="POST" class="flex w-full flex-col gap-y-4" use:enhance={handleFormSubmit}>
             <Input
                 label="Nome"
                 name="name"
@@ -277,7 +279,7 @@
                 name="address"
                 options={[]}
                 placeholder="Digite o endereço para pesquisar." />
-            <div class="py-6 sm:py-0 mt-auto">
+            <div class="mt-auto py-6 sm:py-0">
                 <Button id="add_customer" type="submit" {loading}
                     >{selectedCustomer.id ? "Editar" : "Adicionar"}</Button>
             </div>
