@@ -12,6 +12,7 @@
     import MenuItems from "./MenuItems.svelte"
     import MobileSidebar from "./MobileSidebar.svelte"
     import Modal from "./Modal.svelte"
+    import Logo from "$lib/images/smartstockit-logo-h.svg"
 
     export let profile: Profile
     export let session: Session
@@ -36,7 +37,9 @@
         </svelte:fragment>
     </IconButton>
     <div class="hidden sm:block">
-        <a href="/" class="text-xl font-bold">Smart Stock It</a>
+        <a href="/" class="text-xl font-bold">
+            <img src={Logo} alt="SmartStockIt" width="200">
+        </a>
     </div>
     <nav class="align-middle">
         <ul class="flex gap-x-6 items-center">
