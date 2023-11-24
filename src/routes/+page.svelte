@@ -3,7 +3,7 @@
     import iPhone from "$lib/images/iphone15pro.png"
     import "../app.css"
 
-    import { clamp } from "lodash"
+    import _ from "lodash"
     import type { PageData } from "./$types"
 
     export let data: PageData
@@ -13,7 +13,7 @@
     let header: HTMLHeadElement
     let more: HTMLDivElement
 
-    $: opacity = clamp(y, 0, 100)
+    $: opacity = _.clamp(y, 0, 100)
 </script>
 
 <svelte:window bind:scrollY={y} />
