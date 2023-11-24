@@ -2,8 +2,8 @@
     import Button from "$lib/components/Button.svelte"
     import iPhone from "$lib/images/iphone15pro.png"
     import "../app.css"
-
     import _ from "lodash"
+
     import type { PageData } from "./$types"
 
     export let data: PageData
@@ -11,7 +11,8 @@
 
     let y: number
     let header: HTMLHeadElement
-    let more: HTMLDivElement
+    let more: HTMLElement
+    let last: HTMLElement
 
     $: opacity = _.clamp(y, 0, 100)
 </script>
@@ -64,7 +65,7 @@
         </div>
     </section>
 
-    <div
+    <section
         id="more"
         bind:this={more}
         class="hero-gradient mx-auto flex h-auto snap-center flex-col items-center justify-center sm:h-screen">
@@ -95,7 +96,8 @@
                         <Button
                             intent="secondary"
                             class="text-md h-10 w-full p-2 sm:w-fit"
-                            href="/signup">Saiba mais</Button>
+                            on:click={() => last.scrollIntoView({ behavior: "smooth" })}
+                            >Saiba mais</Button>
                     </div>
                     <div class="grid w-full grid-rows-3 items-center gap-4">
                         <h3 class="text-md font-semibold sm:text-lg">Vários tipos de Produtos</h3>
@@ -124,9 +126,10 @@
                 </p>
             </div>
         </div> -->
-    </div>
+    </section>
 
     <section
+        bind:this={last}
         class="mx-auto flex h-screen w-full snap-center flex-col items-center justify-center bg-gradient-to-b from-surface-900 to-primary-500/10 px-4 text-white sm:px-8">
         <h2 class="mb-6 text-2xl font-bold sm:text-3xl">Não perca mais tempo, comece hoje!</h2>
         <p class="mb-8 text-lg sm:text-2xl">
