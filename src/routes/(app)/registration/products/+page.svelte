@@ -20,6 +20,7 @@
     import { twMerge } from "tailwind-merge"
     import { z } from "zod"
     import type { PageServerData } from "./$types"
+    import { page } from "$app/stores"
 
     const addProductSchema = z.object({
         name: z.string().min(1, "Nome do produto não pode ser vazio."),
@@ -481,6 +482,10 @@
         selectedProduct.unit.name = data.units.find(({ id }) => id === value)?.name || ""
     }
 </script>
+
+<svelte:head>
+    <title>SmartStockIt | Produtos</title>
+</svelte:head>
 
 <div id="reader" style="width:500px"></div>
 <div class="flex flex-col gap-y-10 w-full h-full">
