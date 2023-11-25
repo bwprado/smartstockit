@@ -1,9 +1,10 @@
 <script lang="ts">
     import { enhance } from "$app/forms"
-    import Button from "$lib/components/Button.svelte"
-    import Input from "$lib/components/Input.svelte"
     import { getModalStore } from "@skeletonlabs/skeleton"
     import type { SubmitFunction } from "@sveltejs/kit"
+    
+    import Button from "$lib/components/Button.svelte"
+    import Input from "$lib/components/Input.svelte"
 
     const modal = getModalStore()
 
