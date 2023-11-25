@@ -2,7 +2,9 @@
     import Button from "$lib/components/Button.svelte"
     import "../app.css"
     import _ from "lodash"
-    import BG from "../../static/images/shutterstock_2203155427.jpg"
+    import BG from "@images/shutterstock_2203155427.jpg?enhanced"
+    import Logo from "@images/smartstockit-logo-h-rasterized-primary.svg"
+    import iPhone from "@images/iphone15pro.png"
 
     import type { PageData } from "./$types"
 
@@ -29,7 +31,7 @@
     style={`backdrop-filter: blur(${opacity / 20}px)`}>
     <div class="backdrop-blur-sm">
         <a href="/" class="text-xl font-bold">
-            <img src={BG} class="w-52 sm:w-[250px]" alt="SmartStockIt" />
+            <enhanced:img src={Logo} srcset="" class="w-52 sm:w-[250px]" alt="SmartStockIt" />
         </a>
     </div>
     <ul>
@@ -44,8 +46,7 @@
 <main class="flex snap-y snap-mandatory flex-col items-center overflow-auto">
     <section
         class="flex h-screen w-full snap-center flex-col items-center justify-center gap-y-8 bg-cover text-white"
-        style="background-image: url('https://vhjquurwdlkrfmaxfygm.supabase.co/storage/v1/object/public/images/shutterstock_2203155427.jpg?t=2023-11-25T05%3A49%3A43.575Z'); background-position: center {y /
-            3}px">
+        style="background-image: url({BG}); background-position: center {y / 3}px">
         <div class="mt-32 flex flex-col gap-4 rounded-xl p-4 sm:w-1/2 sm:p-10">
             <h1 class="text-4xl font-bold sm:text-6xl">Gerencie seu estoque com facilidade</h1>
             <p class="text-xl">
@@ -67,8 +68,8 @@
         bind:this={more}
         class="hero-gradient mx-auto flex h-auto snap-center flex-col items-center justify-center sm:h-screen">
         <div class="box-border flex h-full w-full flex-col gap-4 sm:flex-row sm:items-center">
-            <img
-                src="https://vhjquurwdlkrfmaxfygm.supabase.co/storage/v1/object/public/images/iphone15pro.png?t=2023-11-25T06%3A05%3A57.925Z"
+            <enhanced:img
+                src={iPhone}
                 alt="iPhone App"
                 class="order-2 h-[80%] px-4 sm:order-1 sm:px-20" />
             <div
