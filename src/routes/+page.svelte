@@ -2,7 +2,7 @@
     import Button from "$lib/components/Button.svelte"
     import "../app.css"
     import _ from "lodash"
-    import BG from "@images/shutterstock_2203155427.jpg?enhanced"
+    import BG from "@images/shutterstock_2203155427.jpg"
     import Logo from "@images/smartstockit-logo-h-rasterized-primary.svg"
     import iPhone from "@images/iphone15pro.png"
 
@@ -31,7 +31,7 @@
     style={`backdrop-filter: blur(${opacity / 20}px)`}>
     <div class="backdrop-blur-sm">
         <a href="/" class="text-xl font-bold">
-            <enhanced:img src={Logo} class="w-52 sm:w-[250px]" alt="SmartStockIt App" />
+            <img src={Logo} class="w-52 sm:w-[250px]" alt="SmartStockIt App" />
         </a>
     </div>
     <ul>
@@ -68,10 +68,7 @@
         bind:this={more}
         class="hero-gradient mx-auto flex h-auto snap-center flex-col items-center justify-center sm:h-screen">
         <div class="box-border flex h-full w-full flex-col gap-4 sm:flex-row sm:items-center">
-            <enhanced:img
-                src={iPhone}
-                alt="iPhone App"
-                class="order-2 h-[80%] px-4 sm:order-1 sm:px-20" />
+            <img src={iPhone} alt="iPhone App" class="order-2 h-[80%] px-4 sm:order-1 sm:px-20" />
             <div
                 class="mt-[100px] flex h-[calc(100vh-100px)] flex-col gap-8 rounded-lg p-4 sm:mt-0 sm:h-auto sm:p-8">
                 <p class="text-primary-400-500-token text-sm font-bold">Controle</p>
