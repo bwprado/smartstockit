@@ -2,7 +2,7 @@
     import Button from "$lib/components/Button.svelte"
     import "../app.css"
     import _ from "lodash"
-    import BG from "../assets/images/shutterstock_2203155427.jpg"
+    import BG from "../../static/images/shutterstock_2203155427.jpg"
 
     import type { PageData } from "./$types"
 
