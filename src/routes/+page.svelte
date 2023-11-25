@@ -2,6 +2,7 @@
     import Button from "$lib/components/Button.svelte"
     import "../app.css"
     import _ from "lodash"
+    import BG from "../assets/images/shutterstock_2203155427.jpg"
 
     import type { PageData } from "./$types"
 
@@ -28,10 +29,7 @@
     style={`backdrop-filter: blur(${opacity / 20}px)`}>
     <div class="backdrop-blur-sm">
         <a href="/" class="text-xl font-bold">
-            <img
-                src="https://vhjquurwdlkrfmaxfygm.supabase.co/storage/v1/object/public/images/smartstockit-logo-h-rasterized-primary.svg?t=2023-11-25T05%3A50%3A11.816Z"
-                class="w-52 sm:w-[250px]"
-                alt="SmartStockIt" />
+            <img src={BG} class="w-52 sm:w-[250px]" alt="SmartStockIt" />
         </a>
     </div>
     <ul>
