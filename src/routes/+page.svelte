@@ -1,6 +1,5 @@
 <script lang="ts">
     import Button from "$lib/components/Button.svelte"
-    import iPhone from "$lib/images/iphone15pro.png"
     import "../app.css"
     import _ from "lodash"
 
@@ -70,7 +69,10 @@
         bind:this={more}
         class="hero-gradient mx-auto flex h-auto snap-center flex-col items-center justify-center sm:h-screen">
         <div class="box-border flex h-full w-full flex-col gap-4 sm:flex-row sm:items-center">
-            <img src={iPhone} alt="iPhone App" class="order-2 h-[80%] px-4 sm:order-1 sm:px-20" />
+            <img
+                src="https://vhjquurwdlkrfmaxfygm.supabase.co/storage/v1/object/public/images/iphone15pro.png?t=2023-11-25T06%3A05%3A57.925Z"
+                alt="iPhone App"
+                class="order-2 h-[80%] px-4 sm:order-1 sm:px-20" />
             <div
                 class="mt-[100px] flex h-[calc(100vh-100px)] flex-col gap-8 rounded-lg p-4 sm:mt-0 sm:h-auto sm:p-8">
                 <p class="text-primary-400-500-token text-sm font-bold">Controle</p>
