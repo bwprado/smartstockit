@@ -3,7 +3,6 @@
     import Footer from "$lib/components/Footer.svelte"
     import IconButton from "$lib/components/IconButton.svelte"
     import Input from "$lib/components/Input.svelte"
-    import Backgound from "$lib/images/shutterstock_2203155427.jpg"
 
     import { ArrowBigDown } from "lucide-svelte"
     import { getToastStore } from "@skeletonlabs/skeleton"
@@ -48,7 +47,7 @@
 <div class={divWrapper}>
     <div class="relative snap-start">
         <div
-            style="background-image: url({Backgound});"
+            style="background-image: url(https://vhjquurwdlkrfmaxfygm.supabase.co/storage/v1/object/public/images/smartstockit-logo-h-rasterized-primary.svg?t=2023-11-25T05%3A50%3A11.816Z);"
             class="grid h-full snap-start grid-rows-[max-content,auto,max-content] items-center justify-between bg-gradient-to-r from-surface-900/50 to-surface-900/20 bg-cover sm:p-8">
             <header class="w-full p-6 text-white">
                 <h1 class="text-4xl font-bold">Smart Stock It</h1>
