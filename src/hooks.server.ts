@@ -2,7 +2,7 @@ import { PUBLIC_SUPABASE_KEY, PUBLIC_SUPABASE_URL } from "$env/static/public"
 import { createSupabaseServerClient } from "@supabase/auth-helpers-sveltekit"
 import { error, type Handle } from "@sveltejs/kit"
 
-const unprotectedRoutes = ["/", "/login", "/signup", "/signup/verify", "/logout", "/auth/callback"]
+const unprotectedRoutes = ["/", "/login", "/signup", "/signup/verify", "/logout", "/auth/callback", "output/images"]
 
 export const handle: Handle = async ({ event, resolve }) => {
     event.locals.supabase = createSupabaseServerClient({
