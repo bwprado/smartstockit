@@ -31,7 +31,7 @@
     style={`backdrop-filter: blur(${opacity / 20}px)`}>
     <div class="backdrop-blur-sm">
         <a href="/" class="text-xl font-bold">
-            <enhanced:img src={Logo} srcset="" class="w-52 sm:w-[250px]" alt="SmartStockIt" />
+            <enhanced:img src={Logo} class="w-52 sm:w-[250px]" alt="SmartStockIt App" />
         </a>
     </div>
     <ul>
