@@ -12,7 +12,6 @@
     import MenuItems from "./MenuItems.svelte"
     import MobileSidebar from "./MobileSidebar.svelte"
     import Modal from "./Modal.svelte"
-    import Logo from "$lib/images/smartstockit-logo-h.svg"
 
     export let profile: Profile
     export let session: Session
@@ -30,19 +29,22 @@
 </script>
 
 <header
-    class="flex h-max w-full bg-primary-500 items-center text-gray-200 justify-between py-4 px-4">
-    <IconButton on:click={handleMenuClick} class="dark:text-gray-200 text-white lg:hidden">
+    class="flex h-max w-full items-center justify-between bg-primary-500 px-4 py-4 text-gray-200">
+    <IconButton on:click={handleMenuClick} class="text-white dark:text-gray-200 lg:hidden">
         <svelte:fragment slot="icon">
             <Menu />
         </svelte:fragment>
     </IconButton>
     <div class="hidden sm:block">
         <a href="/" class="text-xl font-bold">
-            <img src={Logo} alt="SmartStockIt" width="200">
+            <img
+                src="https://vhjquurwdlkrfmaxfygm.supabase.co/storage/v1/object/public/images/smartstockit-logo-h.svg?t=2023-11-25T05%3A50%3A37.458Z"
+                alt="SmartStockIt"
+                width="200" />
         </a>
     </div>
     <nav class="align-middle">
-        <ul class="flex gap-x-6 items-center">
+        <ul class="flex items-center gap-x-6">
             <LightSwitch on:click={() => setModeCurrent($modeCurrent ? true : false)} />
             {#if !session}
                 <li aria-current={$page.url.pathname.startsWith("/login")}>
@@ -59,27 +61,27 @@
                             width="w-12"
                             cursor="cursor-pointer" />
                     </button>
-                    <div class="card p-4 w-72 shadow-xl" data-popup="popupFeatured">
+                    <div class="card w-72 p-4 shadow-xl" data-popup="popupFeatured">
                         <div class="space-y-4">
-                            <div class="flex gap-x-2 items-center">
+                            <div class="flex items-center gap-x-2">
                                 <Avatar
                                     initials={profile?.name || "SN"}
                                     border="border-4 border-surface-300-600-token hover:!border-primary-500"
                                     width="w-12"
                                     cursor="cursor-pointer" />
-                                <p class="font-bold dark:text-white text-surface-900">
+                                <p class="font-bold text-surface-900 dark:text-white">
                                     {profile?.name || "Sem Nome"}
                                 </p>
                             </div>
                             <a
-                                class="btn variant-soft w-full"
+                                class="variant-soft btn w-full"
                                 href="/logout"
                                 target="_blank"
                                 rel="noreferrer">
                                 Logout
                             </a>
                         </div>
-                        <div class="arrow bg-surface-100-800-token" />
+                        <div class="bg-surface-100-800-token arrow" />
                     </div>
                 </li>
             {/if}

@@ -30,7 +30,7 @@
     <div class="backdrop-blur-sm">
         <a href="/" class="text-xl font-bold">
             <img
-                src="src\lib\images\smartstockit-logo-h-rasterized-primary.svg"
+                src="https://vhjquurwdlkrfmaxfygm.supabase.co/storage/v1/object/public/images/smartstockit-logo-h-rasterized-primary.svg?t=2023-11-25T05%3A50%3A11.816Z"
                 class="w-52 sm:w-[250px]"
                 alt="SmartStockIt" />
         </a>
@@ -47,7 +47,7 @@
 <main class="flex snap-y snap-mandatory flex-col items-center overflow-auto">
     <section
         class="flex h-screen w-full snap-center flex-col items-center justify-center gap-y-8 bg-cover text-white"
-        style="background-image: url('/src/lib/images/shutterstock_2203155427.jpg'); background-position: center {y /
+        style="background-image: url('https://vhjquurwdlkrfmaxfygm.supabase.co/storage/v1/object/public/images/shutterstock_2203155427.jpg?t=2023-11-25T05%3A49%3A43.575Z'); background-position: center {y /
             3}px">
         <div class="mt-32 flex flex-col gap-4 rounded-xl p-4 sm:w-1/2 sm:p-10">
             <h1 class="text-4xl font-bold sm:text-6xl">Gerencie seu estoque com facilidade</h1>
