@@ -2,9 +2,6 @@
     import Button from "$lib/components/Button.svelte"
     import "../app.css"
     import _ from "lodash"
-    import BG from "@images/shutterstock_2203155427.jpg"
-    import Logo from "@images/smartstockit-logo-h-rasterized-primary.svg"
-    import iPhone from "@images/iphone15pro.png"
 
     import type { PageData } from "./$types"
 
@@ -16,7 +13,8 @@
     let more: HTMLElement
     let last: HTMLElement
 
-    $: opacity = _.clamp(y, 0, 100)
+    $: scrollY = Math.round(y / 3)
+    $: opacity = _.clamp(Math.round(y) / 1000, 0, 1)
 </script>
 
 <svelte:window bind:scrollY={y} />
@@ -27,13 +25,14 @@
 
 <header
     bind:this={header}
-    class="fixed flex h-[100px] w-full items-center justify-between px-4 py-8 text-gray-200 transition-all sm:px-8"
-    style={`backdrop-filter: blur(${opacity / 20}px)`}>
-    <div class="backdrop-blur-sm">
-        <a href="/" class="text-xl font-bold">
-            <img src={Logo} class="w-52 sm:w-[250px]" alt="SmartStockIt App" />
-        </a>
-    </div>
+    class="fixed z-10 flex h-[100px] w-full items-center justify-between px-4 py-8 text-gray-200 transition-all sm:px-8"
+    style="background-color: rgba(21, 23, 31, {opacity})">
+    <a href="/" class="text-xl font-bold">
+        <enhanced:img
+            src="@images/smartstockit-logo-h-rasterized-primary.svg"
+            class="w-52 sm:w-[250px]"
+            alt="SmartStockIt App" />
+    </a>
     <ul>
         <li>
             <a href={session ? "/dashboard" : "/login"}>
@@ -45,9 +44,9 @@
 
 <main class="flex snap-y snap-mandatory flex-col items-center overflow-auto">
     <section
-        class="flex h-screen w-full snap-center flex-col items-center justify-center gap-y-8 bg-cover text-white"
-        style="background-image: url({BG}); background-position: center {y / 3}px">
-        <div class="mt-32 flex flex-col gap-4 rounded-xl p-4 sm:w-1/2 sm:p-10">
+        class="hero-image relative flex h-screen w-full snap-center flex-col items-center justify-center gap-y-8 bg-cover px-4 text-white"
+        style="background-position: center {scrollY}px">
+        <div class="mt-32 flex w-full max-w-prose flex-col gap-4 rounded-xl">
             <h1 class="text-4xl font-bold sm:text-6xl">Gerencie seu estoque com facilidade</h1>
             <p class="text-xl">
                 Bem-vindo ao nosso aplicativo de estoque, a solução perfeita para o seu negócio.
@@ -66,11 +65,9 @@
     <section
         id="more"
         bind:this={more}
-        class="hero-gradient mx-auto flex h-auto snap-center flex-col items-center justify-center sm:h-screen">
-        <div class="box-border flex h-full w-full flex-col gap-4 sm:flex-row sm:items-center">
-            <img src={iPhone} alt="iPhone App" class="order-2 h-[80%] px-4 sm:order-1 sm:px-20" />
-            <div
-                class="mt-[100px] flex h-[calc(100vh-100px)] flex-col gap-8 rounded-lg p-4 sm:mt-0 sm:h-auto sm:p-8">
+        class="hero-gradient mx-auto flex h-[calc(100vh-100px)] snap-center flex-col items-center justify-center sm:h-screen py-32">
+        <div class="grid h-full w-full grid-cols-2 gap-4 px-8 sm:flex-row sm:items-center">
+            <div class="mt-[100px] flex flex-col gap-8 rounded-lg p-4 sm:mt-0 sm:h-auto sm:p-8">
                 <p class="text-primary-400-500-token text-sm font-bold">Controle</p>
                 <div>
                     <h2 class="text-2xl font-bold sm:text-3xl">
@@ -81,8 +78,8 @@
                         muito mais.
                     </p>
                 </div>
-                <div class="grid grid-rows-2 gap-x-4 gap-y-10 sm:grid-cols-2 sm:gap-x-10">
-                    <div class="grid w-full grid-rows-3 items-center gap-4">
+                <div class="grid grid-rows-1 gap-x-4 gap-y-10 sm:grid-cols-2 sm:gap-x-10">
+                    <div class="grid w-full grid-rows-2 items-center gap-4">
                         <h3 class="text-md font-semibold sm:text-lg">
                             Cadastro de Produtos Completo
                         </h3>
@@ -108,6 +105,7 @@
                     </div>
                 </div>
             </div>
+            <enhanced:img src="@images/iphone15pro.png" alt="iPhone App" class="max-h-[900px] w-fit px-8" />
         </div>
         <!-- <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <div class="rounded-lg border border-surface-500 p-6 text-center">
@@ -136,3 +134,19 @@
         <Button href="/signup" class="p-4 text-xl font-bold">Crie uma conta gratuita</Button>
     </section>
 </main>
+
+<style>
+    .hero-image {
+        background-image: image-set(
+            url("@images/hero-image-scale-w_1920.jpg") 1x,
+            url("@images/hero-image-scale-w_1831.jpg") 2x,
+            url("@images/hero-image-scale-w_1747.jpg") 3x,
+            url("@images/hero-image-scale-w_1568.jpg") 4x,
+            url("@images/hero-image-scale-w_1397.jpg") 5x,
+            url("@images/hero-image-scale-w_1176.jpg") 6x,
+            url("@images/hero-image-scale-w_1053.jpg") 7x,
+            url("@images/hero-image-scale-w_828.jpg") 8x,
+            url("@images/hero-image-scale-w_560.jpg") 9x
+        );
+    }
+</style>
