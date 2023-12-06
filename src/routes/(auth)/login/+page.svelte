@@ -1,5 +1,6 @@
 <script lang="ts">
     import { enhance } from "$app/forms"
+    import { Image } from "@unpic/svelte"
     import { getModalStore } from "@skeletonlabs/skeleton"
     import type { SubmitFunction } from "@sveltejs/kit"
 
@@ -23,10 +24,12 @@
     class="hero-gradient grid h-screen w-screen grid-cols-1 items-center justify-center overflow-hidden lg:grid-cols-2">
     <section class="hero-image hidden lg:block">
         <div class="flex h-full flex-col items-center pb-10 pt-20">
-            <img
-                src="src\images\smartstockit-logo-primary.svg"
-                alt="SmartStockIt App"
-                class="mr-auto max-h-[300px] pl-10" />
+            <div class="items-center-justify-center mr-auto flex max-w-xs pl-10">
+                <Image
+                    src="https://res.cloudinary.com/drbrk2cvk/image/upload/v1701830378/smartstockit-logo-primary_o2lhag.svg"
+                    alt="SmartStockIt App"
+                    layout="constrained" />
+            </div>
             <p class="mt-auto text-white">SmartStockIt App - 2023</p>
         </div>
     </section>
@@ -35,9 +38,10 @@
             method="post"
             class="flex max-w-lg flex-col items-center justify-center gap-y-4"
             use:enhance={handleSubmit}>
-            <img
-                src="src\images\smartstockit-logo-h-rasterized-primary.svg"
+            <Image
+                src="https://res.cloudinary.com/drbrk2cvk/image/upload/v1701829379/logo-h-primary.svg"
                 alt="SmartStockIt App"
+                layout="constrained"
                 class="w-full" />
             <p class="font-bold">Login</p>
             <Input id="email" name="email" label="Email" type="email" />
@@ -69,15 +73,24 @@
 <style>
     .hero-image {
         background-image: image-set(
-            url("@images/hero-image-scale-w_1920.jpg") 1x,
-            url("@images/hero-image-scale-w_1831.jpg") 2x,
-            url("@images/hero-image-scale-w_1747.jpg") 3x,
-            url("@images/hero-image-scale-w_1568.jpg") 4x,
-            url("@images/hero-image-scale-w_1397.jpg") 5x,
-            url("@images/hero-image-scale-w_1176.jpg") 6x,
-            url("@images/hero-image-scale-w_1053.jpg") 7x,
-            url("@images/hero-image-scale-w_828.jpg") 8x,
-            url("@images/hero-image-scale-w_560.jpg") 9x
+            url("https://res.cloudinary.com/drbrk2cvk/image/upload/v1701829377/ojp66t6lsbg5xhgqsgh6.jpg")
+                1x,
+            url("https://res.cloudinary.com/drbrk2cvk/image/upload/v1701829377/tg4vfhotgrvnqc8vlzw0.jpg")
+                2x,
+            url("https://res.cloudinary.com/drbrk2cvk/image/upload/v1701829377/ks08x1uxayoyecgwg6mg.jpg")
+                3x,
+            url("https://res.cloudinary.com/drbrk2cvk/image/upload/v1701829377/jv7wyypghoust7z9ieho.jpg")
+                4x,
+            url("https://res.cloudinary.com/drbrk2cvk/image/upload/v1701829377/cqaq83snqahrsgfwqljv.jpg")
+                5x,
+            url("https://res.cloudinary.com/drbrk2cvk/image/upload/v1701829377/xnwfguquvgox8sgwtnl4.jpg")
+                6x,
+            url("https://res.cloudinary.com/drbrk2cvk/image/upload/v1701829376/q434qzwlobvzfvvop9hc.jpg")
+                7x,
+            url("https://res.cloudinary.com/drbrk2cvk/image/upload/v1701829376/gjcfc8diahznkcxbygbj.jpg")
+                8x,
+            url("https://res.cloudinary.com/drbrk2cvk/image/upload/v1701829376/zpmhg73vvaptlssfhg2a.avif")
+                9x
         );
         background-position: 10%;
         background-size: cover;
