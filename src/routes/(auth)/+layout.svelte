@@ -2,9 +2,8 @@
     import { page } from "$app/stores"
     import { Modal, Toast, initializeStores, type ModalComponent } from "@skeletonlabs/skeleton"
 
-    import Footer from "$lib/components/Footer.svelte"
-    import "../../app.css"
     import ModalLoading from "$lib/components/ModalLoading.svelte"
+    import "../../app.css"
 
     initializeStores()
 
@@ -20,10 +19,9 @@
 <svelte:head>
     <title>Smart Stock It | {$page.url.pathname === "/login" ? "Login" : "Criar Conta"}</title>
 </svelte:head>
-<div class="flex h-screen w-auto items-center justify-center lg:h-[calc(100vh-44px)]">
+<div class="flex h-screen w-auto items-center justify-center">
     <slot />
 </div>
-<Footer />
 
 <style>
     :root {
