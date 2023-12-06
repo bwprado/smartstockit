@@ -610,6 +610,22 @@
     "@typescript-eslint/types" "5.62.0"
     eslint-visitor-keys "^3.3.0"
 
+"@unpic/core@^0.0.41":
+  version "0.0.41"
+  resolved "https://registry.yarnpkg.com/@unpic/core/-/core-0.0.41.tgz#b04b934d7e331bda597359932fd2e779474f75df"
+  integrity sha512-mfxJYYIuOHRD78bzKwIFiAqD4BqgVXXOyy85LEo29I7hiMyPlPKMAw+bnIktQg3zre0wbqIYXHSi1un91tc/Yw==
+  dependencies:
+    unpic "^3.15.0"
+
+"@unpic/svelte@^0.0.42":
+  version "0.0.42"
+  resolved "https://registry.yarnpkg.com/@unpic/svelte/-/svelte-0.0.42.tgz#1f45e831b9d1d379eced94aeea0fc8c27702c602"
+  integrity sha512-mpvjhAOd8smKoMlooU7xV+jvPPpgRZ4xCHRV5I0VDd5sis7lsV/GQMs3/DDu7adCbIBQO9SIvA5ZNYzVV9uAnA==
+  dependencies:
+    "@unpic/core" "^0.0.41"
+    style-object-to-css-string "1.0.1"
+    unpic "^3.15.0"
+
 "@vercel/nft@^0.23.0":
   version "0.23.1"
   resolved "https://registry.yarnpkg.com/@vercel/nft/-/nft-0.23.1.tgz#f17c5f9d3f3a0178ea25eb7397a14618c00529bf"
@@ -2756,6 +2772,11 @@ strip-json-comments@~2.0.1:
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
   integrity sha512-4gB8na07fecVVkOI6Rs4e7T6NOTki5EmL7TUduTs6bu3EdnSycntVJ4re8kgZA+wx9IueI2Y11bfbgwtzuE0KQ==
 
+style-object-to-css-string@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/style-object-to-css-string/-/style-object-to-css-string-1.0.1.tgz#ef47ed3e47417189b3ea19604a3599f9310d743a"
+  integrity sha512-ci7tySCofUqq86WziXoEsIE/aGZ2rkw7mmz6Afklhbmk7i05Z1d8hSUaJMUWUOJPbsvK+7TW5ulklZm55/S44Q==
+
 sucrase@^3.32.0:
   version "3.34.0"
   resolved "https://registry.yarnpkg.com/sucrase/-/sucrase-3.34.0.tgz#1e0e2d8fcf07f8b9c3569067d92fbd8690fb576f"
@@ -3068,6 +3089,11 @@ universalify@^0.1.0:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
   integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
+
+unpic@^3.15.0:
+  version "3.15.0"
+  resolved "https://registry.yarnpkg.com/unpic/-/unpic-3.15.0.tgz#38a15cecdbe729ddd273b313290dfd2fdfabbebf"
+  integrity sha512-LgpCLS5qaZR9p3ALtBQSeh5HkP1o0kViI3DSaWaeMZeIUOZ5hGPmLPoGsduXI+y1up3ISoNIV5YvYori+3VNLA==
 
 update-browserslist-db@^1.0.11:
   version "1.0.11"
