@@ -26,12 +26,14 @@
 <header
     bind:this={header}
     class="fixed z-10 flex h-[100px] w-full items-center justify-between px-4 py-8 text-gray-200 transition-all sm:px-8"
-    style="background-color: rgba(21, 23, 31, {opacity})">
+    style="background-color: rgba(21, 23, 31, {opacity})"
+>
     <a href="/" class="text-xl font-bold">
         <enhanced:img
             src="@images/smartstockit-logo-h-rasterized-primary.svg"
             class="w-52 sm:w-[250px]"
-            alt="SmartStockIt App" />
+            alt="SmartStockIt App"
+        />
     </a>
     <ul>
         <li>
@@ -45,7 +47,8 @@
 <main class="flex snap-y snap-mandatory flex-col items-center overflow-auto">
     <section
         class="hero-image relative flex h-screen w-full snap-center flex-col items-center justify-center gap-y-8 bg-cover px-4 text-white"
-        style="background-position: center {scrollY}px">
+        style="background-position: center {scrollY}px"
+    >
         <div class="mt-32 flex w-full max-w-prose flex-col gap-4 rounded-xl">
             <h1 class="text-4xl font-bold sm:text-6xl">Gerencie seu estoque com facilidade</h1>
             <p class="text-xl">
@@ -53,11 +56,13 @@
             </p>
             <div class="grid w-full grid-cols-2 gap-8">
                 <Button
-                    class="w-full p-2 text-sm sm:text-lg"
+                    class="h-full w-full p-2 text-sm sm:text-lg"
                     intent="secondary"
-                    on:click={() => more.scrollIntoView({ behavior: "smooth" })}>Saber mais</Button>
-                <Button class="w-full p-2 text-sm sm:text-lg" href="/signup"
-                    >Crie uma conta gratuita</Button>
+                    on:click={() => more.scrollIntoView({ behavior: "smooth" })}>Saber mais</Button
+                >
+                <Button class="h-fit w-full p-2 text-sm sm:text-lg" href="/signup"
+                    >Crie uma conta gratuita</Button
+                >
             </div>
         </div>
     </section>
@@ -65,47 +70,57 @@
     <section
         id="more"
         bind:this={more}
-        class="hero-gradient mx-auto flex h-[calc(100vh-100px)] snap-center flex-col items-center justify-center sm:h-screen py-32">
-        <div class="grid h-full w-full grid-cols-2 gap-4 px-8 sm:flex-row sm:items-center">
-            <div class="mt-[100px] flex flex-col gap-8 rounded-lg p-4 sm:mt-0 sm:h-auto sm:p-8">
+        class="hero-gradient mx-auto flex h-[calc(calc(100vh+100px)*2)] snap-center sm:h-[calc(100vh+100px)]"
+    >
+        <div
+            class="flex h-full w-full flex-col gap-20 pl-4 pr-4 pt-[100px] sm:grid sm:grid-cols-[1.5fr,1fr] sm:items-center sm:gap-10 sm:pl-8 sm:pr-0"
+        >
+            <div class="flex flex-col gap-10 rounded-lg sm:h-auto sm:gap-8">
                 <p class="text-primary-400-500-token text-sm font-bold">Controle</p>
                 <div>
                     <h2 class="text-2xl font-bold sm:text-3xl">
-                        Recursos incríveis do nosso aplicativo de estoque
+                        Recursos incríveis do nosso aplicativo de <span class="w-fit bg-primary-500"
+                            >estoque</span
+                        >
                     </h2>
                     <p class="text-sm text-surface-400">
                         Cadastramento de produtos, controle de estoque, relatórios detalhados e
                         muito mais.
                     </p>
                 </div>
-                <div class="grid grid-rows-1 gap-x-4 gap-y-10 sm:grid-cols-2 sm:gap-x-10">
-                    <div class="grid w-full grid-rows-2 items-center gap-4">
-                        <h3 class="text-md font-semibold sm:text-lg">
+                <div class="grid grid-rows-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:gap-x-10">
+                    <div class="flex w-full flex-col gap-4 sm:items-center">
+                        <h3 class="text-md font-semibold lg:text-lg">
                             Cadastro de Produtos Completo
                         </h3>
                         <p class="text-sm text-surface-400">
-                            Cadastre seus produtos com todas as informações necessárias para um
-                            controle eficiente e preciso. Crie categorias, unidades de medida,
-                            marcas e muito mais.
+                            Possibilidade de criar categorias, unidades, marcas, fornecedores para
+                            um controle mais preciso de produtos.
                         </p>
                         <Button
                             intent="secondary"
-                            class="text-md h-10 w-full p-2 sm:w-fit"
+                            class="text-md mt-auto w-fit p-2 sm:w-full"
                             on:click={() => last.scrollIntoView({ behavior: "smooth" })}
-                            >Saiba mais</Button>
+                            >Saiba mais</Button
+                        >
                     </div>
-                    <div class="grid w-full grid-rows-3 items-center gap-4">
+                    <div class="flex w-full flex-col gap-4 sm:items-center">
                         <h3 class="text-md font-semibold sm:text-lg">Vários tipos de Produtos</h3>
                         <p class="text-sm text-surface-400">
                             Produtos simples, compostos, kits, matérias-primas, embalagens, insumos
                             e muito mais.
                         </p>
-                        <Button class="text-md h-10 w-full p-2 sm:w-fit" href="/signup"
-                            >Crie uma conta</Button>
+                        <Button class="text-md mt-auto w-fit p-2 sm:w-full" href="/signup"
+                            >Crie uma conta</Button
+                        >
                     </div>
                 </div>
             </div>
-            <enhanced:img src="@images/iphone15pro.png" alt="iPhone App" class="max-h-[900px] w-fit px-8" />
+            <enhanced:img
+                src="@images/iphone15pro.png"
+                alt="iPhone App"
+                class="max-h-[800px] overflow-clip sm:w-fit"
+            />
         </div>
         <!-- <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             <div class="rounded-lg border border-surface-500 p-6 text-center">
@@ -126,12 +141,15 @@
 
     <section
         bind:this={last}
-        class="mx-auto flex h-screen w-full snap-center flex-col items-center justify-center bg-gradient-to-b from-surface-900 to-primary-500/10 px-4 text-white sm:px-8">
+        class="mx-auto flex h-screen w-full snap-center flex-col items-center justify-center bg-gradient-to-b from-surface-900 to-primary-500/10 px-4 text-white sm:px-8"
+    >
         <h2 class="mb-6 text-2xl font-bold sm:text-3xl">Não perca mais tempo, comece hoje!</h2>
         <p class="mb-8 text-lg sm:text-2xl">
             Registre-se agora e experimente todos os benefícios do nosso aplicativo de estoque.
         </p>
-        <Button href="/signup" class="p-4 text-xl font-bold">Crie uma conta gratuita</Button>
+        <Button href="/signup" class="h-10 w-fit p-4 text-xl font-bold"
+            >Crie uma conta gratuita</Button
+        >
     </section>
 </main>
 
