@@ -1,7 +1,7 @@
 {
     "tabWidth": 4,
     "printWidth": 100,
-    "svelteBracketNewLine": false,
+    "svelteBracketNewLine": true,
     "svelteIndentScriptAndStyle": true,
     "svelteAllowShorthand": true,
     "svelteSortOrder": "options-scripts-markup-styles",
