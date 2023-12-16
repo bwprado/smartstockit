@@ -16,7 +16,7 @@
         [
             "rounded-lg",
             "font-bold",
-            "h-full",
+            "h-10",
             "sm:px-4",
             "py-2",
             "px-2",
@@ -70,8 +70,8 @@
 </script>
 
 {#if href}
-    <a {href}>
-        <button {disabled} on:click {type} {id} class={twMerge(btnStyle({ intent }), className)}>
+    <a {href} class={twMerge(btnStyle({ intent }), className)}>
+        <button {disabled} on:click {type} {id}>
             {#if loading}
                 <ProgressRadial width="w-5" fill="text-white" stroke={100} />
             {/if}
